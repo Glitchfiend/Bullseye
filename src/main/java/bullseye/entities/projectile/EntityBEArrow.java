@@ -52,8 +52,7 @@ public class EntityBEArrow extends EntityArrow implements IProjectile
     private int ticksInGround;
     private int ticksInAir;
     private int knockbackStrength;
-    ItemBEArrow.ArrowType arrowType = this.getArrowType();
-    private double damage = arrowType.getDamageInflicted();
+    private double damage = 1.0D;
     
     public EntityBEArrow(World world)
     {
@@ -189,10 +188,9 @@ public class EntityBEArrow extends EntityArrow implements IProjectile
         }
     }
     
+    @Override
     public void onUpdate()
     {
-        super.onUpdate();
-
         if (this.prevRotationPitch == 0.0F && this.prevRotationYaw == 0.0F)
         {
             float f = MathHelper.sqrt_double(this.motionX * this.motionX + this.motionZ * this.motionZ);
@@ -326,7 +324,10 @@ public class EntityBEArrow extends EntityArrow implements IProjectile
         else
         {
             ++this.ticksInAir;
-            damage = arrowType.getDamageInflicted();
+            ItemBEArrow.ArrowType arrowType = this.getArrowType();
+            this.damage = arrowType.getDamageInflicted();
+            System.out.println(this.damage);
+            System.out.println(arrowType);
             Vec3 vec31 = new Vec3(this.posX, this.posY, this.posZ);
             Vec3 vec3 = new Vec3(this.posX + this.motionX, this.posY + this.motionY, this.posZ + this.motionZ);
             MovingObjectPosition movingobjectposition = this.worldObj.rayTraceBlocks(vec31, vec3, false, true, false);
@@ -371,7 +372,6 @@ public class EntityBEArrow extends EntityArrow implements IProjectile
             }
             
             //Ice Arrow Effect
-        	ItemBEArrow.ArrowType arrowType = this.getArrowType();
         	if (arrowType == ItemBEArrow.ArrowType.ICE_ARROW)
         	{
 	            MovingObjectPosition watercollisionpos = this.worldObj.rayTraceBlocks(vec31, vec3, true, false, false);
@@ -460,7 +460,7 @@ public class EntityBEArrow extends EntityArrow implements IProjectile
                         }
                 	}
 
-                    if (movingobjectposition.entityHit.attackEntityFrom(damagesource, (float)this.damage))
+                	if (movingobjectposition.entityHit.attackEntityFrom(damagesource, (float)l))
                     {
                         if (movingobjectposition.entityHit instanceof EntityLivingBase)
                         {
@@ -579,14 +579,6 @@ public class EntityBEArrow extends EntityArrow implements IProjectile
             		this.worldObj.spawnParticle(EnumParticleTypes.SMOKE_NORMAL, this.posX + this.motionX * (double)k / 8.0D, this.posY + this.motionY * (double)k / 8.0D, this.posZ + this.motionZ * (double)k / 8.0D, 0.0D, 0.0D, 0.0D, new int[0]);
                 }
             }
-
-            /*if (this.getIsCritical())
-            {
-                for (int k = 0; k < 4; ++k)
-                {
-                    this.worldObj.spawnParticle(EnumParticleTypes.CRIT, this.posX + this.motionX * (double)k / 4.0D, this.posY + this.motionY * (double)k / 4.0D, this.posZ + this.motionZ * (double)k / 4.0D, -this.motionX, -this.motionY + 0.2D, -this.motionZ, new int[0]);
-                }
-            }*/
 
             this.posX += this.motionX;
             this.posY += this.motionY;

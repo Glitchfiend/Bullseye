@@ -36,10 +36,9 @@ public class ArrowEventHandler
 		World world = player.worldObj;
 		ItemStack itemstack = event.item;
 		Item item = itemstack.getItem();
-		int duration = event.duration;
 		
 		if (itemstack.getItem() == Items.bow)
-		{
+		{		
 	        boolean flag = player.capabilities.isCreativeMode || EnchantmentHelper.getEnchantmentLevel(Enchantment.infinity.effectId, itemstack) > 0;
 	
 	        if (flag || player.inventory.hasItem(BEItems.arrow))
@@ -61,7 +60,7 @@ public class ArrowEventHandler
 	        	
 		            if (bestArrowSlot > -1 && bestAvailableArrowType != null)
 		            {
-			            int i = item.getMaxItemUseDuration(itemstack) - duration;
+			            int i = item.getMaxItemUseDuration(itemstack) - event.duration;
 			            net.minecraftforge.event.entity.player.ArrowLooseEvent looseevent = new net.minecraftforge.event.entity.player.ArrowLooseEvent(player, itemstack, i);
 			            if (net.minecraftforge.common.MinecraftForge.EVENT_BUS.post(looseevent)) return;
 			            i = looseevent.charge;
@@ -78,47 +77,51 @@ public class ArrowEventHandler
 			                f = 1.0F;
 			            }
 			
-			            EntityBEArrow entitytanarrow = new EntityBEArrow(world, player, f * 2.0F);
-			            entitytanarrow.setArrowType(bestAvailableArrowType);
+			            EntityBEArrow entitybearrow = new EntityBEArrow(world, player, f * 2.0F);
+			            entitybearrow.setArrowType(bestAvailableArrowType);
 			
 			            if (f == 1.0F)
 			            {
-			                entitytanarrow.setIsCritical(true);
+			                entitybearrow.setIsCritical(true);
 			            }
 			            
 			            int j = EnchantmentHelper.getEnchantmentLevel(Enchantment.power.effectId, itemstack);
 
 			            if (j > 0)
 			            {
-			                entitytanarrow.setDamage(entitytanarrow.getDamage() + (double)j * 0.5D + 0.5D);
+			                entitybearrow.setDamage(entitybearrow.getDamage() + (double)j * 0.5D + 0.5D);
 			            }
 
 			            int k = EnchantmentHelper.getEnchantmentLevel(Enchantment.punch.effectId, itemstack);
 
 			            if (k > 0)
 			            {
-			                entitytanarrow.setKnockbackStrength(k);
+			                entitybearrow.setKnockbackStrength(k);
 			            }
 			
 			            itemstack.damageItem(1, player);
 			            world.playSoundAtEntity(player, "random.bow", 1.0F, 1.0F / (world.rand.nextFloat() * 0.4F + 1.2F) + f * 0.5F);
 			            
-			            if (!flag)
+			            if (flag)
+			            {
+			                entitybearrow.canBePickedUp = 2;
+			            }
+			            else
 			            {
 			            	player.inventory.decrStackSize(bestArrowSlot, 1);
 			            }
 			
 			            //player.triggerAchievement(StatList.objectUseStats[Item.getIdFromItem(this)]);
 			
-			            world.spawnEntityInWorld(entitytanarrow);
+			            world.spawnEntityInWorld(entitybearrow);
 			            
 			            if (bestAvailableArrowType == ItemBEArrow.ArrowType.FIRE_ARROW)
 			            {
-			            	world.playSoundAtEntity(entitytanarrow, "item.fireCharge.use", 1.0F, (world.rand.nextFloat() - world.rand.nextFloat()) * 0.2F + 1.0F);
+			            	world.playSoundAtEntity(entitybearrow, "item.fireCharge.use", 1.0F, (world.rand.nextFloat() - world.rand.nextFloat()) * 0.2F + 1.0F);
 			            }
 			            if (bestAvailableArrowType == ItemBEArrow.ArrowType.BOMB_ARROW)
 			            {
-			            	world.playSoundAtEntity(entitytanarrow, "game.tnt.primed", 1.0F, 1.0F);
+			            	world.playSoundAtEntity(entitybearrow, "game.tnt.primed", 1.0F, 1.0F);
 			            }
 		            
 			            event.setCanceled(true);

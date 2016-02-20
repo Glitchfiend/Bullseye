@@ -15,7 +15,7 @@ public class ItemArrowTopper extends Item
     
     public static enum TopperType implements IStringSerializable
     {
-        FIRE_ARROW_TOPPER, ICE_ARROW_TOPPER, LIGHTNING_ARROW_TOPPER, BOMB_ARROW_TOPPER;
+    	BOMB_ARROW_TOPPER, FIRE_ARROW_TOPPER, ICE_ARROW_TOPPER, LIGHTNING_ARROW_TOPPER;
         @Override
         public String getName()
         {

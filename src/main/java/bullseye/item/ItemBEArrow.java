@@ -15,7 +15,7 @@ public class ItemBEArrow extends Item
     
     public static enum ArrowType implements IStringSerializable
     {
-        EGG_ARROW, DIAMOND_ARROW, FIRE_ARROW, ICE_ARROW, LIGHTNING_ARROW, BOMB_ARROW;
+        EGG_ARROW, DIAMOND_ARROW, BOMB_ARROW, FIRE_ARROW, ICE_ARROW, LIGHTNING_ARROW;
         @Override
         public String getName()
         {

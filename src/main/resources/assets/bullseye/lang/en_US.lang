@@ -1,0 +1,12 @@
+itemGroup.tabBullseye=Bullseye
+
+item.bomb_arrow.name=Bomb Arrow
+item.bomb_arrow_topper.name=Bomb Arrow Topper
+item.fire_arrow.name=Fire Arrow
+item.fire_arrow_topper.name=Fire Arrow Topper
+item.ice_arrow.name=Ice Arrow
+item.ice_arrow_topper.name=Ice Arrow Topper
+item.lightning_arrow.name=Lightning Arrow
+item.lightning_arrow_topper.name=Lightning Arrow Topper
+
+entity.Bullseye.arrow.name=Arrow

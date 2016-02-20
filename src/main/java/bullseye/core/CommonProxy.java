@@ -7,7 +7,14 @@
  ******************************************************************************/
 package bullseye.core;
 
-public class CommonProxy extends ClientProxy
-{
+import net.minecraft.block.Block;
+import net.minecraft.item.Item;
+import bullseye.particle.BEParticleTypes;
 
+public class CommonProxy
+{
+	public void registerRenderers() {}
+    public void registerItemVariantModel(Item item, String name, int metadata) {}
+    public void registerNonRenderingProperties(Block block) {}
+    public void spawnParticle(BEParticleTypes type, double x, double y, double z, Object... info) {}
 }

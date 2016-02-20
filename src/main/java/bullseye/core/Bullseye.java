@@ -7,15 +7,20 @@
  ******************************************************************************/
 package bullseye.core;
 
+import net.minecraftforge.fml.common.Mod;
+import net.minecraftforge.fml.common.Mod.EventHandler;
+import net.minecraftforge.fml.common.Mod.Instance;
+import net.minecraftforge.fml.common.SidedProxy;
+import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
+
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import net.minecraftforge.fml.common.Mod;
-import net.minecraftforge.fml.common.SidedProxy;
-import net.minecraftforge.fml.common.Mod.EventHandler;
-import net.minecraftforge.fml.common.Mod.Instance;
-import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
-import net.minecraftforge.fml.common.event.FMLServerStartingEvent;
+import bullseye.init.ModCrafting;
+import bullseye.init.ModEntities;
+import bullseye.init.ModHandlers;
+import bullseye.init.ModItems;
+import bullseye.init.ModVanillaCompat;
 
 @Mod(modid = Bullseye.MOD_ID, name = Bullseye.MOD_NAME)
 public class Bullseye
@@ -34,5 +39,12 @@ public class Bullseye
     @EventHandler
     public void preInit(FMLPreInitializationEvent event)
     {
+    	ModEntities.init();
+        ModItems.init();
+        ModVanillaCompat.init();
+        ModHandlers.init();
+        ModCrafting.init();
+        
+        proxy.registerRenderers();
     }
 }

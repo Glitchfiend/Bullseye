@@ -50,11 +50,20 @@ public class ArrowEventHandler
 		            for (int k = 0; k < player.inventory.mainInventory.length; ++k)
 		            {
 		                ItemStack current = player.inventory.mainInventory[k];
-		                if (current != null && current.getItem() == BEItems.arrow)
+		                if (current != null)
 		                {
-	                		bestAvailableArrowType = ItemBEArrow.ArrowType.fromMeta(current.getMetadata());
-	                        bestArrowSlot = k;
-	                        break;
+		                	if (current.getItem() == Items.arrow)
+		                	{
+		                		bestAvailableArrowType = null;
+		                		bestArrowSlot = -1;
+		                		break;
+		                	}
+		                	if (current.getItem() == BEItems.arrow)
+		                	{
+			                	bestAvailableArrowType = ItemBEArrow.ArrowType.fromMeta(current.getMetadata());
+			                    bestArrowSlot = k;
+		                        break;
+		                	}
 		                }
 		            }
 	        	

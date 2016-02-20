@@ -326,8 +326,6 @@ public class EntityBEArrow extends EntityArrow implements IProjectile
             ++this.ticksInAir;
             ItemBEArrow.ArrowType arrowType = this.getArrowType();
             this.damage = arrowType.getDamageInflicted();
-            System.out.println(this.damage);
-            System.out.println(arrowType);
             Vec3 vec31 = new Vec3(this.posX, this.posY, this.posZ);
             Vec3 vec3 = new Vec3(this.posX + this.motionX, this.posY + this.motionY, this.posZ + this.motionZ);
             MovingObjectPosition movingobjectposition = this.worldObj.rayTraceBlocks(vec31, vec3, false, true, false);

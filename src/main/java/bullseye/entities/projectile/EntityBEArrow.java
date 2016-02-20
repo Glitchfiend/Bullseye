@@ -14,6 +14,7 @@ import net.minecraft.entity.monster.EntityEnderman;
 import net.minecraft.entity.passive.EntityChicken;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraft.entity.projectile.EntityArrow;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -37,7 +38,7 @@ import bullseye.core.Bullseye;
 import bullseye.item.ItemBEArrow;
 import bullseye.particle.BEParticleTypes;
 
-public class EntityBEArrow extends Entity implements IProjectile
+public class EntityBEArrow extends EntityArrow implements IProjectile
 {
     private int xTile = -1;
     private int yTile = -1;
@@ -50,8 +51,9 @@ public class EntityBEArrow extends Entity implements IProjectile
     public Entity shootingEntity;
     private int ticksInGround;
     private int ticksInAir;
-    private double damage = 1.0D;
     private int knockbackStrength;
+    ItemBEArrow.ArrowType arrowType = this.getArrowType();
+    private double damage = arrowType.getDamageInflicted();
     
     public EntityBEArrow(World world)
     {
@@ -238,6 +240,16 @@ public class EntityBEArrow extends Entity implements IProjectile
 	                        entitychicken.setLocationAndAngles(this.posX, this.posY, this.posZ, this.rotationYaw, 0.0F);
 	                        this.worldObj.spawnEntityInWorld(entitychicken);
             			}
+            			this.setDead();
+                    }
+            	}
+            	if (arrowType == ItemBEArrow.ArrowType.DIAMOND_ARROW)
+            	{
+                	++this.ticksInGround;
+
+                    if (this.ticksInGround >= 1200)
+                    {
+                        this.setDead();
                     }
             	}
             	if (arrowType == ItemBEArrow.ArrowType.FIRE_ARROW)
@@ -264,6 +276,7 @@ public class EntityBEArrow extends Entity implements IProjectile
             			{
             				this.worldObj.setBlockState(blockpos, Blocks.ice.getDefaultState());
             			}
+            			this.setDead();
             		}
             	}
             	if (arrowType == ItemBEArrow.ArrowType.ICE_ARROW)
@@ -278,6 +291,7 @@ public class EntityBEArrow extends Entity implements IProjectile
             			{
             				this.worldObj.setBlockState(blockpos.up(), Blocks.snow_layer.getDefaultState());
             			}
+            			this.setDead();
             		}
             	}
             	if (arrowType == ItemBEArrow.ArrowType.BOMB_ARROW)
@@ -286,6 +300,7 @@ public class EntityBEArrow extends Entity implements IProjectile
                     {	
                         float f = 2.0F;
                         this.worldObj.createExplosion(this, this.posX, this.posY, this.posZ, f, true);
+                        this.setDead();
                     }
             	}
             	if (arrowType == ItemBEArrow.ArrowType.LIGHTNING_ARROW)
@@ -294,10 +309,9 @@ public class EntityBEArrow extends Entity implements IProjectile
                     {	
                         EntityLightningBolt entityLightningBolt = new EntityLightningBolt(this.worldObj, this.posX, this.posY, this.posZ);
                         this.worldObj.addWeatherEffect(entityLightningBolt);
+                        this.setDead();
                     }
             	}
-            	
-            	this.setDead();
             }
             else
             {
@@ -312,6 +326,7 @@ public class EntityBEArrow extends Entity implements IProjectile
         else
         {
             ++this.ticksInAir;
+            damage = arrowType.getDamageInflicted();
             Vec3 vec31 = new Vec3(this.posX, this.posY, this.posZ);
             Vec3 vec3 = new Vec3(this.posX + this.motionX, this.posY + this.motionY, this.posZ + this.motionZ);
             MovingObjectPosition movingobjectposition = this.worldObj.rayTraceBlocks(vec31, vec3, false, true, false);
@@ -405,11 +420,11 @@ public class EntityBEArrow extends Entity implements IProjectile
 
                     if (this.shootingEntity == null)
                     {
-                        damagesource = DamageSource.generic;
+                        damagesource = DamageSource.causeArrowDamage(this, this);
                     }
                     else
                     {
-                        damagesource = DamageSource.generic;
+                        damagesource = DamageSource.causeArrowDamage(this, this.shootingEntity);
                     }
 
                     if (this.isBurning() && !(movingobjectposition.entityHit instanceof EntityEnderman))
@@ -418,20 +433,6 @@ public class EntityBEArrow extends Entity implements IProjectile
                     }
 
                     //Arrow Effects
-                    if (arrowType == ItemBEArrow.ArrowType.EGG_ARROW)
-                	{
-                    	if (movingobjectposition.entityHit instanceof EntityLivingBase)
-                        {	
-                			int i = worldObj.rand.nextInt(4);
-                			if (i == 0)
-                			{
-    	                        EntityChicken entitychicken = new EntityChicken(this.worldObj);
-    	                        entitychicken.setGrowingAge(-24000);
-    	                        entitychicken.setLocationAndAngles(this.posX, this.posY, this.posZ, this.rotationYaw, 0.0F);
-    	                        this.worldObj.spawnEntityInWorld(entitychicken);
-                			}
-                        }
-                	}
                     if (arrowType == ItemBEArrow.ArrowType.FIRE_ARROW)
                     {
                         if (movingobjectposition.entityHit instanceof EntityLivingBase)
@@ -459,7 +460,7 @@ public class EntityBEArrow extends Entity implements IProjectile
                         }
                 	}
 
-                    if (movingobjectposition.entityHit.attackEntityFrom(damagesource, (float)l))
+                    if (movingobjectposition.entityHit.attackEntityFrom(damagesource, (float)this.damage))
                     {
                         if (movingobjectposition.entityHit instanceof EntityLivingBase)
                         {
@@ -467,7 +468,10 @@ public class EntityBEArrow extends Entity implements IProjectile
 
                             if (!this.worldObj.isRemote)
                             {
-                                entitylivingbase.setArrowCountInEntity(entitylivingbase.getArrowCountInEntity() + 1);
+                            	if (arrowType == ItemBEArrow.ArrowType.DIAMOND_ARROW)
+                            	{
+                            		entitylivingbase.setArrowCountInEntity(entitylivingbase.getArrowCountInEntity() + 1);
+                            	}
                             }
 
                             if (this.knockbackStrength > 0)
@@ -537,6 +541,16 @@ public class EntityBEArrow extends Entity implements IProjectile
                 }
             }
             
+            if (arrowType == ItemBEArrow.ArrowType.DIAMOND_ARROW || arrowType == ItemBEArrow.ArrowType.EGG_ARROW)
+            {
+	            if (this.getIsCritical())
+	            {
+	                for (int k = 0; k < 4; ++k)
+	                {
+	                    this.worldObj.spawnParticle(EnumParticleTypes.CRIT, this.posX + this.motionX * (double)k / 4.0D, this.posY + this.motionY * (double)k / 4.0D, this.posZ + this.motionZ * (double)k / 4.0D, -this.motionX, -this.motionY + 0.2D, -this.motionZ, new int[0]);
+	                }
+	            }
+            }
             if (arrowType == ItemBEArrow.ArrowType.FIRE_ARROW)
             {
             	for (int k = 0; k < 8; ++k)
@@ -715,16 +729,19 @@ public class EntityBEArrow extends Entity implements IProjectile
         return false;
     }
     
+    @Override
     public void setDamage(double damageIn)
     {
         this.damage = damageIn;
     }
 
+    @Override
     public double getDamage()
     {
         return this.damage;
     }
 
+    @Override
     public void setKnockbackStrength(int knockbackStrengthIn)
     {
         this.knockbackStrength = knockbackStrengthIn;
@@ -742,6 +759,7 @@ public class EntityBEArrow extends Entity implements IProjectile
         return 0.0F;
     }
 
+    @Override
     public void setIsCritical(boolean critical)
     {
         byte b0 = this.dataWatcher.getWatchableObjectByte(16);
@@ -756,6 +774,7 @@ public class EntityBEArrow extends Entity implements IProjectile
         }
     }
 
+    @Override
     public boolean getIsCritical()
     {
         byte b0 = this.dataWatcher.getWatchableObjectByte(16);

@@ -15,7 +15,7 @@ public class ItemBEArrow extends Item
     
     public static enum ArrowType implements IStringSerializable
     {
-        EGG_ARROW, FIRE_ARROW, ICE_ARROW, LIGHTNING_ARROW, BOMB_ARROW;
+        EGG_ARROW, DIAMOND_ARROW, FIRE_ARROW, ICE_ARROW, LIGHTNING_ARROW, BOMB_ARROW;
         @Override
         public String getName()
         {
@@ -26,16 +26,25 @@ public class ItemBEArrow extends Item
         {
             return this.getName();
         }
-        public float getDamageInflicted()
+        
+        public double getDamageInflicted()
         {
             switch(this)
             {
 	            case EGG_ARROW:
-	                return 0.1F;
+	                return 0.25D;
+	            case DIAMOND_ARROW:
+                    return 4.0D;
                 case FIRE_ARROW:
-                    return 0.5F;
+                    return 0.5D;
+                case ICE_ARROW:
+                    return 1.0D;
+                case LIGHTNING_ARROW:
+                    return 0.5D;
+                case BOMB_ARROW:
+                    return 0.5D;
                 default:
-                    return 1.0F;
+                    return 2.0D;
             }
         }
         public static ArrowType fromMeta(int meta)

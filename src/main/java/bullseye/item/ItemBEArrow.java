@@ -15,7 +15,7 @@ public class ItemBEArrow extends Item
     
     public static enum ArrowType implements IStringSerializable
     {
-        FIRE_ARROW, ICE_ARROW, LIGHTNING_ARROW, BOMB_ARROW;
+        EGG_ARROW, FIRE_ARROW, ICE_ARROW, LIGHTNING_ARROW, BOMB_ARROW;
         @Override
         public String getName()
         {
@@ -30,8 +30,10 @@ public class ItemBEArrow extends Item
         {
             switch(this)
             {
+	            case EGG_ARROW:
+	                return 0.1F;
                 case FIRE_ARROW:
-                    return 2.0F;
+                    return 0.5F;
                 default:
                     return 1.0F;
             }

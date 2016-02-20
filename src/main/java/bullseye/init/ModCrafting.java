@@ -21,6 +21,7 @@ public class ModCrafting
     	// Register crafting recipes
 
     	// Arrows
+    	GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(BEItems.arrow, 4, ItemBEArrow.ArrowType.EGG_ARROW.ordinal()), new Object [] {"E", "S", "F", 'E', Items.egg, 'S', "stickWood", 'F', Items.feather}));
     	GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(BEItems.arrow, 4, ItemBEArrow.ArrowType.FIRE_ARROW.ordinal()), new Object [] {"T", "S", "F", 'T', new ItemStack(BEItems.arrow_topper, 1, ItemArrowTopper.TopperType.FIRE_ARROW_TOPPER.ordinal()), 'S', "stickWood", 'F', Items.feather}));
     	GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(BEItems.arrow, 4, ItemBEArrow.ArrowType.ICE_ARROW.ordinal()), new Object [] {"T", "S", "F", 'T', new ItemStack(BEItems.arrow_topper, 1, ItemArrowTopper.TopperType.ICE_ARROW_TOPPER.ordinal()), 'S', "stickWood", 'F', Items.feather}));
     	GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(BEItems.arrow, 4, ItemBEArrow.ArrowType.LIGHTNING_ARROW.ordinal()), new Object [] {"T", "S", "F", 'T', new ItemStack(BEItems.arrow_topper, 1, ItemArrowTopper.TopperType.LIGHTNING_ARROW_TOPPER.ordinal()), 'S', "stickWood", 'F', Items.feather}));

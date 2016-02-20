@@ -11,6 +11,7 @@ import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.IProjectile;
 import net.minecraft.entity.effect.EntityLightningBolt;
 import net.minecraft.entity.monster.EntityEnderman;
+import net.minecraft.entity.passive.EntityChicken;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.init.Blocks;
@@ -225,6 +226,20 @@ public class EntityBEArrow extends Entity implements IProjectile
             {
             	//Arrow Effects
             	ItemBEArrow.ArrowType arrowType = this.getArrowType();
+            	if (arrowType == ItemBEArrow.ArrowType.EGG_ARROW)
+            	{
+            		if (!this.worldObj.isRemote)
+                    {	
+            			int i = worldObj.rand.nextInt(4);
+            			if (i == 0)
+            			{
+	                        EntityChicken entitychicken = new EntityChicken(this.worldObj);
+	                        entitychicken.setGrowingAge(-24000);
+	                        entitychicken.setLocationAndAngles(this.posX, this.posY, this.posZ, this.rotationYaw, 0.0F);
+	                        this.worldObj.spawnEntityInWorld(entitychicken);
+            			}
+                    }
+            	}
             	if (arrowType == ItemBEArrow.ArrowType.FIRE_ARROW)
             	{
             		if (!this.worldObj.isRemote)
@@ -403,6 +418,20 @@ public class EntityBEArrow extends Entity implements IProjectile
                     }
 
                     //Arrow Effects
+                    if (arrowType == ItemBEArrow.ArrowType.EGG_ARROW)
+                	{
+                    	if (movingobjectposition.entityHit instanceof EntityLivingBase)
+                        {	
+                			int i = worldObj.rand.nextInt(4);
+                			if (i == 0)
+                			{
+    	                        EntityChicken entitychicken = new EntityChicken(this.worldObj);
+    	                        entitychicken.setGrowingAge(-24000);
+    	                        entitychicken.setLocationAndAngles(this.posX, this.posY, this.posZ, this.rotationYaw, 0.0F);
+    	                        this.worldObj.spawnEntityInWorld(entitychicken);
+                			}
+                        }
+                	}
                     if (arrowType == ItemBEArrow.ArrowType.FIRE_ARROW)
                     {
                         if (movingobjectposition.entityHit instanceof EntityLivingBase)

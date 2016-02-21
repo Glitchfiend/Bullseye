@@ -12,6 +12,7 @@ import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.IProjectile;
 import net.minecraft.entity.monster.EntityEnderman;
 import net.minecraft.entity.passive.EntitySheep;
+import net.minecraft.entity.passive.EntityWolf;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.entity.projectile.EntityArrow;
@@ -33,9 +34,7 @@ import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import bullseye.api.BEItems;
-import bullseye.core.Bullseye;
 import bullseye.item.ItemDyeArrow;
-import bullseye.particle.BEParticleTypes;
 
 public class EntityDyeArrow extends EntityArrow implements IProjectile
 {
@@ -343,6 +342,17 @@ public class EntityDyeArrow extends EntityArrow implements IProjectile
                 if (this.shootingEntity instanceof EntityPlayer)
                 {
                     entitysheep.setFleeceColor(EnumDyeColor.byMetadata(dyeType.ordinal()));
+                    this.setDead();
+                }
+            }
+            
+            if (movingobjectposition != null && movingobjectposition.entityHit != null && movingobjectposition.entityHit instanceof EntityWolf)
+            {
+                EntityWolf entitywolf = (EntityWolf)movingobjectposition.entityHit;
+
+                if (this.shootingEntity instanceof EntityPlayer)
+                {
+                    entitywolf.setCollarColor(EnumDyeColor.byMetadata(dyeType.ordinal()));
                     this.setDead();
                 }
             }

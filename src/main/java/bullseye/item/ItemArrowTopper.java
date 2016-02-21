@@ -16,11 +16,11 @@ public class ItemArrowTopper extends Item
     
     public static enum TopperType implements IStringSerializable
     {
-    	BOMB_ARROW_TOPPER, FIRE_ARROW_TOPPER, ICE_ARROW_TOPPER, LIGHTNING_ARROW_TOPPER;
+    	BOMB, FIRE, ICE, LIGHTNING;
         @Override
         public String getName()
         {
-            return this.name().toLowerCase();
+            return this.name().toLowerCase() + "_arrow_topper";
         }
         @Override
         public String toString()
@@ -57,7 +57,7 @@ public class ItemArrowTopper extends Item
         TopperType toppertype = ItemArrowTopper.TopperType.fromMeta(stack.getMetadata());
         switch (toppertype)
         {
-            case FIRE_ARROW_TOPPER: case ICE_ARROW_TOPPER: case LIGHTNING_ARROW_TOPPER:
+            case FIRE: case ICE: case LIGHTNING:
                 return true;
             default:
                 return super.hasEffect(stack); 

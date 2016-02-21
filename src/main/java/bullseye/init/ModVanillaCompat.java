@@ -3,6 +3,7 @@ package bullseye.init;
 import net.minecraft.block.BlockDispenser;
 import bullseye.api.BEItems;
 import bullseye.entities.projectiles.dispenser.DispenserBehaviorBEArrow;
+import bullseye.entities.projectiles.dispenser.DispenserBehaviorDyeArrow;
 
 public class ModVanillaCompat
 {
@@ -14,5 +15,6 @@ public class ModVanillaCompat
     private static void registerDispenserBehaviors()
     {
     	BlockDispenser.dispenseBehaviorRegistry.putObject(BEItems.arrow, new DispenserBehaviorBEArrow());
+    	BlockDispenser.dispenseBehaviorRegistry.putObject(BEItems.dye_arrow, new DispenserBehaviorDyeArrow());
     }
 }

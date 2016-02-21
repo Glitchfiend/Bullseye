@@ -11,4 +11,21 @@ item.ice_arrow_topper.name=Ice Arrow Topper
 item.lightning_arrow.name=Lightning Arrow
 item.lightning_arrow_topper.name=Lightning Arrow Topper
 
+item.dye_arrow_red.name=Red Dye Arrow
+item.dye_arrow_orange.name=Orange Dye Arrow
+item.dye_arrow_yellow.name=Yellow Dye Arrow
+item.dye_arrow_lime.name=Lime Dye Arrow
+item.dye_arrow_green.name=Green Dye Arrow
+item.dye_arrow_cyan.name=Cyan Dye Arrow
+item.dye_arrow_light_blue.name=Light Blue Dye Arrow
+item.dye_arrow_blue.name=Blue Dye Arrow
+item.dye_arrow_purple.name=Purple Dye Arrow
+item.dye_arrow_magenta.name=Magenta Dye Arrow
+item.dye_arrow_pink.name=Pink Dye Arrow
+item.dye_arrow_brown.name=Brown Dye Arrow
+item.dye_arrow_white.name=White Dye Arrow
+item.dye_arrow_silver.name=Light Gray Dye Arrow
+item.dye_arrow_gray.name=Gray Dye Arrow
+item.dye_arrow_black.name=Black Dye Arrow
+
 entity.Bullseye.arrow.name=Arrow

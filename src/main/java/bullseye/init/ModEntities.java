@@ -11,6 +11,7 @@ import net.minecraftforge.fml.common.registry.EntityRegistry;
 import net.minecraftforge.fml.common.registry.EntityRegistry.EntityRegistration;
 import bullseye.core.Bullseye;
 import bullseye.entities.projectile.EntityBEArrow;
+import bullseye.entities.projectile.EntityDyeArrow;
 
 import com.google.common.collect.Maps;
 
@@ -24,6 +25,7 @@ public class ModEntities
     public static void init()
     {
         // projectiles
+    	registerBEEntity(EntityDyeArrow.class, "dye_arrow", 80, 3, true);
         registerBEEntity(EntityBEArrow.class, "arrow", 80, 3, true);
     }
     

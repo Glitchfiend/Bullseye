@@ -8,6 +8,7 @@ public class BEItems
 {
 	public static Item be_icon;
 
+	public static Item dye_arrow;
     public static Item arrow;
     public static Item arrow_topper;
 }

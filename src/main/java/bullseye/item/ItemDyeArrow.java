@@ -10,15 +10,15 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 
-public class ItemBEArrow extends Item
+public class ItemDyeArrow extends Item
 {
-    public static enum ArrowType implements IStringSerializable
+    public static enum DyeType implements IStringSerializable
     {
-        EGG, DIAMOND, BOMB, FIRE, ICE, LIGHTNING;
+    	WHITE, ORANGE, MAGENTA, LIGHT_BLUE, YELLOW, LIME, PINK, GRAY, SILVER, CYAN, PURPLE, BLUE, BROWN, GREEN, RED, BLACK;
         @Override
         public String getName()
         {
-            return this.name().toLowerCase() + "_arrow";
+            return "dye_arrow_" + this.name().toLowerCase();
         }
         @Override
         public String toString()
@@ -30,29 +30,17 @@ public class ItemBEArrow extends Item
         {
             switch(this)
             {
-	            case EGG:
-	                return 0.25D;
-	            case DIAMOND:
-                    return 4.0D;
-                case FIRE:
-                    return 0.5D;
-                case ICE:
-                    return 1.0D;
-                case LIGHTNING:
-                    return 0.5D;
-                case BOMB:
-                    return 0.5D;
                 default:
-                    return 2.0D;
+                    return 1.0D;
             }
         }
-        public static ArrowType fromMeta(int meta)
+        public static DyeType fromMeta(int meta)
         {
-            return ArrowType.values()[meta % ArrowType.values().length];
+            return DyeType.values()[meta % DyeType.values().length];
         }
     };
     
-    public ItemBEArrow()
+    public ItemDyeArrow()
     {
         this.setHasSubtypes(true);
         this.setMaxDamage(0);
@@ -63,22 +51,9 @@ public class ItemBEArrow extends Item
     @SideOnly(Side.CLIENT)
     public void getSubItems(Item itemIn, CreativeTabs tab, List subItems)
     {
-        for (ArrowType arrowType : ArrowType.values())
+        for (DyeType dyeType : DyeType.values())
         {
-            subItems.add(new ItemStack(itemIn, 1, arrowType.ordinal()));
-        }
-    }
-    
-    @Override
-    public boolean hasEffect(ItemStack stack)
-    {
-        ArrowType arrowtype = ItemBEArrow.ArrowType.fromMeta(stack.getMetadata());
-        switch (arrowtype)
-        {
-            case FIRE: case ICE: case LIGHTNING:
-                return true;
-            default:
-                return super.hasEffect(stack); 
+            subItems.add(new ItemStack(itemIn, 1, dyeType.ordinal()));
         }
     }
     
@@ -93,7 +68,7 @@ public class ItemBEArrow extends Item
     @Override
     public String getUnlocalizedName(ItemStack stack)
     {
-        return "item." + ArrowType.fromMeta(stack.getMetadata()).toString();
+        return "item." + DyeType.fromMeta(stack.getMetadata()).toString();
     }
     
     

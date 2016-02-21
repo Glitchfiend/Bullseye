@@ -130,7 +130,10 @@ public class ArrowEventHandler
 
 				            if (j > 0)
 				            {
-				                entitybearrow.setDamage(entitybearrow.getDamage() + (double)j * 0.5D + 0.5D);
+				            	if (bestAvailableArrowType != ItemBEArrow.ArrowType.TRAINING)
+				            	{
+				            		entitybearrow.setDamage(entitybearrow.getDamage() + (double)j * 0.5D + 0.5D);
+				            	}
 				            }
 
 				            int k = EnchantmentHelper.getEnchantmentLevel(Enchantment.punch.effectId, itemstack);
@@ -138,6 +141,14 @@ public class ArrowEventHandler
 				            if (k > 0)
 				            {
 				                entitybearrow.setKnockbackStrength(k);
+				            }
+				            
+				            if (EnchantmentHelper.getEnchantmentLevel(Enchantment.flame.effectId, itemstack) > 0)
+				            {
+				            	if (bestAvailableArrowType == ItemBEArrow.ArrowType.DIAMOND)
+				            	{
+				            		entitybearrow.setFire(100);	
+				            	}
 				            }
 				
 				            itemstack.damageItem(1, player);

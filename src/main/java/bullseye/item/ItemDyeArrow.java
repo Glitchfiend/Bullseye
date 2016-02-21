@@ -31,7 +31,7 @@ public class ItemDyeArrow extends Item
             switch(this)
             {
                 default:
-                    return 1.0D;
+                    return 0.25D;
             }
         }
         public static DyeType fromMeta(int meta)

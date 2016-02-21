@@ -341,15 +341,12 @@ public class EntityDyeArrow extends EntityArrow implements IProjectile
             {
                 EntityPlayer entityplayer = (EntityPlayer)movingobjectposition.entityHit;
 
-                if (this.shootingEntity instanceof EntityPlayer)
+                for (ItemStack itemstack : entityplayer.inventory.armorInventory)
                 {
-                    for (ItemStack itemstack : entityplayer.inventory.armorInventory)
+                    if (itemstack != null && (itemstack.getItem() == Items.leather_helmet || itemstack.getItem() == Items.leather_chestplate || itemstack.getItem() == Items.leather_leggings || itemstack.getItem() == Items.leather_boots))
                     {
-                        if (itemstack != null && (itemstack.getItem() == Items.leather_helmet || itemstack.getItem() == Items.leather_chestplate || itemstack.getItem() == Items.leather_leggings || itemstack.getItem() == Items.leather_boots))
-                        {
-                            ItemArmor itemarmor = (ItemArmor)itemstack.getItem();
-                            itemarmor.setColor(itemstack, EnumDyeColor.byMetadata(dyeType.ordinal()).getMapColor().colorValue);
-                        }
+                        ItemArmor itemarmor = (ItemArmor)itemstack.getItem();
+                        itemarmor.setColor(itemstack, EnumDyeColor.byMetadata(dyeType.ordinal()).getMapColor().colorValue);
                     }
                 }
             }
@@ -358,22 +355,16 @@ public class EntityDyeArrow extends EntityArrow implements IProjectile
             {
                 EntitySheep entitysheep = (EntitySheep)movingobjectposition.entityHit;
 
-                if (this.shootingEntity instanceof EntityPlayer)
-                {
-                    entitysheep.setFleeceColor(EnumDyeColor.byMetadata(dyeType.ordinal()));
-                    this.setDead();
-                }
+                entitysheep.setFleeceColor(EnumDyeColor.byMetadata(dyeType.ordinal()));
+                this.setDead();
             }
             
             if (movingobjectposition != null && movingobjectposition.entityHit != null && movingobjectposition.entityHit instanceof EntityWolf)
             {
                 EntityWolf entitywolf = (EntityWolf)movingobjectposition.entityHit;
 
-                if (this.shootingEntity instanceof EntityPlayer)
-                {
-                    entitywolf.setCollarColor(EnumDyeColor.byMetadata(dyeType.ordinal()));
-                    this.setDead();
-                }
+                entitywolf.setCollarColor(EnumDyeColor.byMetadata(dyeType.ordinal()));
+                this.setDead();
             }
 
             if (movingobjectposition != null)

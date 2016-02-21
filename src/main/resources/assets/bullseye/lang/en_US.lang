@@ -29,3 +29,4 @@ item.dye_arrow_gray.name=Gray Dye Arrow
 item.dye_arrow_black.name=Black Dye Arrow
 
 entity.Bullseye.arrow.name=Arrow
+entity.Bullseye.dye_arrow.name=Dye Arrow

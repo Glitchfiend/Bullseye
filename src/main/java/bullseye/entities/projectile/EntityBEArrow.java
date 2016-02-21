@@ -7,6 +7,7 @@ import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityList;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.IProjectile;
 import net.minecraft.entity.effect.EntityLightningBolt;
@@ -26,6 +27,7 @@ import net.minecraft.util.DamageSource;
 import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.MathHelper;
 import net.minecraft.util.MovingObjectPosition;
+import net.minecraft.util.StatCollector;
 import net.minecraft.util.MovingObjectPosition.MovingObjectType;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.Vec3;
@@ -866,5 +868,25 @@ public class EntityBEArrow extends EntityArrow implements IProjectile
     {
         byte b0 = this.dataWatcher.getWatchableObjectByte(16);
         return (b0 & 1) != 0;
+    }
+    
+    @Override
+    public String getName()
+    {
+        if (this.hasCustomName())
+        {
+            return this.getCustomNameTag();
+        }
+        else
+        {
+            String s = EntityList.getEntityString(this);
+
+            if (s == null)
+            {
+                s = "generic";
+            }
+
+            return StatCollector.translateToLocal("entity.Bullseye." + this.getArrowType() + ".name");
+        }
     }
 }

@@ -29,4 +29,26 @@ item.dye_arrow_gray.name=Gray Dye Arrow
 item.dye_arrow_black.name=Black Dye Arrow
 
 entity.Bullseye.arrow.name=Arrow
-entity.Bullseye.dye_arrow.name=Dye Arrow
+entity.Bullseye.egg_arrow.name=Egg Arrow
+entity.Bullseye.diamond_arrow.name=Diamond Arrow
+entity.Bullseye.bomb_arrow.name=Bomb Arrow
+entity.Bullseye.fire_arrow.name=Fire Arrow
+entity.Bullseye.ice_arrow.name=Ice Arrow
+entity.Bullseye.lightning_arrow.name=Lightning Arrow
+
+entity.Bullseye.dye_arrow_red.name=Red Dye Arrow
+entity.Bullseye.dye_arrow_orange.name=Orange Dye Arrow
+entity.Bullseye.dye_arrow_yellow.name=Yellow Dye Arrow
+entity.Bullseye.dye_arrow_lime.name=Lime Dye Arrow
+entity.Bullseye.dye_arrow_green.name=Green Dye Arrow
+entity.Bullseye.dye_arrow_cyan.name=Cyan Dye Arrow
+entity.Bullseye.dye_arrow_light_blue.name=Light Blue Dye Arrow
+entity.Bullseye.dye_arrow_blue.name=Blue Dye Arrow
+entity.Bullseye.dye_arrow_purple.name=Purple Dye Arrow
+entity.Bullseye.dye_arrow_magenta.name=Magenta Dye Arrow
+entity.Bullseye.dye_arrow_pink.name=Pink Dye Arrow
+entity.Bullseye.dye_arrow_brown.name=Brown Dye Arrow
+entity.Bullseye.dye_arrow_white.name=White Dye Arrow
+entity.Bullseye.dye_arrow_silver.name=Light Gray Dye Arrow
+entity.Bullseye.dye_arrow_gray.name=Gray Dye Arrow
+entity.Bullseye.dye_arrow_black.name=Black Dye Arrow

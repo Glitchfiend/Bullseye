@@ -70,6 +70,19 @@ public class ItemBEArrow extends Item
         }
     }
     
+    @Override
+    public boolean hasEffect(ItemStack stack)
+    {
+        ArrowType arrowtype = ItemBEArrow.ArrowType.fromMeta(stack.getMetadata());
+        switch (arrowtype)
+        {
+            case FIRE_ARROW: case ICE_ARROW: case LIGHTNING_ARROW:
+                return true;
+            default:
+                return super.hasEffect(stack); 
+        }
+    }
+    
     // default behavior in Item is to return 0, but the meta value is important here because it determines which dart type to use
     @Override
     public int getMetadata(int metadata)

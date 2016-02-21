@@ -2,6 +2,7 @@ package bullseye.item;
 
 import java.util.List;
 
+import bullseye.item.ItemBEArrow.ArrowType;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -47,6 +48,19 @@ public class ItemArrowTopper extends Item
         for (TopperType topperType : TopperType.values())
         {
             subItems.add(new ItemStack(itemIn, 1, topperType.ordinal()));
+        }
+    }
+    
+    @Override
+    public boolean hasEffect(ItemStack stack)
+    {
+        TopperType toppertype = ItemArrowTopper.TopperType.fromMeta(stack.getMetadata());
+        switch (toppertype)
+        {
+            case FIRE_ARROW_TOPPER: case ICE_ARROW_TOPPER: case LIGHTNING_ARROW_TOPPER:
+                return true;
+            default:
+                return super.hasEffect(stack); 
         }
     }
     

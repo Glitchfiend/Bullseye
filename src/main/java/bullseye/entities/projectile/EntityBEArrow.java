@@ -391,6 +391,26 @@ public class EntityBEArrow extends EntityArrow implements IProjectile
 	                }
             	}
             }
+        	if (arrowType == ItemBEArrow.ArrowType.FIRE_ARROW)
+        	{
+	            MovingObjectPosition watercollisionpos = this.worldObj.rayTraceBlocks(vec31, vec3, true, false, false);
+	            if (watercollisionpos != null && watercollisionpos.typeOfHit == MovingObjectType.BLOCK)
+	            {
+	                BlockPos pos = watercollisionpos.getBlockPos();
+	                IBlockState state = this.worldObj.getBlockState(pos);
+	                Fluid fluid = FluidRegistry.lookupFluidForBlock(state.getBlock());
+	
+	                if (fluid != null && fluid == FluidRegistry.WATER) //Temporary, until a registry is created
+	                {
+	                	this.worldObj.playSoundEffect(this.posX, this.posY, this.posZ, "random.fizz", 0.5F, 2.6F + (this.worldObj.rand.nextFloat() - this.worldObj.rand.nextFloat()) * 0.8F);
+	                	for (int i = 0; i < 8; ++i)
+	                    {
+	                        this.worldObj.spawnParticle(EnumParticleTypes.SMOKE_LARGE, (this.posX - 0.5D) + Math.random(), this.posY + 0.25D, (this.posZ - 0.5D) + Math.random(), 0.0D, 0.0D, 0.0D, new int[0]);
+	                    }
+	                	this.setDead();
+	                }
+            	}
+            }
 
             if (movingobjectposition != null && movingobjectposition.entityHit != null && movingobjectposition.entityHit instanceof EntityPlayer)
             {

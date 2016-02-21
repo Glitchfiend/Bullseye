@@ -480,16 +480,21 @@ public class EntityBEArrow extends EntityArrow implements IProjectile
                     float f2 = MathHelper.sqrt_double(this.motionX * this.motionX + this.motionY * this.motionY + this.motionZ * this.motionZ);
                     int l = MathHelper.ceiling_double_int((double)f2 * this.damage);
 
-                    if (arrowType != ItemBEArrow.ArrowType.TRAINING)
+                    if (this.getIsCritical())
                     {
-	                    if (this.getIsCritical())
-	                    {
-	                        l += this.rand.nextInt(l / 2 + 2);
-	                    }
+                    	if (arrowType == ItemBEArrow.ArrowType.TRAINING)
+                    	{
+                    		l = 0;
+                    	}
+                    	else
+                    	{
+                    		l += this.rand.nextInt(l / 2 + 2);
+                    	}
                     }
 
                     DamageSource damagesource;
 
+                    
                     if (this.shootingEntity == null)
                     {
                         damagesource = DamageSource.causeArrowDamage(this, this);
@@ -614,49 +619,12 @@ public class EntityBEArrow extends EntityArrow implements IProjectile
                     }
                     else
                     {
-                    	if (arrowType == ItemBEArrow.ArrowType.TRAINING)
-                    	{
-                    		if (movingobjectposition.entityHit instanceof EntityLivingBase)
-                            {
-                                EntityLivingBase entitylivingbase = (EntityLivingBase)movingobjectposition.entityHit;
-
-                                if (!this.worldObj.isRemote)
-                                {
-                                	entitylivingbase.setArrowCountInEntity(entitylivingbase.getArrowCountInEntity() + 1);
-                                }
-
-                                if (this.knockbackStrength > 0)
-                                {
-                                    float f7 = MathHelper.sqrt_double(this.motionX * this.motionX + this.motionZ * this.motionZ);
-
-                                    if (f7 > 0.0F)
-                                    {
-                                        movingobjectposition.entityHit.addVelocity(this.motionX * (double)this.knockbackStrength * 0.6000000238418579D / (double)f7, 0.1D, this.motionZ * (double)this.knockbackStrength * 0.6000000238418579D / (double)f7);
-                                    }
-                                }
-
-                                if (this.shootingEntity != null && movingobjectposition.entityHit != this.shootingEntity && movingobjectposition.entityHit instanceof EntityPlayer && this.shootingEntity instanceof EntityPlayerMP)
-                                {
-                                    ((EntityPlayerMP)this.shootingEntity).playerNetServerHandler.sendPacket(new S2BPacketChangeGameState(6, 0.0F));
-                                }
-                            }
-
-                            this.playSound("random.bowhit", 1.0F, 1.2F / (this.rand.nextFloat() * 0.2F + 0.9F));
-
-                            if (!(movingobjectposition.entityHit instanceof EntityEnderman))
-                            {
-                                this.setDead();
-                            }
-                    	}
-                    	else
-                    	{
-                            this.motionX *= -0.10000000149011612D;
-                            this.motionY *= -0.10000000149011612D;
-                            this.motionZ *= -0.10000000149011612D;
-                            this.rotationYaw += 180.0F;
-                            this.prevRotationYaw += 180.0F;
-                            this.ticksInAir = 0;
-                    	}
+                        this.motionX *= -0.10000000149011612D;
+                        this.motionY *= -0.10000000149011612D;
+                        this.motionZ *= -0.10000000149011612D;
+                        this.rotationYaw += 180.0F;
+                        this.prevRotationYaw += 180.0F;
+                        this.ticksInAir = 0;
                     }
                 }
                 else

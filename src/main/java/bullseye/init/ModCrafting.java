@@ -1,5 +1,6 @@
 package bullseye.init;
 
+import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.fml.common.registry.GameRegistry;
@@ -48,7 +49,7 @@ public class ModCrafting
     	// Arrow Toppers
     	GameRegistry.addShapedRecipe(new ItemStack(BEItems.arrow_topper, 1, ItemArrowTopper.TopperType.BOMB.ordinal()), new Object [] {" C ", "CGC", " C ", 'C', Items.clay_ball, 'G', Items.gunpowder});
     	GameRegistry.addShapedRecipe(new ItemStack(BEItems.arrow_topper, 1, ItemArrowTopper.TopperType.FIRE.ordinal()), new Object [] {" B ", "BCB", " B ", 'B', Items.blaze_powder, 'C', Items.coal});
-    	GameRegistry.addShapedRecipe(new ItemStack(BEItems.arrow_topper, 1, ItemArrowTopper.TopperType.ICE.ordinal()), new Object [] {" S ", "SPS", " S ", 'S', Items.snowball, 'P', Items.prismarine_crystals});
+    	GameRegistry.addShapedRecipe(new ItemStack(BEItems.arrow_topper, 1, ItemArrowTopper.TopperType.ICE.ordinal()), new Object [] {" S ", "SPS", " S ", 'S', Items.snowball, 'P', Blocks.ice});
     	GameRegistry.addShapedRecipe(new ItemStack(BEItems.arrow_topper, 1, ItemArrowTopper.TopperType.LIGHTNING.ordinal()), new Object [] {" Q ", "QNQ", " Q ", 'Q', Items.quartz, 'N', Items.nether_star});
     }
 }

@@ -16,6 +16,7 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.entity.projectile.EntityArrow;
 import net.minecraft.init.Blocks;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.play.server.S2BPacketChangeGameState;
@@ -238,8 +239,14 @@ public class EntityBEArrow extends EntityArrow implements IProjectile
 	                        entitychicken.setLocationAndAngles(this.posX, this.posY, this.posZ, this.rotationYaw, 0.0F);
 	                        this.worldObj.spawnEntityInWorld(entitychicken);
             			}
-            			this.setDead();
                     }
+        	        int itemId = Item.getIdFromItem(BEItems.arrow);
+        	        int itemMeta = this.getArrowType().ordinal();
+        	        for (int ii = 0; ii < 16; ++ii)
+        	        {
+        	            this.worldObj.spawnParticle(EnumParticleTypes.ITEM_CRACK, this.posX, this.posY, this.posZ, ((double)this.rand.nextFloat() - 0.5D) * 0.08D, ((double)this.rand.nextFloat() - 0.5D) * 0.08D, ((double)this.rand.nextFloat() - 0.5D) * 0.08D, new int[] {itemId, itemMeta});                
+        	        }
+        			this.setDead();
             	}
             	if (arrowType == ItemBEArrow.ArrowType.DIAMOND_ARROW)
             	{
@@ -274,8 +281,19 @@ public class EntityBEArrow extends EntityArrow implements IProjectile
             			{
             				this.worldObj.setBlockState(blockpos, Blocks.ice.getDefaultState());
             			}
-            			this.setDead();
             		}
+        			this.worldObj.playSoundEffect(this.posX, this.posY, this.posZ, "random.fizz", 0.5F, 2.6F + (this.worldObj.rand.nextFloat() - this.worldObj.rand.nextFloat()) * 0.8F);
+                	for (int i = 0; i < 8; ++i)
+                    {
+                        this.worldObj.spawnParticle(EnumParticleTypes.SMOKE_LARGE, (this.posX - 0.5D) + Math.random(), this.posY + 0.25D, (this.posZ - 0.5D) + Math.random(), 0.0D, 0.0D, 0.0D, new int[0]);
+                    }
+        	        int itemId = Item.getIdFromItem(BEItems.arrow);
+        	        int itemMeta = this.getArrowType().ordinal();
+        	        for (int ii = 0; ii < 16; ++ii)
+        	        {
+        	            this.worldObj.spawnParticle(EnumParticleTypes.ITEM_CRACK, this.posX, this.posY, this.posZ, ((double)this.rand.nextFloat() - 0.5D) * 0.08D, ((double)this.rand.nextFloat() - 0.5D) * 0.08D, ((double)this.rand.nextFloat() - 0.5D) * 0.08D, new int[] {itemId, itemMeta});                
+        	        }
+        			this.setDead();
             	}
             	if (arrowType == ItemBEArrow.ArrowType.ICE_ARROW)
             	{
@@ -289,8 +307,18 @@ public class EntityBEArrow extends EntityArrow implements IProjectile
             			{
             				this.worldObj.setBlockState(blockpos.up(), Blocks.snow_layer.getDefaultState());
             			}
-            			this.setDead();
             		}
+                	for (int i = 0; i < 8; ++i)
+                    {
+                		Bullseye.proxy.spawnParticle(BEParticleTypes.SNOWFLAKE, (this.posX - 0.5D) + Math.random(), this.posY + 0.25D, (this.posZ - 0.5D) + Math.random(), 0.0D, 0.0D, 0.0D, new int[0]);
+                    }
+        	        int itemId = Item.getIdFromItem(BEItems.arrow);
+        	        int itemMeta = this.getArrowType().ordinal();
+        	        for (int ii = 0; ii < 16; ++ii)
+        	        {
+        	            this.worldObj.spawnParticle(EnumParticleTypes.ITEM_CRACK, this.posX, this.posY, this.posZ, ((double)this.rand.nextFloat() - 0.5D) * 0.08D, ((double)this.rand.nextFloat() - 0.5D) * 0.08D, ((double)this.rand.nextFloat() - 0.5D) * 0.08D, new int[] {itemId, itemMeta});                
+        	        }
+        			this.setDead();
             	}
             	if (arrowType == ItemBEArrow.ArrowType.BOMB_ARROW)
             	{
@@ -298,8 +326,14 @@ public class EntityBEArrow extends EntityArrow implements IProjectile
                     {	
                         float f = 2.0F;
                         this.worldObj.createExplosion(this, this.posX, this.posY, this.posZ, f, true);
-                        this.setDead();
                     }
+        	        int itemId = Item.getIdFromItem(BEItems.arrow);
+        	        int itemMeta = this.getArrowType().ordinal();
+        	        for (int ii = 0; ii < 16; ++ii)
+        	        {
+        	            this.worldObj.spawnParticle(EnumParticleTypes.ITEM_CRACK, this.posX, this.posY, this.posZ, ((double)this.rand.nextFloat() - 0.5D) * 0.08D, ((double)this.rand.nextFloat() - 0.5D) * 0.08D, ((double)this.rand.nextFloat() - 0.5D) * 0.08D, new int[] {itemId, itemMeta});                
+        	        }
+                    this.setDead();
             	}
             	if (arrowType == ItemBEArrow.ArrowType.LIGHTNING_ARROW)
             	{
@@ -307,8 +341,14 @@ public class EntityBEArrow extends EntityArrow implements IProjectile
                     {	
                         EntityLightningBolt entityLightningBolt = new EntityLightningBolt(this.worldObj, this.posX, this.posY, this.posZ);
                         this.worldObj.addWeatherEffect(entityLightningBolt);
-                        this.setDead();
                     }
+        	        int itemId = Item.getIdFromItem(BEItems.arrow);
+        	        int itemMeta = this.getArrowType().ordinal();
+        	        for (int ii = 0; ii < 16; ++ii)
+        	        {
+        	            this.worldObj.spawnParticle(EnumParticleTypes.ITEM_CRACK, this.posX, this.posY, this.posZ, ((double)this.rand.nextFloat() - 0.5D) * 0.08D, ((double)this.rand.nextFloat() - 0.5D) * 0.08D, ((double)this.rand.nextFloat() - 0.5D) * 0.08D, new int[] {itemId, itemMeta});                
+        	        }
+                    this.setDead();
             	}
             }
             else
@@ -456,8 +496,33 @@ public class EntityBEArrow extends EntityArrow implements IProjectile
                         if (movingobjectposition.entityHit instanceof EntityLivingBase)
                         {
                             movingobjectposition.entityHit.setFire(10);
-                            this.setDead();
+                			this.worldObj.playSoundEffect(this.posX, this.posY, this.posZ, "random.fizz", 0.5F, 2.6F + (this.worldObj.rand.nextFloat() - this.worldObj.rand.nextFloat()) * 0.8F);
+                        	for (int i = 0; i < 8; ++i)
+                            {
+                                this.worldObj.spawnParticle(EnumParticleTypes.SMOKE_LARGE, (this.posX - 0.5D) + Math.random(), this.posY + 0.25D, (this.posZ - 0.5D) + Math.random(), 0.0D, 0.0D, 0.0D, new int[0]);
+                            }
+                	        int itemId = Item.getIdFromItem(BEItems.arrow);
+                	        int itemMeta = this.getArrowType().ordinal();
+                	        for (int ii = 0; ii < 16; ++ii)
+                	        {
+                	            this.worldObj.spawnParticle(EnumParticleTypes.ITEM_CRACK, this.posX, this.posY, this.posZ, ((double)this.rand.nextFloat() - 0.5D) * 0.08D, ((double)this.rand.nextFloat() - 0.5D) * 0.08D, ((double)this.rand.nextFloat() - 0.5D) * 0.08D, new int[] {itemId, itemMeta});                
+                	        }
+                			this.setDead();
                         }
+                    }
+                    if (arrowType == ItemBEArrow.ArrowType.ICE_ARROW)
+                    {
+                    	for (int i = 0; i < 8; ++i)
+                        {
+                    		Bullseye.proxy.spawnParticle(BEParticleTypes.SNOWFLAKE, (this.posX - 0.5D) + Math.random(), this.posY + 0.25D, (this.posZ - 0.5D) + Math.random(), 0.0D, 0.0D, 0.0D, new int[0]);
+                        }
+            	        int itemId = Item.getIdFromItem(BEItems.arrow);
+            	        int itemMeta = this.getArrowType().ordinal();
+            	        for (int ii = 0; ii < 16; ++ii)
+            	        {
+            	            this.worldObj.spawnParticle(EnumParticleTypes.ITEM_CRACK, this.posX, this.posY, this.posZ, ((double)this.rand.nextFloat() - 0.5D) * 0.08D, ((double)this.rand.nextFloat() - 0.5D) * 0.08D, ((double)this.rand.nextFloat() - 0.5D) * 0.08D, new int[] {itemId, itemMeta});                
+            	        }
+            			this.setDead();
                     }
                 	if (arrowType == ItemBEArrow.ArrowType.BOMB_ARROW)
                 	{
@@ -465,8 +530,14 @@ public class EntityBEArrow extends EntityArrow implements IProjectile
                         {	
                             float f = 2.0F;
                             this.worldObj.createExplosion(this, this.posX, this.posY, this.posZ, f, true);
-                            this.setDead();
                         }
+            	        int itemId = Item.getIdFromItem(BEItems.arrow);
+            	        int itemMeta = this.getArrowType().ordinal();
+            	        for (int ii = 0; ii < 16; ++ii)
+            	        {
+            	            this.worldObj.spawnParticle(EnumParticleTypes.ITEM_CRACK, this.posX, this.posY, this.posZ, ((double)this.rand.nextFloat() - 0.5D) * 0.08D, ((double)this.rand.nextFloat() - 0.5D) * 0.08D, ((double)this.rand.nextFloat() - 0.5D) * 0.08D, new int[] {itemId, itemMeta});                
+            	        }
+            	        this.setDead();
                 	}
                 	if (arrowType == ItemBEArrow.ArrowType.LIGHTNING_ARROW)
                 	{
@@ -474,8 +545,14 @@ public class EntityBEArrow extends EntityArrow implements IProjectile
                         {	
                             EntityLightningBolt entityLightningBolt = new EntityLightningBolt(this.worldObj, this.posX, this.posY, this.posZ);
                             this.worldObj.addWeatherEffect(entityLightningBolt);
-                            this.setDead();
                         }
+            	        int itemId = Item.getIdFromItem(BEItems.arrow);
+            	        int itemMeta = this.getArrowType().ordinal();
+            	        for (int ii = 0; ii < 16; ++ii)
+            	        {
+            	            this.worldObj.spawnParticle(EnumParticleTypes.ITEM_CRACK, this.posX, this.posY, this.posZ, ((double)this.rand.nextFloat() - 0.5D) * 0.08D, ((double)this.rand.nextFloat() - 0.5D) * 0.08D, ((double)this.rand.nextFloat() - 0.5D) * 0.08D, new int[] {itemId, itemMeta});                
+            	        }
+            	        this.setDead();
                 	}
 
                 	if (movingobjectposition.entityHit.attackEntityFrom(damagesource, (float)l))

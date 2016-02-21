@@ -25,7 +25,21 @@ public class ArrowEventHandler
 		
 		if (player.inventory.hasItem(BEItems.arrow))
 		{
-			player.setItemInUse(itemstack, item.getMaxItemUseDuration(itemstack));
+            for (int k = 0; k < player.inventory.mainInventory.length; ++k)
+            {
+                ItemStack current = player.inventory.mainInventory[k];
+                if (current != null)
+                {
+                	if (current.getItem() == Items.arrow)
+                	{
+                		break;
+                	}
+                	if (current.getItem() == BEItems.arrow)
+                	{
+                		player.setItemInUse(itemstack, item.getMaxItemUseDuration(itemstack));
+                	}
+                }
+            }
 		}
     }
 	

@@ -17,8 +17,10 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.entity.projectile.EntityArrow;
 import net.minecraft.init.Blocks;
+import net.minecraft.init.Items;
 import net.minecraft.item.EnumDyeColor;
 import net.minecraft.item.Item;
+import net.minecraft.item.ItemArmor;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.play.server.S2BPacketChangeGameState;
@@ -332,6 +334,23 @@ public class EntityDyeArrow extends EntityArrow implements IProjectile
                 if (entityplayer.capabilities.disableDamage || this.shootingEntity instanceof EntityPlayer && !((EntityPlayer)this.shootingEntity).canAttackPlayer(entityplayer))
                 {
                     movingobjectposition = null;
+                }
+            }
+            
+            if (movingobjectposition != null && movingobjectposition.entityHit != null && movingobjectposition.entityHit instanceof EntityPlayer)
+            {
+                EntityPlayer entityplayer = (EntityPlayer)movingobjectposition.entityHit;
+
+                if (this.shootingEntity instanceof EntityPlayer)
+                {
+                    for (ItemStack itemstack : entityplayer.inventory.armorInventory)
+                    {
+                        if (itemstack != null && (itemstack.getItem() == Items.leather_helmet || itemstack.getItem() == Items.leather_chestplate || itemstack.getItem() == Items.leather_leggings || itemstack.getItem() == Items.leather_boots))
+                        {
+                            ItemArmor itemarmor = (ItemArmor)itemstack.getItem();
+                            itemarmor.setColor(itemstack, EnumDyeColor.byMetadata(dyeType.ordinal()).getMapColor().colorValue);
+                        }
+                    }
                 }
             }
             

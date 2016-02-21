@@ -582,7 +582,7 @@ public class EntityBEArrow extends EntityArrow implements IProjectile
 
                             if (!this.worldObj.isRemote)
                             {
-                            	if (arrowType == ItemBEArrow.ArrowType.TRAINING || arrowType == ItemBEArrow.ArrowType.DIAMOND)
+                            	if (arrowType == ItemBEArrow.ArrowType.DIAMOND)
                             	{
                             		entitylivingbase.setArrowCountInEntity(entitylivingbase.getArrowCountInEntity() + 1);
                             	}
@@ -614,7 +614,10 @@ public class EntityBEArrow extends EntityArrow implements IProjectile
 
                         if (!(movingobjectposition.entityHit instanceof EntityEnderman))
                         {
-                            this.setDead();
+                        	if (arrowType != ItemBEArrow.ArrowType.TRAINING)
+                        	{
+                        		this.setDead();
+                        	}
                         }
                     }
                     else

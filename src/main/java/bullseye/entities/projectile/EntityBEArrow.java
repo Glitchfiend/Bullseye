@@ -3,6 +3,7 @@ package bullseye.entities.projectile;
 import java.util.List;
 
 import net.minecraft.block.Block;
+import net.minecraft.block.BlockColored;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.enchantment.EnchantmentHelper;
@@ -17,7 +18,10 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.entity.projectile.EntityArrow;
 import net.minecraft.init.Blocks;
+import net.minecraft.init.Items;
+import net.minecraft.item.EnumDyeColor;
 import net.minecraft.item.Item;
+import net.minecraft.item.ItemArmor;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.play.server.S2BPacketChangeGameState;
@@ -270,6 +274,18 @@ public class EntityBEArrow extends EntityArrow implements IProjectile
             				{
             					this.worldObj.extinguishFire((EntityPlayer)this.shootingEntity, blockpos.up(), EnumFacing.UP);
             				}
+            			}
+            			if (block == Blocks.stained_hardened_clay)
+            			{
+            				worldObj.setBlockState(blockpos, Blocks.hardened_clay.getDefaultState());
+            			}
+            			if (block == Blocks.stained_glass)
+            			{
+            				worldObj.setBlockState(blockpos, Blocks.glass.getDefaultState());
+            			}
+            			if (block == Blocks.stained_glass_pane)
+            			{
+            				worldObj.setBlockState(blockpos, Blocks.glass_pane.getDefaultState());
             			}
             		}
             		this.worldObj.playAuxSFX(2002, blockpos, 0);
@@ -554,6 +570,19 @@ public class EntityBEArrow extends EntityArrow implements IProjectile
                     //Arrow Effects
                     if (arrowType == ItemBEArrow.ArrowType.EXTINGUISHING)
                     {
+        	            if (movingobjectposition.entityHit instanceof EntityPlayer)
+        	            {
+        	                EntityPlayer entityplayer = (EntityPlayer)movingobjectposition.entityHit;
+        	
+        	                for (ItemStack itemstack : entityplayer.inventory.armorInventory)
+        	                {
+        	                    if (itemstack != null && (itemstack.getItem() == Items.leather_helmet || itemstack.getItem() == Items.leather_chestplate || itemstack.getItem() == Items.leather_leggings || itemstack.getItem() == Items.leather_boots))
+        	                    {
+        	                        ItemArmor itemarmor = (ItemArmor)itemstack.getItem();
+        	                        itemarmor.removeColor(itemstack);
+        	                    }
+        	                }
+        	            }
                         if (movingobjectposition.entityHit instanceof EntityLivingBase)
                         {
                         	this.worldObj.playAuxSFX(2002, blockpos, 0);

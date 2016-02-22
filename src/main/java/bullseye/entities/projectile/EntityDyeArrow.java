@@ -339,20 +339,6 @@ public class EntityDyeArrow extends EntityArrow implements IProjectile
                 }
             }
             
-            if (movingobjectposition != null && movingobjectposition.entityHit != null && movingobjectposition.entityHit instanceof EntityPlayer)
-            {
-                EntityPlayer entityplayer = (EntityPlayer)movingobjectposition.entityHit;
-
-                for (ItemStack itemstack : entityplayer.inventory.armorInventory)
-                {
-                    if (itemstack != null && (itemstack.getItem() == Items.leather_helmet || itemstack.getItem() == Items.leather_chestplate || itemstack.getItem() == Items.leather_leggings || itemstack.getItem() == Items.leather_boots))
-                    {
-                        ItemArmor itemarmor = (ItemArmor)itemstack.getItem();
-                        itemarmor.setColor(itemstack, EnumDyeColor.byMetadata(dyeType.ordinal()).getMapColor().colorValue);
-                    }
-                }
-            }
-            
             if (movingobjectposition != null && movingobjectposition.entityHit != null && movingobjectposition.entityHit instanceof EntitySheep)
             {
                 EntitySheep entitysheep = (EntitySheep)movingobjectposition.entityHit;
@@ -395,6 +381,20 @@ public class EntityDyeArrow extends EntityArrow implements IProjectile
                     if (this.isBurning() && !(movingobjectposition.entityHit instanceof EntityEnderman))
                     {
                         movingobjectposition.entityHit.setFire(5);
+                    }
+                    
+                    if (movingobjectposition.entityHit instanceof EntityPlayer)
+                    {
+                        EntityPlayer entityplayer = (EntityPlayer)movingobjectposition.entityHit;
+
+                        for (ItemStack itemstack : entityplayer.inventory.armorInventory)
+                        {
+                            if (itemstack != null && (itemstack.getItem() == Items.leather_helmet || itemstack.getItem() == Items.leather_chestplate || itemstack.getItem() == Items.leather_leggings || itemstack.getItem() == Items.leather_boots))
+                            {
+                                ItemArmor itemarmor = (ItemArmor)itemstack.getItem();
+                                itemarmor.setColor(itemstack, EnumDyeColor.byMetadata(dyeType.ordinal()).getMapColor().colorValue);
+                            }
+                        }
                     }
 
                 	if (movingobjectposition.entityHit.attackEntityFrom(damagesource, (float)l))

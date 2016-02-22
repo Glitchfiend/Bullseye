@@ -24,12 +24,13 @@ import net.minecraft.network.play.server.S2BPacketChangeGameState;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.BlockPos;
 import net.minecraft.util.DamageSource;
+import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.MathHelper;
 import net.minecraft.util.MovingObjectPosition;
-import net.minecraft.util.StatCollector;
 import net.minecraft.util.MovingObjectPosition.MovingObjectType;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.StatCollector;
 import net.minecraft.util.Vec3;
 import net.minecraft.world.World;
 import net.minecraftforge.fluids.Fluid;
@@ -259,6 +260,31 @@ public class EntityBEArrow extends EntityArrow implements IProjectile
         	        }
         			this.setDead();
             	}
+            	if (arrowType == ItemBEArrow.ArrowType.EXTINGUISHING)
+            	{
+            		if (!this.worldObj.isRemote)
+            		{
+            			if (this.worldObj.getBlockState(blockpos.up()).getBlock() == Blocks.fire)
+            			{
+            				if (this.shootingEntity instanceof EntityPlayer)
+            				{
+            					this.worldObj.extinguishFire((EntityPlayer)this.shootingEntity, blockpos.up(), EnumFacing.UP);
+            				}
+            			}
+            		}
+            		this.worldObj.playAuxSFX(2002, blockpos, 0);
+                	for (int i = 0; i < 8; ++i)
+                    {
+                        this.worldObj.spawnParticle(EnumParticleTypes.WATER_SPLASH, (this.posX - 0.5D) + Math.random(), this.posY + 0.25D, (this.posZ - 0.5D) + Math.random(), 0.0D, 0.0D, 0.0D, new int[0]);
+                    }
+        	        int itemId = Item.getIdFromItem(BEItems.arrow);
+        	        int itemMeta = this.getArrowType().ordinal();
+        	        for (int ii = 0; ii < 16; ++ii)
+        	        {
+        	            this.worldObj.spawnParticle(EnumParticleTypes.ITEM_CRACK, this.posX, this.posY, this.posZ, ((double)this.rand.nextFloat() - 0.5D) * 0.08D, ((double)this.rand.nextFloat() - 0.5D) * 0.08D, ((double)this.rand.nextFloat() - 0.5D) * 0.08D, new int[] {itemId, itemMeta});                
+        	        }
+        			this.setDead();
+            	}
             	if (arrowType == ItemBEArrow.ArrowType.DIAMOND)
             	{
                 	++this.ticksInGround;
@@ -420,7 +446,28 @@ public class EntityBEArrow extends EntityArrow implements IProjectile
                 movingobjectposition = new MovingObjectPosition(entity);
             }
             
-            //Ice Arrow Effect
+            //Water/Lava
+            if (arrowType == ItemBEArrow.ArrowType.EXTINGUISHING)
+        	{
+	            MovingObjectPosition watercollisionpos = this.worldObj.rayTraceBlocks(vec31, vec3, true, false, false);
+	            if (watercollisionpos != null && watercollisionpos.typeOfHit == MovingObjectType.BLOCK)
+	            {
+	                BlockPos pos = watercollisionpos.getBlockPos();
+	                IBlockState state = this.worldObj.getBlockState(pos);
+	                Fluid fluid = FluidRegistry.lookupFluidForBlock(state.getBlock());
+	
+	                if (fluid != null && fluid == FluidRegistry.LAVA) //Temporary, until a registry is created
+	                {
+	                	this.worldObj.playAuxSFX(2002, blockpos, 0);
+	                	for (int i = 0; i < 8; ++i)
+	                    {
+	                        this.worldObj.spawnParticle(EnumParticleTypes.WATER_SPLASH, (this.posX - 0.5D) + Math.random(), this.posY + 0.25D, (this.posZ - 0.5D) + Math.random(), 0.0D, 0.0D, 0.0D, new int[0]);
+	                    }
+	                	this.worldObj.setBlockState(pos, Blocks.obsidian.getDefaultState());
+	                    this.setDead();
+	                }
+            	}
+            }
         	if (arrowType == ItemBEArrow.ArrowType.ICE)
         	{
 	            MovingObjectPosition watercollisionpos = this.worldObj.rayTraceBlocks(vec31, vec3, true, false, false);
@@ -433,11 +480,6 @@ public class EntityBEArrow extends EntityArrow implements IProjectile
 	                if (fluid != null && fluid == FluidRegistry.WATER) //Temporary, until a registry is created
 	                {
 	                	this.worldObj.setBlockState(pos, Blocks.ice.getDefaultState());
-	                    this.setDead();
-	                }
-	                if (fluid != null && fluid == FluidRegistry.LAVA) //Temporary, until a registry is created
-	                {
-	                	this.worldObj.setBlockState(pos, Blocks.obsidian.getDefaultState());
 	                    this.setDead();
 	                }
             	}
@@ -510,6 +552,24 @@ public class EntityBEArrow extends EntityArrow implements IProjectile
                     }
 
                     //Arrow Effects
+                    if (arrowType == ItemBEArrow.ArrowType.EXTINGUISHING)
+                    {
+                        if (movingobjectposition.entityHit instanceof EntityLivingBase)
+                        {
+                        	this.worldObj.playAuxSFX(2002, blockpos, 0);
+    	                	for (int i = 0; i < 8; ++i)
+    	                    {
+    	                        this.worldObj.spawnParticle(EnumParticleTypes.WATER_SPLASH, (this.posX - 0.5D) + Math.random(), this.posY + 0.25D, (this.posZ - 0.5D) + Math.random(), 0.0D, 0.0D, 0.0D, new int[0]);
+    	                    }
+                	        int itemId = Item.getIdFromItem(BEItems.arrow);
+                	        int itemMeta = this.getArrowType().ordinal();
+                	        for (int ii = 0; ii < 16; ++ii)
+                	        {
+                	            this.worldObj.spawnParticle(EnumParticleTypes.ITEM_CRACK, this.posX, this.posY, this.posZ, ((double)this.rand.nextFloat() - 0.5D) * 0.08D, ((double)this.rand.nextFloat() - 0.5D) * 0.08D, ((double)this.rand.nextFloat() - 0.5D) * 0.08D, new int[] {itemId, itemMeta});                
+                	        }
+                			this.setDead();
+                        }
+                    }
                     if (arrowType == ItemBEArrow.ArrowType.FIRE)
                     {
                         if (movingobjectposition.entityHit instanceof EntityLivingBase)

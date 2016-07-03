@@ -14,7 +14,7 @@ public class ModVanillaCompat
     
     private static void registerDispenserBehaviors()
     {
-    	BlockDispenser.dispenseBehaviorRegistry.putObject(BEItems.arrow, new DispenserBehaviorBEArrow());
-    	BlockDispenser.dispenseBehaviorRegistry.putObject(BEItems.dye_arrow, new DispenserBehaviorDyeArrow());
+    	BlockDispenser.DISPENSE_BEHAVIOR_REGISTRY.putObject(BEItems.arrow, new DispenserBehaviorBEArrow());
+    	BlockDispenser.DISPENSE_BEHAVIOR_REGISTRY.putObject(BEItems.dye_arrow, new DispenserBehaviorDyeArrow());
     }
 }

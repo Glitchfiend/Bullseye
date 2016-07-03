@@ -1,15 +1,14 @@
 package bullseye.particle;
 
-import net.minecraft.client.particle.EntityFX;
+import bullseye.core.ClientProxy;
+import net.minecraft.client.particle.Particle;
 import net.minecraft.client.renderer.GlStateManager;
-import net.minecraft.client.renderer.WorldRenderer;
 import net.minecraft.entity.Entity;
-import net.minecraft.util.MathHelper;
+import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.client.FMLClientHandler;
-import bullseye.core.ClientProxy;
 
-public class EntitySnowflakeFX extends EntityFX
+public class EntitySnowflakeFX extends Particle
 {
     
     public EntitySnowflakeFX(World world, double xCoordIn, double yCoordIn, double zCoordIn, double xSpeedIn, double ySpeedIn, double zSpeedIn)

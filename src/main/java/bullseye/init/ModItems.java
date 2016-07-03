@@ -8,8 +8,13 @@ import static bullseye.api.BEItems.dye_arrow;
 import java.util.ArrayList;
 import java.util.List;
 
-import net.minecraft.client.resources.model.ModelBakery;
-import net.minecraft.client.resources.model.ModelResourceLocation;
+import bullseye.core.Bullseye;
+import bullseye.item.ItemArrowTopper;
+import bullseye.item.ItemBEArrow;
+import bullseye.item.ItemDyeArrow;
+import bullseye.util.inventory.CreativeTabBE;
+import net.minecraft.client.renderer.block.model.ModelBakery;
+import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -17,11 +22,6 @@ import net.minecraftforge.client.model.ModelLoader;
 import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.minecraftforge.fml.relauncher.Side;
-import bullseye.core.Bullseye;
-import bullseye.item.ItemArrowTopper;
-import bullseye.item.ItemBEArrow;
-import bullseye.item.ItemDyeArrow;
-import bullseye.util.inventory.CreativeTabBE;
 
 public class ModItems
 {

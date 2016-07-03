@@ -1,5 +1,10 @@
 package bullseye.handler;
 
+import bullseye.api.BEItems;
+import bullseye.entities.projectile.EntityBEArrow;
+import bullseye.entities.projectile.EntityDyeArrow;
+import bullseye.item.ItemBEArrow;
+import bullseye.item.ItemDyeArrow;
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.player.EntityPlayer;
@@ -7,14 +12,9 @@ import net.minecraft.init.Items;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
+import net.minecraftforge.event.entity.player.ArrowLooseEvent;
 import net.minecraftforge.event.entity.player.ArrowNockEvent;
-import net.minecraftforge.event.entity.player.PlayerUseItemEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
-import bullseye.api.BEItems;
-import bullseye.entities.projectile.EntityBEArrow;
-import bullseye.entities.projectile.EntityDyeArrow;
-import bullseye.item.ItemBEArrow;
-import bullseye.item.ItemDyeArrow;
 
 public class ArrowEventHandler
 {
@@ -32,7 +32,7 @@ public class ArrowEventHandler
                 ItemStack current = player.inventory.mainInventory[k];
                 if (current != null)
                 {
-                	if (current.getItem() == Items.arrow)
+                	if (current.getItem() == Items.ARROW)
                 	{
                 		break;
                 	}
@@ -59,7 +59,7 @@ public class ArrowEventHandler
 		ItemStack itemstack = event.item;
 		Item item = itemstack.getItem();
 		
-		if (itemstack.getItem() == Items.bow)
+		if (itemstack.getItem() == Items.BOW)
 		{		
 	        boolean flag = player.capabilities.isCreativeMode || EnchantmentHelper.getEnchantmentLevel(Enchantment.infinity.effectId, itemstack) > 0;
 	
@@ -75,7 +75,7 @@ public class ArrowEventHandler
 		                ItemStack current = player.inventory.mainInventory[k];
 		                if (current != null)
 		                {
-		                	if (current.getItem() == Items.arrow)
+		                	if (current.getItem() == Items.ARROW)
 		                	{
 		                		bestAvailableArrowType = null;
 		                		bestArrowSlot = -1;
@@ -101,9 +101,9 @@ public class ArrowEventHandler
 		            if (bestArrowSlot > -1 && (bestAvailableArrowType != null || bestAvailableDyeType != null))
 		            {
 			            int i = item.getMaxItemUseDuration(itemstack) - event.duration;
-			            net.minecraftforge.event.entity.player.ArrowLooseEvent looseevent = new net.minecraftforge.event.entity.player.ArrowLooseEvent(player, itemstack, i);
+			            ArrowLooseEvent looseevent = new ArrowLooseEvent(player, itemstack, world, i, flag);
 			            if (net.minecraftforge.common.MinecraftForge.EVENT_BUS.post(looseevent)) return;
-			            i = looseevent.charge;
+			            i = looseevent.getCharge();
 			            float f = (float)i / 20.0F;
 			            f = (f * f + f * 2.0F) / 3.0F;
 			

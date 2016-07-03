@@ -7,23 +7,23 @@
  ******************************************************************************/
 package bullseye.core;
 
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.particle.EntityFX;
-import net.minecraft.client.renderer.entity.Render;
-import net.minecraft.client.renderer.entity.RenderManager;
-import net.minecraft.client.resources.model.ModelBakery;
-import net.minecraft.client.resources.model.ModelResourceLocation;
-import net.minecraft.entity.Entity;
-import net.minecraft.item.Item;
-import net.minecraft.util.MathHelper;
-import net.minecraft.util.ResourceLocation;
-import net.minecraftforge.client.model.ModelLoader;
-import net.minecraftforge.fml.client.registry.IRenderFactory;
-import net.minecraftforge.fml.client.registry.RenderingRegistry;
 import bullseye.entities.projectile.EntityBEArrow;
 import bullseye.entities.projectile.RenderBEArrow;
 import bullseye.particle.BEParticleTypes;
 import bullseye.particle.EntitySnowflakeFX;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.particle.Particle;
+import net.minecraft.client.renderer.block.model.ModelBakery;
+import net.minecraft.client.renderer.block.model.ModelResourceLocation;
+import net.minecraft.client.renderer.entity.Render;
+import net.minecraft.client.renderer.entity.RenderManager;
+import net.minecraft.entity.Entity;
+import net.minecraft.item.Item;
+import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.math.MathHelper;
+import net.minecraftforge.client.model.ModelLoader;
+import net.minecraftforge.fml.client.registry.IRenderFactory;
+import net.minecraftforge.fml.client.registry.RenderingRegistry;
 
 
 public class ClientProxy extends CommonProxy
@@ -50,7 +50,7 @@ public class ClientProxy extends CommonProxy
     public void spawnParticle(BEParticleTypes type, double x, double y, double z, Object... info)
     {
         Minecraft minecraft = Minecraft.getMinecraft();
-        EntityFX entityFx = null;
+        Particle entityFx = null;
         switch (type)
         {
         case SNOWFLAKE:

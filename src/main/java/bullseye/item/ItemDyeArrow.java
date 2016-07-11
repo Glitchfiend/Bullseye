@@ -2,15 +2,20 @@ package bullseye.item;
 
 import java.util.List;
 
+import bullseye.entities.projectile.EntityDyeArrow;
 import net.minecraft.creativetab.CreativeTabs;
+import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.projectile.EntityArrow;
 import net.minecraft.item.Item;
+import net.minecraft.item.ItemArrow;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.IStringSerializable;
+import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 
-public class ItemDyeArrow extends Item
+public class ItemDyeArrow extends ItemArrow
 {
     public static enum DyeType implements IStringSerializable
     {
@@ -44,6 +49,14 @@ public class ItemDyeArrow extends Item
     {
         this.setHasSubtypes(true);
         this.setMaxDamage(0);
+    }
+    
+    @Override
+    public EntityArrow createArrow(World worldIn, ItemStack stack, EntityLivingBase shooter)
+    {
+        EntityDyeArrow entitydyearrow = new EntityDyeArrow(worldIn, shooter);
+        entitydyearrow.setDyeType(ItemDyeArrow.DyeType.fromMeta(stack.getMetadata()));
+        return entitydyearrow;
     }
    
     // add all the gem types as separate items in the creative tab

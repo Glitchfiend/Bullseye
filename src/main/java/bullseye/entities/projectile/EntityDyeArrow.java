@@ -52,7 +52,7 @@ import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
-public abstract class EntityDyeArrow extends EntityArrow implements IProjectile
+public class EntityDyeArrow extends EntityArrow implements IProjectile
 {    
 	private static final Predicate<Entity> ARROW_TARGETS = Predicates.and(new Predicate[] {EntitySelectors.NOT_SPECTATING, EntitySelectors.IS_ALIVE, new Predicate<Entity>()
 	{
@@ -667,7 +667,12 @@ public abstract class EntityDyeArrow extends EntityArrow implements IProjectile
     }
 
     @Override
-    protected abstract ItemStack getArrowStack();
+    protected ItemStack getArrowStack()
+    {
+        ItemStack itemstack = new ItemStack(BEItems.dye_arrow);
+        itemstack.setItemDamage(this.getDyeType().ordinal());
+        return itemstack;
+    }
 
     @Override
     protected boolean canTriggerWalking()

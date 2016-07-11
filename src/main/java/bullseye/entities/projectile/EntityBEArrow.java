@@ -27,6 +27,7 @@ import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.entity.projectile.EntityArrow;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
+import net.minecraft.init.PotionTypes;
 import net.minecraft.init.SoundEvents;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemArmor;
@@ -36,6 +37,7 @@ import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.network.datasync.DataSerializers;
 import net.minecraft.network.datasync.EntityDataManager;
 import net.minecraft.network.play.server.SPacketChangeGameState;
+import net.minecraft.potion.PotionUtils;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.EntitySelectors;
@@ -55,7 +57,7 @@ import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
-public abstract class EntityBEArrow extends EntityArrow implements IProjectile
+public class EntityBEArrow extends EntityArrow implements IProjectile
 {    
 	private static final Predicate<Entity> ARROW_TARGETS = Predicates.and(new Predicate[] {EntitySelectors.NOT_SPECTATING, EntitySelectors.IS_ALIVE, new Predicate<Entity>()
 	{
@@ -945,7 +947,12 @@ public abstract class EntityBEArrow extends EntityArrow implements IProjectile
     }
 
     @Override
-    protected abstract ItemStack getArrowStack();
+    protected ItemStack getArrowStack()
+    {
+        ItemStack itemstack = new ItemStack(BEItems.arrow);
+        itemstack.setItemDamage(this.getArrowType().ordinal());
+        return itemstack;
+    }
 
     @Override
     protected boolean canTriggerWalking()

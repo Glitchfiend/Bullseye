@@ -1,5 +1,6 @@
 package bullseye.entities.projectile;
 
+import java.util.Collection;
 import java.util.List;
 
 import javax.annotation.Nullable;
@@ -25,6 +26,7 @@ import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.entity.projectile.EntityArrow;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
+import net.minecraft.init.PotionTypes;
 import net.minecraft.init.SoundEvents;
 import net.minecraft.item.EnumDyeColor;
 import net.minecraft.item.Item;
@@ -35,6 +37,8 @@ import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.network.datasync.DataSerializers;
 import net.minecraft.network.datasync.EntityDataManager;
 import net.minecraft.network.play.server.SPacketChangeGameState;
+import net.minecraft.potion.PotionEffect;
+import net.minecraft.potion.PotionUtils;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.EntitySelectors;
 import net.minecraft.util.EnumParticleTypes;
@@ -102,6 +106,21 @@ public abstract class EntityDyeArrow extends EntityArrow implements IProjectile
             this.pickupStatus = EntityDyeArrow.PickupStatus.ALLOWED;
         }
     }
+    
+    @SideOnly(Side.CLIENT)
+    @Override
+    public boolean isInRangeToRenderDist(double distance)
+    {
+        double d0 = this.getEntityBoundingBox().getAverageEdgeLength() * 10.0D;
+
+        if (Double.isNaN(d0))
+        {
+            d0 = 1.0D;
+        }
+
+        d0 = d0 * 64.0D * getRenderDistanceWeight();
+        return distance < d0 * d0;
+    }
  
     @Override
     protected void entityInit()
@@ -120,6 +139,7 @@ public abstract class EntityDyeArrow extends EntityArrow implements IProjectile
     	return ItemDyeArrow.DyeType.values()[dataManager.get(DYE_TYPE)];
     }
     
+    @Override
     public void setAim(Entity p_184547_1_, float p_184547_2_, float p_184547_3_, float p_184547_4_, float p_184547_5_, float p_184547_6_)
     {
         float f = -MathHelper.sin(p_184547_3_ * 0.017453292F) * MathHelper.cos(p_184547_2_ * 0.017453292F);
@@ -135,6 +155,7 @@ public abstract class EntityDyeArrow extends EntityArrow implements IProjectile
         }
     }
     
+    @Override
     public void setThrowableHeading(double x, double y, double z, float velocity, float inaccuracy)
     {
         float f = MathHelper.sqrt_double(x * x + y * y + z * z);
@@ -157,6 +178,7 @@ public abstract class EntityDyeArrow extends EntityArrow implements IProjectile
     }
 
     @SideOnly(Side.CLIENT)
+    @Override
     public void setPositionAndRotationDirect(double x, double y, double z, float yaw, float pitch, int posRotationIncrements, boolean teleport)
     {
         this.setPosition(x, y, z);
@@ -164,6 +186,7 @@ public abstract class EntityDyeArrow extends EntityArrow implements IProjectile
     }
 
     @SideOnly(Side.CLIENT)
+    @Override
     public void setVelocity(double x, double y, double z)
     {
         this.motionX = x;
@@ -373,7 +396,8 @@ public abstract class EntityDyeArrow extends EntityArrow implements IProjectile
             this.doBlockCollisions();
         }
     }
-    
+
+    @Override
     protected void onHit(RayTraceResult raytraceResultIn)
     {
         Entity entity = raytraceResultIn.entityHit;
@@ -525,11 +549,13 @@ public abstract class EntityDyeArrow extends EntityArrow implements IProjectile
         }
     }
 
+    @Override
     protected void arrowHit(EntityLivingBase living)
     {
     }
     
     @Nullable
+    @Override
     protected Entity findEntityOnPath(Vec3d start, Vec3d end)
     {
         Entity entity = null;
@@ -538,7 +564,7 @@ public abstract class EntityDyeArrow extends EntityArrow implements IProjectile
 
         for (int i = 0; i < list.size(); ++i)
         {
-            Entity entity1 = (Entity)list.get(i);
+            Entity entity1 = list.get(i);
 
             if (entity1 != this.shootingEntity || this.ticksInAir >= 5)
             {
@@ -619,6 +645,7 @@ public abstract class EntityDyeArrow extends EntityArrow implements IProjectile
         }
     }
 
+    @Override
     public void onCollideWithPlayer(EntityPlayer entityIn)
     {
         if (!this.worldObj.isRemote && this.inGround && this.arrowShake <= 0)
@@ -639,47 +666,56 @@ public abstract class EntityDyeArrow extends EntityArrow implements IProjectile
         }
     }
 
+    @Override
     protected abstract ItemStack getArrowStack();
 
+    @Override
     protected boolean canTriggerWalking()
     {
         return false;
     }
 
     @SideOnly(Side.CLIENT)
+    @Override
     public int getBrightnessForRender(float partialTicks)
     {
         return 15728880;
     }
     
+    @Override
     public void setDamage(double damageIn)
     {
         this.damage = damageIn;
     }
 
+    @Override
     public double getDamage()
     {
         return this.damage;
     }
 
+    @Override
     public void setKnockbackStrength(int knockbackStrengthIn)
     {
         this.knockbackStrength = knockbackStrengthIn;
     }
 
+    @Override
     public boolean canBeAttackedWithItem()
     {
         return false;
     }
 
+    @Override
     public float getEyeHeight()
     {
         return 0.0F;
     }
 
+    @Override
     public void setIsCritical(boolean critical)
     {
-        byte b0 = ((Byte)this.dataManager.get(CRITICAL)).byteValue();
+        byte b0 = this.dataManager.get(CRITICAL).byteValue();
 
         if (critical)
         {
@@ -691,9 +727,10 @@ public abstract class EntityDyeArrow extends EntityArrow implements IProjectile
         }
     }
 
+    @Override
     public boolean getIsCritical()
     {
-        byte b0 = ((Byte)this.dataManager.get(CRITICAL)).byteValue();
+        byte b0 = this.dataManager.get(CRITICAL).byteValue();
         return (b0 & 1) != 0;
     }
 

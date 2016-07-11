@@ -8,6 +8,7 @@ import bullseye.item.ItemDyeArrow;
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.init.Enchantments;
 import net.minecraft.init.Items;
 import net.minecraft.init.SoundEvents;
 import net.minecraft.item.Item;
@@ -38,14 +39,18 @@ public class ArrowEventHandler
                 	{
                 		break;
                 	}
+                	if (current.getItem() == Items.TIPPED_ARROW)
+                	{
+                		break;
+                	}
                 	if (current.getItem() == BEItems.arrow)
                 	{
-                		player.setItemInUse(itemstack, item.getMaxItemUseDuration(itemstack));
+                		itemstack = new ItemStack(item, item.getMaxItemUseDuration(itemstack));
                 		break;
                 	}
                 	if (current.getItem() == BEItems.dye_arrow)
                 	{
-                		player.setItemInUse(itemstack, item.getMaxItemUseDuration(itemstack));
+                		itemstack = new ItemStack(item, item.getMaxItemUseDuration(itemstack));
                 		break;
                 	}
                 }
@@ -54,16 +59,16 @@ public class ArrowEventHandler
     }
 	
 	@SubscribeEvent
-	public void onPlayerStopUsingItem(PlayerUseItemEvent.Stop event)
+	public void onArrowLoose(ArrowLooseEvent event)
 	{
-		EntityPlayer player = event.entityPlayer;
+		EntityPlayer player = event.getEntityPlayer();
 		World world = player.worldObj;
-		ItemStack itemstack = event.item;
+		ItemStack itemstack = event.getBow();
 		Item item = itemstack.getItem();
 		
 		if (itemstack.getItem() == Items.BOW)
 		{		
-	        boolean flag = player.capabilities.isCreativeMode || EnchantmentHelper.getEnchantmentLevel(Enchantment.infinity.effectId, itemstack) > 0;
+	        boolean flag = player.capabilities.isCreativeMode || EnchantmentHelper.getEnchantmentLevel(Enchantments.INFINITY, itemstack) > 0;
 	
 	        if (flag || player.inventory.hasItemStack(new ItemStack(BEItems.arrow)) || player.inventory.hasItemStack(new ItemStack(BEItems.dye_arrow)))
 	        {
@@ -78,6 +83,12 @@ public class ArrowEventHandler
 		                if (current != null)
 		                {
 		                	if (current.getItem() == Items.ARROW)
+		                	{
+		                		bestAvailableArrowType = null;
+		                		bestArrowSlot = -1;
+		                		break;
+		                	}
+		                	if (current.getItem() == Items.TIPPED_ARROW)
 		                	{
 		                		bestAvailableArrowType = null;
 		                		bestArrowSlot = -1;
@@ -102,7 +113,7 @@ public class ArrowEventHandler
 	        	
 		            if (bestArrowSlot > -1 && (bestAvailableArrowType != null || bestAvailableDyeType != null))
 		            {
-			            int i = item.getMaxItemUseDuration(itemstack) - event.duration;
+			            int i = item.getMaxItemUseDuration(itemstack) - event.getCharge();
 			            ArrowLooseEvent looseevent = new ArrowLooseEvent(player, itemstack, world, i, flag);
 			            if (net.minecraftforge.common.MinecraftForge.EVENT_BUS.post(looseevent)) return;
 			            i = looseevent.getCharge();
@@ -128,7 +139,7 @@ public class ArrowEventHandler
 				                entitybearrow.setIsCritical(true);
 				            }
 				            
-				            int j = EnchantmentHelper.getEnchantmentLevel(Enchantment.power.effectId, itemstack);
+				            int j = EnchantmentHelper.getEnchantmentLevel(Enchantments.POWER, itemstack);
 
 				            if (j > 0)
 				            {
@@ -138,14 +149,14 @@ public class ArrowEventHandler
 				            	}
 				            }
 
-				            int k = EnchantmentHelper.getEnchantmentLevel(Enchantment.punch.effectId, itemstack);
+				            int k = EnchantmentHelper.getEnchantmentLevel(Enchantments.PUNCH, itemstack);
 
 				            if (k > 0)
 				            {
 				                entitybearrow.setKnockbackStrength(k);
 				            }
 				            
-				            if (EnchantmentHelper.getEnchantmentLevel(Enchantment.flame.effectId, itemstack) > 0)
+				            if (EnchantmentHelper.getEnchantmentLevel(Enchantments.FLAME, itemstack) > 0)
 				            {
 				            	if (bestAvailableArrowType == ItemBEArrow.ArrowType.DIAMOND)
 				            	{
@@ -188,14 +199,14 @@ public class ArrowEventHandler
 				            	entitydyearrow.setIsCritical(true);
 				            }
 				            
-				            int j = EnchantmentHelper.getEnchantmentLevel(Enchantment.power.effectId, itemstack);
+				            int j = EnchantmentHelper.getEnchantmentLevel(Enchantments.POWER, itemstack);
 
 				            if (j > 0)
 				            {
 				            	entitydyearrow.setDamage(entitydyearrow.getDamage() + (double)j * 0.5D + 0.5D);
 				            }
 
-				            int k = EnchantmentHelper.getEnchantmentLevel(Enchantment.punch.effectId, itemstack);
+				            int k = EnchantmentHelper.getEnchantmentLevel(Enchantments.PUNCH, itemstack);
 
 				            if (k > 0)
 				            {

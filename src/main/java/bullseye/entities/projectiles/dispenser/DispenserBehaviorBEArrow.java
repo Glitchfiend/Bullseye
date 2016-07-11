@@ -1,4 +1,4 @@
-package bullseye.entities.projectiles.dispenser;
+/*package bullseye.entities.projectiles.dispenser;
 
 import bullseye.entities.projectile.EntityBEArrow;
 import bullseye.item.ItemBEArrow;
@@ -34,4 +34,4 @@ public class DispenserBehaviorBEArrow extends BehaviorProjectileDispense
 		arrow.setArrowType(ItemBEArrow.ArrowType.fromMeta(stack.getMetadata()));
 		return arrow;
 	}
-}
+}*/

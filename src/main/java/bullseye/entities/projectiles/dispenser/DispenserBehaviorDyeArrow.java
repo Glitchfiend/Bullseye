@@ -1,4 +1,4 @@
-package bullseye.entities.projectiles.dispenser;
+/*package bullseye.entities.projectiles.dispenser;
 
 import net.minecraft.block.BlockDispenser;
 import net.minecraft.dispenser.BehaviorProjectileDispense;
@@ -39,4 +39,4 @@ public class DispenserBehaviorDyeArrow extends BehaviorProjectileDispense
 		// TODO Auto-generated method stub
 		return null;
 	}
-}
+}*/

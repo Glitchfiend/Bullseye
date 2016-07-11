@@ -111,6 +111,7 @@ public abstract class EntityBEArrow extends EntityArrow implements IProjectile
     }
     
     @SideOnly(Side.CLIENT)
+    @Override
     public boolean isInRangeToRenderDist(double distance)
     {
         double d0 = this.getEntityBoundingBox().getAverageEdgeLength() * 10.0D;
@@ -141,6 +142,7 @@ public abstract class EntityBEArrow extends EntityArrow implements IProjectile
         return ItemBEArrow.ArrowType.values()[dataManager.get(ARROW_TYPE)];
     }
     
+    @Override
     public void setAim(Entity p_184547_1_, float p_184547_2_, float p_184547_3_, float p_184547_4_, float p_184547_5_, float p_184547_6_)
     {
         float f = -MathHelper.sin(p_184547_3_ * 0.017453292F) * MathHelper.cos(p_184547_2_ * 0.017453292F);
@@ -156,6 +158,7 @@ public abstract class EntityBEArrow extends EntityArrow implements IProjectile
         }
     }
     
+    @Override
     public void setThrowableHeading(double x, double y, double z, float velocity, float inaccuracy)
     {
         float f = MathHelper.sqrt_double(x * x + y * y + z * z);
@@ -178,6 +181,7 @@ public abstract class EntityBEArrow extends EntityArrow implements IProjectile
     }
 
     @SideOnly(Side.CLIENT)
+    @Override
     public void setPositionAndRotationDirect(double x, double y, double z, float yaw, float pitch, int posRotationIncrements, boolean teleport)
     {
         this.setPosition(x, y, z);
@@ -185,6 +189,7 @@ public abstract class EntityBEArrow extends EntityArrow implements IProjectile
     }
 
     @SideOnly(Side.CLIENT)
+    @Override
     public void setVelocity(double x, double y, double z)
     {
         this.motionX = x;
@@ -553,6 +558,7 @@ public abstract class EntityBEArrow extends EntityArrow implements IProjectile
         }
     }
     
+    @Override
     protected void onHit(RayTraceResult raytraceResultIn)
     {
     	Entity entity = raytraceResultIn.entityHit;
@@ -618,11 +624,13 @@ public abstract class EntityBEArrow extends EntityArrow implements IProjectile
     		
     		if (this.shootingEntity == null)
     		{
-    			damagesource = DamageSource.causeArrowDamage(this, this);
+    			//damagesource = DamageSource.causeArrowDamage(this, this);
+    			damagesource = DamageSource.generic;
     		}
     		else
     		{
-    			damagesource = DamageSource.causeArrowDamage(this, this.shootingEntity);
+    			//damagesource = DamageSource.causeArrowDamage(this, this.shootingEntity);
+    			damagesource = DamageSource.generic;
     		}
 
     		if (this.isBurning() && !(entity instanceof EntityEnderman))
@@ -819,11 +827,13 @@ public abstract class EntityBEArrow extends EntityArrow implements IProjectile
     	}
     }
 
+    @Override
     protected void arrowHit(EntityLivingBase living)
     {
     }
     
     @Nullable
+    @Override
     protected Entity findEntityOnPath(Vec3d start, Vec3d end)
     {
         Entity entity = null;
@@ -913,6 +923,7 @@ public abstract class EntityBEArrow extends EntityArrow implements IProjectile
         }
     }
 
+    @Override
     public void onCollideWithPlayer(EntityPlayer entityIn)
     {
         if (!this.worldObj.isRemote && this.inGround && this.arrowShake <= 0)
@@ -933,44 +944,53 @@ public abstract class EntityBEArrow extends EntityArrow implements IProjectile
         }
     }
 
+    @Override
     protected abstract ItemStack getArrowStack();
 
+    @Override
     protected boolean canTriggerWalking()
     {
         return false;
     }
 
     @SideOnly(Side.CLIENT)
+    @Override
     public int getBrightnessForRender(float partialTicks)
     {
         return 15728880;
     }
-    
+
+    @Override
     public void setDamage(double damageIn)
     {
         this.damage = damageIn;
     }
 
+    @Override
     public double getDamage()
     {
         return this.damage;
     }
 
+    @Override
     public void setKnockbackStrength(int knockbackStrengthIn)
     {
         this.knockbackStrength = knockbackStrengthIn;
     }
 
+    @Override
     public boolean canBeAttackedWithItem()
     {
         return false;
     }
 
+    @Override
     public float getEyeHeight()
     {
         return 0.0F;
     }
 
+    @Override
     public void setIsCritical(boolean critical)
     {
         byte b0 = ((Byte)this.dataManager.get(CRITICAL)).byteValue();
@@ -985,6 +1005,7 @@ public abstract class EntityBEArrow extends EntityArrow implements IProjectile
         }
     }
 
+    @Override
     public boolean getIsCritical()
     {
         byte b0 = ((Byte)this.dataManager.get(CRITICAL)).byteValue();

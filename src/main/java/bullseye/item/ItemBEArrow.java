@@ -2,15 +2,20 @@ package bullseye.item;
 
 import java.util.List;
 
+import bullseye.entities.projectile.EntityBEArrow;
 import net.minecraft.creativetab.CreativeTabs;
+import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.projectile.EntityArrow;
 import net.minecraft.item.Item;
+import net.minecraft.item.ItemArrow;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.IStringSerializable;
+import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 
-public class ItemBEArrow extends Item
+public class ItemBEArrow extends ItemArrow
 {
     public static enum ArrowType implements IStringSerializable
     {

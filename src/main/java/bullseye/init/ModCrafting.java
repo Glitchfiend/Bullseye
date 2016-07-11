@@ -2,7 +2,9 @@ package bullseye.init;
 
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
+import net.minecraft.init.PotionTypes;
 import net.minecraft.item.ItemStack;
+import net.minecraft.potion.PotionUtils;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.minecraftforge.oredict.ShapedOreRecipe;
 import bullseye.api.BEItems;
@@ -24,6 +26,7 @@ public class ModCrafting
     	// Arrows
     	GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(BEItems.arrow, 4, ItemBEArrow.ArrowType.TRAINING.ordinal()), new Object [] {"R", "S", "F", 'R', Items.RABBIT_HIDE, 'S', "stickWood", 'F', Items.FEATHER}));
     	GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(BEItems.arrow, 4, ItemBEArrow.ArrowType.EGG.ordinal()), new Object [] {"E", "S", "F", 'E', Items.EGG, 'S', "stickWood", 'F', Items.FEATHER}));
+    	GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(BEItems.arrow, 4, ItemBEArrow.ArrowType.EXTINGUISHING.ordinal()), new Object [] {"T", "S", "F", 'T', PotionUtils.addPotionToItemStack(new ItemStack(Items.POTIONITEM), PotionTypes.WATER), 'S', "stickWood", 'F', Items.FEATHER}));
     	GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(BEItems.arrow, 4, ItemBEArrow.ArrowType.DIAMOND.ordinal()), new Object [] {"D", "S", "F", 'D', Items.DIAMOND, 'S', "stickWood", 'F', Items.FEATHER}));
     	GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(BEItems.arrow, 4, ItemBEArrow.ArrowType.BOMB.ordinal()), new Object [] {"T", "S", "F", 'T', new ItemStack(BEItems.arrow_topper, 1, ItemArrowTopper.TopperType.BOMB.ordinal()), 'S', "stickWood", 'F', Items.FEATHER}));
     	GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(BEItems.arrow, 4, ItemBEArrow.ArrowType.FIRE.ordinal()), new Object [] {"T", "S", "F", 'T', new ItemStack(BEItems.arrow_topper, 1, ItemArrowTopper.TopperType.FIRE.ordinal()), 'S', "stickWood", 'F', Items.FEATHER}));

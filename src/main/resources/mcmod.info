@@ -1,9 +1,9 @@
 [{
     "modid": "Bullseye",
     "name": "Bullseye",
-    "description": "Adds new arrows, including fire arrows, bomb arrows, and more!",
+    "description": "Adds new arrows, including fire arrows, dye arrows, bomb arrows, and more!",
     "version": "${mod_version}",
     "mcversion": "${minecraft_version}",
-    "authorList": ["Adubbz", "Forstride"],
+    "authorList": ["Forstride"],
     "logoFile": "assets/bullseye/textures/gui/logo.png"
 }]

@@ -572,12 +572,11 @@ public class EntityBEArrow extends EntityArrow implements IProjectile
             {
                 BlockPos blockpos = raytraceResultIn.getBlockPos();
                 IBlockState iblockstate = this.worldObj.getBlockState(blockpos);
-                net.minecraftforge.common.util.BlockSnapshot blocksnapshot = net.minecraftforge.common.util.BlockSnapshot.getBlockSnapshot(this.worldObj, blockpos);
 
 		    	//Water/Lava
 		    	if (arrowType == ItemBEArrow.ArrowType.EXTINGUISHING)
 		    	{
-	                if (iblockstate.getMaterial() == Material.WATER && ((Integer)iblockstate.getValue(BlockLiquid.LEVEL)).intValue() == 0 && this.worldObj.isAirBlock(blockpos))
+	                if (iblockstate.getMaterial() == Material.LAVA && ((Integer)iblockstate.getValue(BlockLiquid.LEVEL)).intValue() == 0)
 	                {
 	                	this.worldObj.playSound((EntityPlayer)null, blockpos, SoundEvents.BLOCK_GLASS_BREAK, SoundCategory.BLOCKS, 0.5F, 2.6F + (this.worldObj.rand.nextFloat() - this.worldObj.rand.nextFloat()) * 0.8F);
 						for (int i = 0; i < 8; ++i)
@@ -590,7 +589,7 @@ public class EntityBEArrow extends EntityArrow implements IProjectile
 		    	}
 		    	if (arrowType == ItemBEArrow.ArrowType.ICE)
 		    	{
-	                if (iblockstate.getMaterial() == Material.LAVA && ((Integer)iblockstate.getValue(BlockLiquid.LEVEL)).intValue() == 0 && this.worldObj.isAirBlock(blockpos))
+	                if (iblockstate.getMaterial() == Material.WATER && ((Integer)iblockstate.getValue(BlockLiquid.LEVEL)).intValue() == 0)
 	                {
 	    				this.worldObj.setBlockState(blockpos, Blocks.ICE.getDefaultState());
 	    				this.setDead();
@@ -598,7 +597,7 @@ public class EntityBEArrow extends EntityArrow implements IProjectile
 		    	}
 		    	if (arrowType == ItemBEArrow.ArrowType.FIRE)
 		    	{
-		    		if (iblockstate.getMaterial() == Material.WATER && ((Integer)iblockstate.getValue(BlockLiquid.LEVEL)).intValue() == 0 && this.worldObj.isAirBlock(blockpos))
+		    		if (iblockstate.getMaterial() == Material.WATER && ((Integer)iblockstate.getValue(BlockLiquid.LEVEL)).intValue() == 0)
 	                {
 		    			this.worldObj.playSound((EntityPlayer)null, blockpos, SoundEvents.BLOCK_FIRE_EXTINGUISH, SoundCategory.BLOCKS, 0.5F, 2.6F + (this.worldObj.rand.nextFloat() - this.worldObj.rand.nextFloat()) * 0.8F);
 	    				for (int i = 0; i < 8; ++i)
@@ -626,13 +625,11 @@ public class EntityBEArrow extends EntityArrow implements IProjectile
     		
     		if (this.shootingEntity == null)
     		{
-    			//damagesource = DamageSource.causeArrowDamage(this, this);
-    			damagesource = DamageSource.generic;
+    			damagesource = DamageSource.causeArrowDamage(this, this);
     		}
     		else
     		{
-    			//damagesource = DamageSource.causeArrowDamage(this, this.shootingEntity);
-    			damagesource = DamageSource.generic;
+    			damagesource = DamageSource.causeArrowDamage(this, this.shootingEntity);
     		}
 
     		if (this.isBurning() && !(entity instanceof EntityEnderman))

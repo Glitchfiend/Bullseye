@@ -1,5 +1,7 @@
 package bullseye.entities.projectiles.dispenser;
 
+import bullseye.entities.projectile.EntityBEArrow;
+import bullseye.item.ItemBEArrow;
 import net.minecraft.block.BlockDispenser;
 import net.minecraft.dispenser.BehaviorProjectileDispense;
 import net.minecraft.dispenser.IBlockSource;
@@ -9,8 +11,6 @@ import net.minecraft.entity.IProjectile;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.world.World;
-import bullseye.entities.projectile.EntityBEArrow;
-import bullseye.item.ItemBEArrow;
 
 public class DispenserBehaviorBEArrow extends BehaviorProjectileDispense
 {
@@ -27,16 +27,11 @@ public class DispenserBehaviorBEArrow extends BehaviorProjectileDispense
         return stack;
     }
 	
+	@Override
 	protected IProjectile getProjectileEntity(World world, IPosition iPosition, ItemStack stack)
 	{
 		EntityBEArrow arrow =  new EntityBEArrow(world, iPosition.getX(), iPosition.getY(), iPosition.getZ());
 		arrow.setArrowType(ItemBEArrow.ArrowType.fromMeta(stack.getMetadata()));
 		return arrow;
-	}
-
-	@Override
-	protected IProjectile getProjectileEntity(World worldIn, IPosition position) {
-		// TODO Auto-generated method stub
-		return null;
 	}
 }

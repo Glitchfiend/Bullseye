@@ -9,8 +9,10 @@ import net.minecraft.enchantment.Enchantment;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Items;
+import net.minecraft.init.SoundEvents;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.SoundCategory;
 import net.minecraft.world.World;
 import net.minecraftforge.event.entity.player.ArrowLooseEvent;
 import net.minecraftforge.event.entity.player.ArrowNockEvent;
@@ -21,11 +23,11 @@ public class ArrowEventHandler
 	@SubscribeEvent
     public void onArrowNock(ArrowNockEvent event)
     {
-		EntityPlayer player = event.entityPlayer;
-		ItemStack itemstack = event.result;
+		EntityPlayer player = event.getEntityPlayer();
+		ItemStack itemstack = event.getBow();
 		Item item = itemstack.getItem();
 		
-		if (player.inventory.hasItem(BEItems.arrow) || player.inventory.hasItem(BEItems.dye_arrow))
+		if (player.inventory.hasItemStack(new ItemStack(BEItems.arrow)) || player.inventory.hasItemStack(new ItemStack(BEItems.dye_arrow)))
 		{
             for (int k = 0; k < player.inventory.mainInventory.length; ++k)
             {
@@ -63,7 +65,7 @@ public class ArrowEventHandler
 		{		
 	        boolean flag = player.capabilities.isCreativeMode || EnchantmentHelper.getEnchantmentLevel(Enchantment.infinity.effectId, itemstack) > 0;
 	
-	        if (flag || player.inventory.hasItem(BEItems.arrow) || player.inventory.hasItem(BEItems.dye_arrow))
+	        if (flag || player.inventory.hasItemStack(new ItemStack(BEItems.arrow)) || player.inventory.hasItemStack(new ItemStack(BEItems.dye_arrow)))
 	        {
 	        	if (!world.isRemote)
 	        	{
@@ -152,11 +154,11 @@ public class ArrowEventHandler
 				            }
 				
 				            itemstack.damageItem(1, player);
-				            world.playSoundAtEntity(player, "random.bow", 1.0F, 1.0F / (world.rand.nextFloat() * 0.4F + 1.2F) + f * 0.5F);
+				            world.playSound((EntityPlayer)null, player.getPosition(), SoundEvents.ENTITY_ARROW_SHOOT, SoundCategory.PLAYERS, 1.0F, 1.0F / (world.rand.nextFloat() * 0.4F + 1.2F) + f * 0.5F);
 				            
 				            if (flag)
 				            {
-				                entitybearrow.canBePickedUp = 2;
+				            	entitybearrow.pickupStatus = EntityBEArrow.PickupStatus.CREATIVE_ONLY;
 				            }
 				            else
 				            {
@@ -169,11 +171,11 @@ public class ArrowEventHandler
 				            
 				            if (bestAvailableArrowType == ItemBEArrow.ArrowType.FIRE)
 				            {
-				            	world.playSoundAtEntity(entitybearrow, "item.fireCharge.use", 1.0F, (world.rand.nextFloat() - world.rand.nextFloat()) * 0.2F + 1.0F);
+				            	world.playSound((EntityPlayer)null, entitybearrow.getPosition(), SoundEvents.ITEM_FIRECHARGE_USE, SoundCategory.NEUTRAL,  1.0F, (world.rand.nextFloat() - world.rand.nextFloat()) * 0.2F + 1.0F);
 				            }
 				            if (bestAvailableArrowType == ItemBEArrow.ArrowType.BOMB)
 				            {
-				            	world.playSoundAtEntity(entitybearrow, "game.tnt.primed", 1.0F, 1.0F);
+				            	world.playSound((EntityPlayer)null, entitybearrow.getPosition(), SoundEvents.ENTITY_TNT_PRIMED, SoundCategory.NEUTRAL,  1.0F, 1.0F);
 				            }
 			            }
 			            if (bestAvailableDyeType != null)
@@ -201,11 +203,11 @@ public class ArrowEventHandler
 				            }
 				
 				            itemstack.damageItem(1, player);
-				            world.playSoundAtEntity(player, "random.bow", 1.0F, 1.0F / (world.rand.nextFloat() * 0.4F + 1.2F) + f * 0.5F);
+				            world.playSound((EntityPlayer)null, player.getPosition(), SoundEvents.ENTITY_ARROW_SHOOT, SoundCategory.PLAYERS, 1.0F, 1.0F / (world.rand.nextFloat() * 0.4F + 1.2F) + f * 0.5F);
 				            
 				            if (flag)
 				            {
-				            	entitydyearrow.canBePickedUp = 2;
+				            	entitydyearrow.pickupStatus = EntityDyeArrow.PickupStatus.CREATIVE_ONLY;
 				            }
 				            else
 				            {

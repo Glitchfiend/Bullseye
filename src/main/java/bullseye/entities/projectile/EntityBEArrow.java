@@ -43,6 +43,7 @@ import net.minecraft.util.EnumActionResult;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
@@ -293,7 +294,7 @@ public abstract class EntityBEArrow extends EntityArrow implements IProjectile
             				worldObj.setBlockState(blockpos, Blocks.GLASS_PANE.getDefaultState());
             			}
             		}
-            		this.worldObj.playAuxSFX(2002, blockpos, 0);
+            		this.worldObj.playSound((EntityPlayer)null, blockpos, SoundEvents.BLOCK_GLASS_BREAK, SoundCategory.BLOCKS, 0.5F, 2.6F + (this.worldObj.rand.nextFloat() - this.worldObj.rand.nextFloat()) * 0.8F);
                 	for (int i = 0; i < 8; ++i)
                     {
                         this.worldObj.spawnParticle(EnumParticleTypes.WATER_SPLASH, (this.posX - 0.5D) + Math.random(), this.posY + 0.25D, (this.posZ - 0.5D) + Math.random(), 0.0D, 0.0D, 0.0D, new int[0]);
@@ -340,7 +341,7 @@ public abstract class EntityBEArrow extends EntityArrow implements IProjectile
             				this.worldObj.setBlockState(blockpos, Blocks.ICE.getDefaultState());
             			}
             		}
-        			this.worldObj.playSoundEffect(this.posX, this.posY, this.posZ, "random.fizz", 0.5F, 2.6F + (this.worldObj.rand.nextFloat() - this.worldObj.rand.nextFloat()) * 0.8F);
+            		this.worldObj.playSound((EntityPlayer)null, blockpos, SoundEvents.BLOCK_FIRE_EXTINGUISH, SoundCategory.BLOCKS, 0.5F, 2.6F + (this.worldObj.rand.nextFloat() - this.worldObj.rand.nextFloat()) * 0.8F);
                 	for (int i = 0; i < 8; ++i)
                     {
                         this.worldObj.spawnParticle(EnumParticleTypes.SMOKE_LARGE, (this.posX - 0.5D) + Math.random(), this.posY + 0.25D, (this.posZ - 0.5D) + Math.random(), 0.0D, 0.0D, 0.0D, new int[0]);
@@ -557,13 +558,11 @@ public abstract class EntityBEArrow extends EntityArrow implements IProjectile
     	Entity entity = raytraceResultIn.entityHit;
     	ItemBEArrow.ArrowType arrowType = this.getArrowType();
     	
-		RayTraceResult movingobjectposition = this.rayTrace(this.worldObj, playerIn, true);
-		        
-        if (movingobjectposition != null)
+        if (raytraceResultIn != null)
         {
-            if (movingobjectposition.typeOfHit == RayTraceResult.Type.BLOCK)
+            if (raytraceResultIn.typeOfHit == RayTraceResult.Type.BLOCK)
             {
-                BlockPos blockpos = movingobjectposition.getBlockPos();
+                BlockPos blockpos = raytraceResultIn.getBlockPos();
                 IBlockState iblockstate = this.worldObj.getBlockState(blockpos);
                 net.minecraftforge.common.util.BlockSnapshot blocksnapshot = net.minecraftforge.common.util.BlockSnapshot.getBlockSnapshot(this.worldObj, blockpos);
 
@@ -572,7 +571,7 @@ public abstract class EntityBEArrow extends EntityArrow implements IProjectile
 		    	{
 	                if (iblockstate.getMaterial() == Material.WATER && ((Integer)iblockstate.getValue(BlockLiquid.LEVEL)).intValue() == 0 && this.worldObj.isAirBlock(blockpos))
 	                {
-						this.worldObj.playAuxSFX(2002, blockpos, 0);
+	                	this.worldObj.playSound((EntityPlayer)null, blockpos, SoundEvents.BLOCK_GLASS_BREAK, SoundCategory.BLOCKS, 0.5F, 2.6F + (this.worldObj.rand.nextFloat() - this.worldObj.rand.nextFloat()) * 0.8F);
 						for (int i = 0; i < 8; ++i)
 						{
 							this.worldObj.spawnParticle(EnumParticleTypes.WATER_SPLASH, (this.posX - 0.5D) + Math.random(), this.posY + 0.25D, (this.posZ - 0.5D) + Math.random(), 0.0D, 0.0D, 0.0D, new int[0]);
@@ -583,7 +582,7 @@ public abstract class EntityBEArrow extends EntityArrow implements IProjectile
 		    	}
 		    	if (arrowType == ItemBEArrow.ArrowType.ICE)
 		    	{
-	                if (iblockstate.getMaterial() == Material.LAVA && ((Integer)iblockstate.getValue(BlockLiquid.LEVEL)).intValue() == 0 && worldIn.isAirBlock(blockpos))
+	                if (iblockstate.getMaterial() == Material.LAVA && ((Integer)iblockstate.getValue(BlockLiquid.LEVEL)).intValue() == 0 && this.worldObj.isAirBlock(blockpos))
 	                {
 	    				this.worldObj.setBlockState(blockpos, Blocks.ICE.getDefaultState());
 	    				this.setDead();
@@ -593,7 +592,7 @@ public abstract class EntityBEArrow extends EntityArrow implements IProjectile
 		    	{
 		    		if (iblockstate.getMaterial() == Material.WATER && ((Integer)iblockstate.getValue(BlockLiquid.LEVEL)).intValue() == 0 && this.worldObj.isAirBlock(blockpos))
 	                {
-	    				this.worldObj.playSoundEffect(this.posX, this.posY, this.posZ, "random.fizz", 0.5F, 2.6F + (this.worldObj.rand.nextFloat() - this.worldObj.rand.nextFloat()) * 0.8F);
+		    			this.worldObj.playSound((EntityPlayer)null, blockpos, SoundEvents.BLOCK_FIRE_EXTINGUISH, SoundCategory.BLOCKS, 0.5F, 2.6F + (this.worldObj.rand.nextFloat() - this.worldObj.rand.nextFloat()) * 0.8F);
 	    				for (int i = 0; i < 8; ++i)
 	    				{
 	    					this.worldObj.spawnParticle(EnumParticleTypes.SMOKE_LARGE, (this.posX - 0.5D) + Math.random(), this.posY + 0.25D, (this.posZ - 0.5D) + Math.random(), 0.0D, 0.0D, 0.0D, new int[0]);
@@ -634,9 +633,9 @@ public abstract class EntityBEArrow extends EntityArrow implements IProjectile
     		//Arrow Effects
     		if (arrowType == ItemBEArrow.ArrowType.EXTINGUISHING)
     		{
-    			if (movingobjectposition.entityHit instanceof EntityPlayer)
+    			if (raytraceResultIn.entityHit instanceof EntityPlayer)
     			{
-    				EntityPlayer entityplayer = (EntityPlayer)movingobjectposition.entityHit;
+    				EntityPlayer entityplayer = (EntityPlayer)raytraceResultIn.entityHit;
 
     				for (ItemStack itemstack : entityplayer.inventory.armorInventory)
     				{
@@ -647,10 +646,10 @@ public abstract class EntityBEArrow extends EntityArrow implements IProjectile
     					}
     				}
     			}
-    			if (movingobjectposition.entityHit instanceof EntityLivingBase)
+    			if (raytraceResultIn.entityHit instanceof EntityLivingBase)
     			{
-    				this.worldObj.playAuxSFX(2002, blockpos, 0);
-    				for (int i = 0; i < 8; ++i)
+    				this.worldObj.playSound((EntityPlayer)null, entity.getPosition(), SoundEvents.BLOCK_GLASS_BREAK, SoundCategory.BLOCKS, 0.5F, 2.6F + (this.worldObj.rand.nextFloat() - this.worldObj.rand.nextFloat()) * 0.8F);
+    				for (int i1 = 0; i1 < 8; ++i1)
     				{
     					this.worldObj.spawnParticle(EnumParticleTypes.WATER_SPLASH, (this.posX - 0.5D) + Math.random(), this.posY + 0.25D, (this.posZ - 0.5D) + Math.random(), 0.0D, 0.0D, 0.0D, new int[0]);
     				}
@@ -665,11 +664,11 @@ public abstract class EntityBEArrow extends EntityArrow implements IProjectile
     		}
     		if (arrowType == ItemBEArrow.ArrowType.FIRE)
     		{
-    			if (movingobjectposition.entityHit instanceof EntityLivingBase)
+    			if (raytraceResultIn.entityHit instanceof EntityLivingBase)
     			{
-    				movingobjectposition.entityHit.setFire(10);
-    				this.worldObj.playSoundEffect(this.posX, this.posY, this.posZ, "random.fizz", 0.5F, 2.6F + (this.worldObj.rand.nextFloat() - this.worldObj.rand.nextFloat()) * 0.8F);
-    				for (int i = 0; i < 8; ++i)
+    				raytraceResultIn.entityHit.setFire(10);
+    				this.worldObj.playSound((EntityPlayer)null, entity.getPosition(), SoundEvents.BLOCK_FIRE_EXTINGUISH, SoundCategory.BLOCKS, 0.5F, 2.6F + (this.worldObj.rand.nextFloat() - this.worldObj.rand.nextFloat()) * 0.8F);
+    				for (int i1 = 0; i1 < 8; ++i1)
     				{
     					this.worldObj.spawnParticle(EnumParticleTypes.SMOKE_LARGE, (this.posX - 0.5D) + Math.random(), this.posY + 0.25D, (this.posZ - 0.5D) + Math.random(), 0.0D, 0.0D, 0.0D, new int[0]);
     				}
@@ -684,7 +683,7 @@ public abstract class EntityBEArrow extends EntityArrow implements IProjectile
     		}
     		if (arrowType == ItemBEArrow.ArrowType.ICE)
     		{
-    			for (int i = 0; i < 8; ++i)
+    			for (int i1 = 0; i1 < 8; ++i1)
     			{
     				Bullseye.proxy.spawnParticle(BEParticleTypes.SNOWFLAKE, (this.posX - 0.5D) + Math.random(), this.posY + 0.25D, (this.posZ - 0.5D) + Math.random(), 0.0D, 0.0D, 0.0D, new int[0]);
     			}
@@ -700,8 +699,8 @@ public abstract class EntityBEArrow extends EntityArrow implements IProjectile
     		{
     			if (!this.worldObj.isRemote)
     			{	
-    				float f = 2.0F;
-    				this.worldObj.createExplosion(this, this.posX, this.posY, this.posZ, f, true);
+    				float f1 = 2.0F;
+    				this.worldObj.createExplosion(this, this.posX, this.posY, this.posZ, f1, true);
     			}
     			int itemId = Item.getIdFromItem(BEItems.arrow);
     			int itemMeta = this.getArrowType().ordinal();

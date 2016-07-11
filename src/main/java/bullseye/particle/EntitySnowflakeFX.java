@@ -1,22 +1,23 @@
 package bullseye.particle;
 
-import bullseye.core.ClientProxy;
 import net.minecraft.client.particle.Particle;
 import net.minecraft.client.renderer.GlStateManager;
+import net.minecraft.client.renderer.VertexBuffer;
 import net.minecraft.entity.Entity;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.client.FMLClientHandler;
+import bullseye.core.ClientProxy;
 
 public class EntitySnowflakeFX extends Particle
 {
     
-    public EntitySnowflakeFX(World world, double xCoordIn, double yCoordIn, double zCoordIn, double xSpeedIn, double ySpeedIn, double zSpeedIn)
+    public EntitySnowflakeFX(World world, double xCoordIn, double yCoordIn, double zCoordIn, double motionXIn, double motionYIn, double motionZIn)
     {
-        this(world, xCoordIn, yCoordIn, zCoordIn, xSpeedIn, ySpeedIn, zSpeedIn, 1.0F);
+        this(world, xCoordIn, yCoordIn, zCoordIn, motionXIn, motionYIn, motionZIn, 1.0F);
     }
     
-    public EntitySnowflakeFX(World world, double xCoordIn, double yCoordIn, double zCoordIn, double xSpeedIn, double ySpeedIn, double zSpeedIn, float par14)
+    public EntitySnowflakeFX(World world, double xCoordIn, double yCoordIn, double zCoordIn, double motionXIn, double motionYIn, double motionZIn, float par14)
     {
         super(world, xCoordIn, yCoordIn, zCoordIn, 0.0D, 0.0D, 0.0D);
         
@@ -26,9 +27,9 @@ public class EntitySnowflakeFX extends Particle
         this.motionX *= 0.10000000149011612D;
         this.motionY *= 0.10000000149011612D;
         this.motionZ *= 0.10000000149011612D;
-        this.motionX += xSpeedIn;
-        this.motionY += ySpeedIn;
-        this.motionZ += zSpeedIn;
+        this.motionX += motionXIn;
+        this.motionY += motionYIn;
+        this.motionZ += motionZIn;
         this.particleScale *= 0.75F;
         this.particleScale *= par14;
         this.particleMaxAge = (int)((8.0D / (Math.random() * 0.8D + 0.2D)) * 8);
@@ -36,7 +37,6 @@ public class EntitySnowflakeFX extends Particle
         this.particleAge = world.rand.nextInt(2);
         this.particleAlpha = 1.0F;
         this.particleGravity = 0.02F;
-        this.noClip = false;
     }
     
     @Override
@@ -46,7 +46,7 @@ public class EntitySnowflakeFX extends Particle
     }
     
     @Override
-    public void renderParticle(WorldRenderer renderer, Entity entity, float partialTicks, float rotX, float rotXZ, float rotZ, float rotYZ, float rotXY)
+    public void renderParticle(VertexBuffer renderer, Entity entity, float partialTicks, float rotX, float rotXZ, float rotZ, float rotYZ, float rotXY)
     {
         
         // EffectRenderer will by default bind the vanilla particles texture, override with our own
@@ -76,7 +76,7 @@ public class EntitySnowflakeFX extends Particle
 
         if (particleAge++ >= particleMaxAge)
         {
-            this.setDead();
+            this.setExpired();
         }
 
         this.particleTextureIndexX = 7 - particleAge * 8 / particleMaxAge;
@@ -92,7 +92,7 @@ public class EntitySnowflakeFX extends Particle
         motionY *= 0.9599999785423279D;
         motionZ *= 0.9599999785423279D;
 
-        if (onGround)
+        if (isCollided)
         {
             motionX *= 0.699999988079071D;
             motionZ *= 0.699999988079071D;

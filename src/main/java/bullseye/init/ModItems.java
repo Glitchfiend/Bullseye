@@ -18,6 +18,7 @@ import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.client.model.ModelLoader;
 import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.common.registry.GameRegistry;
@@ -71,7 +72,7 @@ public class ModItems
                     String subItemName = item.getUnlocalizedName(subItem);
                     subItemName =  subItemName.substring(subItemName.indexOf(".") + 1); // remove 'item.' from the front
 
-                    ModelBakery.addVariantName(item, Bullseye.MOD_ID + ":" + subItemName);
+                    ModelBakery.registerItemVariants(item, new ResourceLocation(Bullseye.MOD_ID, subItemName));
                     ModelLoader.setCustomModelResourceLocation(item, subItem.getMetadata(), new ModelResourceLocation(Bullseye.MOD_ID + ":" + subItemName, "inventory"));
                 }
             }

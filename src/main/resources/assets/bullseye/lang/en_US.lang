@@ -1,5 +1,7 @@
 itemGroup.tabBullseye=Bullseye
 
+config.category.arrowSettings.title=Arrow Settings
+
 item.bomb_arrow.name=Bomb Arrow
 item.bomb_arrow_topper.name=Bomb Arrow Topper
 item.diamond_arrow.name=Diamond Arrow

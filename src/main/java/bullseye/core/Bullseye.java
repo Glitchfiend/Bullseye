@@ -7,9 +7,12 @@
  ******************************************************************************/
 package bullseye.core;
 
+import java.io.File;
+
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import bullseye.init.ModConfiguration;
 import bullseye.init.ModCrafting;
 import bullseye.init.ModEntities;
 import bullseye.init.ModItems;
@@ -20,12 +23,13 @@ import net.minecraftforge.fml.common.Mod.Instance;
 import net.minecraftforge.fml.common.SidedProxy;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 
-@Mod(modid = Bullseye.MOD_ID, version = Bullseye.MOD_VERSION, name = Bullseye.MOD_NAME)
+@Mod(modid = Bullseye.MOD_ID, version = Bullseye.MOD_VERSION, name = Bullseye.MOD_NAME, guiFactory = Bullseye.GUI_FACTORY)
 public class Bullseye
 {
     public static final String MOD_NAME = "Bullseye";
     public static final String MOD_ID = "Bullseye";
     public static final String MOD_VERSION = "@MOD_VERSION@";
+    public static final String GUI_FACTORY = "bullseye.client.gui.GuiFactory";
     
     @Instance(MOD_ID)
     public static Bullseye instance;
@@ -34,10 +38,14 @@ public class Bullseye
     public static CommonProxy proxy;
     
     public static Logger logger = LogManager.getLogger(MOD_ID);
+    public static File configDirectory;
     
     @EventHandler
     public void preInit(FMLPreInitializationEvent event)
     {
+    	configDirectory = new File(event.getModConfigurationDirectory(), "bullseye");
+    	ModConfiguration.init(configDirectory);
+    	
     	ModEntities.init();
         ModItems.init();
         ModVanillaCompat.init();

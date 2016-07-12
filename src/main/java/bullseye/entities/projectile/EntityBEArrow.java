@@ -8,6 +8,7 @@ import com.google.common.base.Predicate;
 import com.google.common.base.Predicates;
 
 import bullseye.api.BEItems;
+import bullseye.config.ConfigurationHandler;
 import bullseye.core.Bullseye;
 import bullseye.item.ItemBEArrow;
 import bullseye.particle.BEParticleTypes;
@@ -27,7 +28,6 @@ import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.entity.projectile.EntityArrow;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
-import net.minecraft.init.PotionTypes;
 import net.minecraft.init.SoundEvents;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemArmor;
@@ -37,12 +37,8 @@ import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.network.datasync.DataSerializers;
 import net.minecraft.network.datasync.EntityDataManager;
 import net.minecraft.network.play.server.SPacketChangeGameState;
-import net.minecraft.potion.PotionUtils;
-import net.minecraft.util.ActionResult;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.EntitySelectors;
-import net.minecraft.util.EnumActionResult;
-import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundCategory;
@@ -52,8 +48,6 @@ import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
-import net.minecraftforge.fluids.Fluid;
-import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
@@ -343,6 +337,10 @@ public class EntityBEArrow extends EntityArrow implements IProjectile
             			{
             				this.worldObj.setBlockState(blockpos, Blocks.WATER.getDefaultState());
             			}
+            			if (worldObj.getBlockState(blockpos) == Blocks.FROSTED_ICE.getDefaultState())
+            			{
+            				this.worldObj.setBlockState(blockpos, Blocks.WATER.getDefaultState());
+            			}
             			if (worldObj.getBlockState(blockpos) == Blocks.SNOW_LAYER.getDefaultState())
             			{
             				this.worldObj.setBlockState(blockpos, Blocks.AIR.getDefaultState());
@@ -399,7 +397,7 @@ public class EntityBEArrow extends EntityArrow implements IProjectile
             		if (!this.worldObj.isRemote)
                     {	
                         float f = 2.0F;
-                        this.worldObj.createExplosion(this, this.posX, this.posY, this.posZ, f, true);
+                        this.worldObj.createExplosion(this, this.posX, this.posY, this.posZ, f, ConfigurationHandler.explodeBombArrows);
                     }
         	        int itemId = Item.getIdFromItem(BEItems.arrow);
         	        int itemMeta = this.getArrowType().ordinal();
@@ -413,8 +411,21 @@ public class EntityBEArrow extends EntityArrow implements IProjectile
             	{
             		if (!this.worldObj.isRemote)
                     {	
-                        EntityLightningBolt entityLightningBolt = new EntityLightningBolt(this.worldObj, this.posX, this.posY, this.posZ, inGround);
+                        EntityLightningBolt entityLightningBolt = new EntityLightningBolt(this.worldObj, this.posX, this.posY, this.posZ, !(ConfigurationHandler.fireLightningArrows));
                         this.worldObj.addWeatherEffect(entityLightningBolt);
+                        
+                        if (!(ConfigurationHandler.fireLightningArrows))
+    	    			{
+    	    				double d0 = 3.0D;
+    	                    List<Entity> list = this.worldObj.getEntitiesWithinAABBExcludingEntity(this, new AxisAlignedBB(entityLightningBolt.posX - d0, entityLightningBolt.posY - d0, entityLightningBolt.posZ - d0, entityLightningBolt.posX + d0, entityLightningBolt.posY + 6.0D + d0, entityLightningBolt.posZ + d0));
+
+    	                    for (int i1 = 0; i1 < list.size(); ++i1)
+    	                    {
+    	                        Entity entity1 = (Entity)list.get(i1);
+    	                        if (!net.minecraftforge.event.ForgeEventFactory.onEntityStruckByLightning(entity1, entityLightningBolt))
+    	                            entity1.onStruckByLightning(entityLightningBolt);
+    	                    }
+    	    			}
                     }
         	        int itemId = Item.getIdFromItem(BEItems.arrow);
         	        int itemMeta = this.getArrowType().ordinal();
@@ -599,7 +610,7 @@ public class EntityBEArrow extends EntityArrow implements IProjectile
 		    	{
 	                if (iblockstate.getMaterial() == Material.WATER && ((Integer)iblockstate.getValue(BlockLiquid.LEVEL)).intValue() == 0)
 	                {
-	    				this.worldObj.setBlockState(blockpos, Blocks.ICE.getDefaultState());
+	    				this.worldObj.setBlockState(blockpos, Blocks.FROSTED_ICE.getDefaultState(), 2);
 	    				this.setDead();
 		    		}
 		    	}
@@ -619,8 +630,12 @@ public class EntityBEArrow extends EntityArrow implements IProjectile
 		    		
 		    		if (worldObj.isAirBlock(pos) && this.worldObj.isBlockFullCube(blockpos) && iblockstate.getMaterial() != Material.LAVA && iblockstate.getMaterial() != Material.WATER && iblockstate != Blocks.ICE.getDefaultState() && iblockstate != Blocks.SNOW_LAYER.getDefaultState() && iblockstate != Blocks.SNOW.getDefaultState() && iblockstate != Blocks.PACKED_ICE.getDefaultState())
         			{
-        				this.worldObj.setBlockState(pos, Blocks.FIRE.getDefaultState(), 11);
-        				this.setDead();
+		    			if (ConfigurationHandler.burnFireArrows)
+		    			{
+	        				this.worldObj.setBlockState(pos, Blocks.FIRE.getDefaultState(), 11);
+		    			}
+		    			
+		    			this.setDead();
         			}
 		    	}
             }
@@ -729,7 +744,7 @@ public class EntityBEArrow extends EntityArrow implements IProjectile
     	    			if (!this.worldObj.isRemote)
     	    			{	
     	    				float f1 = 2.0F;
-    	    				this.worldObj.createExplosion(this, this.posX, this.posY, this.posZ, f1, true);
+    	    				this.worldObj.createExplosion(this, this.posX, this.posY, this.posZ, f1, ConfigurationHandler.explodeBombArrows);
     	    			}
     	    			int itemId = Item.getIdFromItem(BEItems.arrow);
     	    			int itemMeta = this.getArrowType().ordinal();
@@ -743,9 +758,23 @@ public class EntityBEArrow extends EntityArrow implements IProjectile
     	    		{
     	    			if (!this.worldObj.isRemote)
     	    			{	
-    	    				EntityLightningBolt entityLightningBolt = new EntityLightningBolt(this.worldObj, this.posX, this.posY, this.posZ, inGround);
+    	    				EntityLightningBolt entityLightningBolt = new EntityLightningBolt(this.worldObj, this.posX, this.posY, this.posZ, !(ConfigurationHandler.fireLightningArrows));
     	    				this.worldObj.addWeatherEffect(entityLightningBolt);
+	    	    			
+	    	    			if (!(ConfigurationHandler.fireLightningArrows))
+	    	    			{
+	    	    				double d0 = 3.0D;
+	    	                    List<Entity> list = this.worldObj.getEntitiesWithinAABBExcludingEntity(this, new AxisAlignedBB(entityLightningBolt.posX - d0, entityLightningBolt.posY - d0, entityLightningBolt.posZ - d0, entityLightningBolt.posX + d0, entityLightningBolt.posY + 6.0D + d0, entityLightningBolt.posZ + d0));
+	
+	    	                    for (int i1 = 0; i1 < list.size(); ++i1)
+	    	                    {
+	    	                        Entity entity1 = (Entity)list.get(i1);
+	    	                        if (!net.minecraftforge.event.ForgeEventFactory.onEntityStruckByLightning(entity1, entityLightningBolt))
+	    	                            entity1.onStruckByLightning(entityLightningBolt);
+	    	                    }
+	    	    			}
     	    			}
+    	    			
     	    			int itemId = Item.getIdFromItem(BEItems.arrow);
     	    			int itemMeta = this.getArrowType().ordinal();
     	    			for (int ii = 0; ii < 16; ++ii)

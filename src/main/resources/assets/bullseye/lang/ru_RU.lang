@@ -1,0 +1,60 @@
+itemGroup.tabBullseye=Bullseye
+
+config.category.arrowSettings.title=Настройки стрел
+
+item.bomb_arrow.name=Стрела с бомбой
+item.bomb_arrow_topper.name=Наконечник стрелы с бомбой
+item.diamond_arrow.name=Алмазная стрела
+item.egg_arrow.name=Стрела с яйцом
+item.extinguishing_arrow.name=Стрела пожаротушения
+item.fire_arrow.name=Огненная стрела
+item.fire_arrow_topper.name=Наконечник огненной стрелы
+item.ice_arrow.name=Ледяная стрела
+item.ice_arrow_topper.name=Наконечник ледяной стрелы
+item.lightning_arrow.name=Молниеносная стрела
+item.lightning_arrow_topper.name=Наконечник молниеносной стрелы
+item.training_arrow.name=Тренировочная стрела
+
+item.dye_arrow_red.name=Стрела с красным красителем
+item.dye_arrow_orange.name=Стрела с оранжевым красителем
+item.dye_arrow_yellow.name=Стрела с жёлтым красителем
+item.dye_arrow_lime.name=Стрела с лаймовым красителем
+item.dye_arrow_green.name=Стрела с зелёным красителем
+item.dye_arrow_cyan.name=Стрела с бирюзовым красителем
+item.dye_arrow_light_blue.name=Стрела с голубым красителем
+item.dye_arrow_blue.name=Стрела с синим красителем
+item.dye_arrow_purple.name=Стрела с фиолетовым красителем
+item.dye_arrow_magenta.name=Стрела с пурпурным красителем
+item.dye_arrow_pink.name=Стрела с розовым красителем
+item.dye_arrow_brown.name=Стрела с коричневым красителем
+item.dye_arrow_white.name=Стрела с белым красителем
+item.dye_arrow_silver.name=Стрела со светло-серым красителем
+item.dye_arrow_gray.name=Стрела с серым красителем
+item.dye_arrow_black.name=Стрела с чёрным красителем
+
+entity.Bullseye.arrow.name=Стрела
+entity.Bullseye.training_arrow.name=Тренировочная стрела
+entity.Bullseye.egg_arrow.name=Стрела с яйцом
+entity.Bullseye.extinguishing_arrow.name=Стрела пожаротушения
+entity.Bullseye.diamond_arrow.name=Алмазная стрела
+entity.Bullseye.bomb_arrow.name=Стрела с бомбой
+entity.Bullseye.fire_arrow.name=Огненная стрела
+entity.Bullseye.ice_arrow.name=Ледяная стрела
+entity.Bullseye.lightning_arrow.name=Молниеносная стрела
+
+entity.Bullseye.dye_arrow_red.name=Стрела с красным красителем
+entity.Bullseye.dye_arrow_orange.name=Стрела с оранжевым красителем
+entity.Bullseye.dye_arrow_yellow.name=Стрела с жёлтым красителем
+entity.Bullseye.dye_arrow_lime.name=Стрела с лаймовым красителем
+entity.Bullseye.dye_arrow_green.name=Стрела с зелёным красителем
+entity.Bullseye.dye_arrow_cyan.name=Стрела с бирюзовым красителем
+entity.Bullseye.dye_arrow_light_blue.name=Стрела с голубым красителем
+entity.Bullseye.dye_arrow_blue.name=Стрела с синим красителем
+entity.Bullseye.dye_arrow_purple.name=Стрела с фиолетовым красителем
+entity.Bullseye.dye_arrow_magenta.name=Стрела с пурпурным красителем
+entity.Bullseye.dye_arrow_pink.name=Стрела с розовым красителем
+entity.Bullseye.dye_arrow_brown.name=Стрела с коричневым красителем
+entity.Bullseye.dye_arrow_white.name=Стрела с белым красителем
+entity.Bullseye.dye_arrow_silver.name=Стрела со светло-серым красителем
+entity.Bullseye.dye_arrow_gray.name=Стрела с серым красителем
+entity.Bullseye.dye_arrow_black.name=Стрела с чёрным красителем

@@ -281,13 +281,21 @@ public class EntityBEArrow extends EntityArrow implements IProjectile
             	{
             		if (!this.worldObj.isRemote)
             		{
-            			if (this.worldObj.getBlockState(blockpos.up()).getBlock() == Blocks.FIRE)
-            			{
-            				if (this.shootingEntity instanceof EntityPlayer)
-            				{
-            					this.worldObj.extinguishFire((EntityPlayer)this.shootingEntity, blockpos.up(), EnumFacing.UP);
-            				}
-            			}
+            			for (int xx = -2; xx <= 2; xx++)
+            	        {
+            	            for (int yy = -2; yy <= 2; yy++)
+            	            {
+            	                for (int zz = -2; zz <= 2; zz++)
+            	                {
+            	                    BlockPos pos = blockpos.add(xx, yy - 1, zz);
+            	                
+			            			if (this.worldObj.getBlockState(pos).getBlock() == Blocks.FIRE)
+			            			{
+			            				worldObj.setBlockToAir(pos);
+			            			}
+            	                }
+            	            }
+            	        }
             			if (block == Blocks.STAINED_HARDENED_CLAY)
             			{
             				worldObj.setBlockState(blockpos, Blocks.HARDENED_CLAY.getDefaultState());

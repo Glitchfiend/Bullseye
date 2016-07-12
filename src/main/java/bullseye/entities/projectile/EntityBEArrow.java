@@ -293,6 +293,10 @@ public class EntityBEArrow extends EntityArrow implements IProjectile
 			            			{
 			            				worldObj.setBlockToAir(pos);
 			            			}
+			            			if (this.worldObj.getBlockState(pos).getBlock() == Blocks.TORCH)
+			            			{
+			            				worldObj.destroyBlock(pos, true);
+			            			}
             	                }
             	            }
             	        }

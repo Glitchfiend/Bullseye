@@ -8,7 +8,9 @@
 package bullseye.core;
 
 import bullseye.entities.projectile.EntityBEArrow;
+import bullseye.entities.projectile.EntityDyeArrow;
 import bullseye.entities.projectile.RenderBEArrow;
+import bullseye.entities.projectile.RenderDyeArrow;
 import bullseye.particle.BEParticleTypes;
 import bullseye.particle.EntitySnowflakeFX;
 import net.minecraft.client.Minecraft;
@@ -34,6 +36,7 @@ public class ClientProxy extends CommonProxy
     public void registerRenderers()
     {
         registerEntityRenderer(EntityBEArrow.class, RenderBEArrow.class);
+        registerEntityRenderer(EntityDyeArrow.class, RenderDyeArrow.class);
     }
     
     @Override

@@ -327,10 +327,6 @@ public class EntityBEArrow extends EntityArrow implements IProjectile
             	{
             		if (!this.worldObj.isRemote)
             		{
-            			if (worldObj.isAirBlock(blockpos.up()) && worldObj.isBlockFullCube(blockpos))
-            			{
-            				this.worldObj.setBlockState(blockpos.up(), Blocks.FIRE.getDefaultState());
-            			}
             			if (worldObj.getBlockState(blockpos) == Blocks.ICE.getDefaultState())
             			{
             				this.worldObj.setBlockState(blockpos, Blocks.WATER.getDefaultState());
@@ -606,6 +602,14 @@ public class EntityBEArrow extends EntityArrow implements IProjectile
 	    				}
 	    				this.setDead();
 		    		}
+		    		
+		    		BlockPos pos = raytraceResultIn.getBlockPos().offset(raytraceResultIn.sideHit);
+		    		
+		    		if (worldObj.isAirBlock(pos) && this.worldObj.isBlockFullCube(blockpos) && iblockstate.getMaterial() != Material.LAVA && iblockstate.getMaterial() != Material.WATER && iblockstate != Blocks.ICE.getDefaultState() && iblockstate != Blocks.SNOW_LAYER.getDefaultState() && iblockstate != Blocks.SNOW.getDefaultState() && iblockstate != Blocks.PACKED_ICE.getDefaultState())
+        			{
+        				this.worldObj.setBlockState(pos, Blocks.FIRE.getDefaultState(), 11);
+        				this.setDead();
+        			}
 		    	}
             }
         }

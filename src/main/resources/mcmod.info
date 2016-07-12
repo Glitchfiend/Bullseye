@@ -4,6 +4,7 @@
     "description": "Adds new arrows, including fire arrows, dye arrows, bomb arrows, and more!",
     "version": "${mod_version}",
     "mcversion": "${minecraft_version}",
+	"url": "http://mods.curse.com/mc-mods/minecraft/247395-bullseye",
     "authorList": ["Forstride"],
     "logoFile": "assets/bullseye/textures/gui/logo.png"
 }]

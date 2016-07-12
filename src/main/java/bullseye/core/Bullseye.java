@@ -7,12 +7,6 @@
  ******************************************************************************/
 package bullseye.core;
 
-import net.minecraftforge.fml.common.Mod;
-import net.minecraftforge.fml.common.Mod.EventHandler;
-import net.minecraftforge.fml.common.Mod.Instance;
-import net.minecraftforge.fml.common.SidedProxy;
-import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
-
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -20,12 +14,18 @@ import bullseye.init.ModCrafting;
 import bullseye.init.ModEntities;
 import bullseye.init.ModItems;
 import bullseye.init.ModVanillaCompat;
+import net.minecraftforge.fml.common.Mod;
+import net.minecraftforge.fml.common.Mod.EventHandler;
+import net.minecraftforge.fml.common.Mod.Instance;
+import net.minecraftforge.fml.common.SidedProxy;
+import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 
-@Mod(modid = Bullseye.MOD_ID, name = Bullseye.MOD_NAME)
+@Mod(modid = Bullseye.MOD_ID, version = Bullseye.MOD_VERSION, name = Bullseye.MOD_NAME)
 public class Bullseye
 {
     public static final String MOD_NAME = "Bullseye";
     public static final String MOD_ID = "Bullseye";
+    public static final String MOD_VERSION = "@MOD_VERSION@";
     
     @Instance(MOD_ID)
     public static Bullseye instance;

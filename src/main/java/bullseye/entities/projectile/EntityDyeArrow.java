@@ -428,42 +428,42 @@ public class EntityDyeArrow extends EntityArrow implements IProjectile
             {
                 entity.setFire(5);
             }
-            
-            if (entity  instanceof EntitySheep)
-            {
-                EntitySheep entitysheep = (EntitySheep)entity;
-
-                entitysheep.setFleeceColor(EnumDyeColor.byMetadata(dyeType.ordinal()));
-                this.setDead();
-            }
-            
-            if (entity instanceof EntityWolf)
-            {
-                EntityWolf entitywolf = (EntityWolf)entity;
-
-                entitywolf.setCollarColor(EnumDyeColor.byMetadata(dyeType.ordinal()));
-                this.setDead();
-            }
-            
-            if (entity instanceof EntityPlayer)
-            {
-                EntityPlayer entityplayer = (EntityPlayer)entity;
-
-                for (ItemStack itemstack : entityplayer.inventory.armorInventory)
-                {
-                    if (itemstack != null && (itemstack.getItem() == Items.LEATHER_HELMET || itemstack.getItem() == Items.LEATHER_CHESTPLATE || itemstack.getItem() == Items.LEATHER_LEGGINGS || itemstack.getItem() == Items.LEATHER_BOOTS))
-                    {
-                        ItemArmor itemarmor = (ItemArmor)itemstack.getItem();
-                        itemarmor.setColor(itemstack, EnumDyeColor.byMetadata(dyeType.ordinal()).getMapColor().colorValue);
-                    }
-                }
-            }
 
             if (entity.attackEntityFrom(damagesource, (float)i))
             {
                 if (entity instanceof EntityLivingBase)
                 {
                     EntityLivingBase entitylivingbase = (EntityLivingBase)entity;
+                    
+                    if (entity instanceof EntitySheep)
+                    {
+                        EntitySheep entitysheep = (EntitySheep)entity;
+
+                        entitysheep.setFleeceColor(EnumDyeColor.byMetadata(dyeType.ordinal()));
+                        this.setDead();
+                    }
+                    
+                    if (entity instanceof EntityWolf)
+                    {
+                        EntityWolf entitywolf = (EntityWolf)entity;
+
+                        entitywolf.setCollarColor(EnumDyeColor.byMetadata(dyeType.ordinal()));
+                        this.setDead();
+                    }
+                    
+                    if (entity instanceof EntityPlayer)
+                    {
+                        EntityPlayer entityplayer = (EntityPlayer)entity;
+
+                        for (ItemStack itemstack : entityplayer.inventory.armorInventory)
+                        {
+                            if (itemstack != null && (itemstack.getItem() == Items.LEATHER_HELMET || itemstack.getItem() == Items.LEATHER_CHESTPLATE || itemstack.getItem() == Items.LEATHER_LEGGINGS || itemstack.getItem() == Items.LEATHER_BOOTS))
+                            {
+                                ItemArmor itemarmor = (ItemArmor)itemstack.getItem();
+                                itemarmor.setColor(itemstack, EnumDyeColor.byMetadata(dyeType.ordinal()).getMapColor().colorValue);
+                            }
+                        }
+                    }
 
                     if (!this.worldObj.isRemote)
                     {

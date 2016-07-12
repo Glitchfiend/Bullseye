@@ -637,107 +637,107 @@ public class EntityBEArrow extends EntityArrow implements IProjectile
     			entity.setFire(5);
     		}
 
-    		//Arrow Effects
-    		if (arrowType == ItemBEArrow.ArrowType.EXTINGUISHING)
-    		{
-    			if (raytraceResultIn.entityHit instanceof EntityPlayer)
-    			{
-    				EntityPlayer entityplayer = (EntityPlayer)raytraceResultIn.entityHit;
-
-    				for (ItemStack itemstack : entityplayer.inventory.armorInventory)
-    				{
-    					if (itemstack != null && (itemstack.getItem() == Items.LEATHER_HELMET || itemstack.getItem() == Items.LEATHER_CHESTPLATE || itemstack.getItem() == Items.LEATHER_LEGGINGS || itemstack.getItem() == Items.LEATHER_BOOTS))
-    					{
-    						ItemArmor itemarmor = (ItemArmor)itemstack.getItem();
-    						itemarmor.removeColor(itemstack);
-    					}
-    				}
-    			}
-    			if (raytraceResultIn.entityHit instanceof EntityLivingBase)
-    			{
-    				this.worldObj.playSound((EntityPlayer)null, entity.getPosition(), SoundEvents.BLOCK_GLASS_BREAK, SoundCategory.BLOCKS, 0.5F, 2.6F + (this.worldObj.rand.nextFloat() - this.worldObj.rand.nextFloat()) * 0.8F);
-    				for (int i1 = 0; i1 < 8; ++i1)
-    				{
-    					this.worldObj.spawnParticle(EnumParticleTypes.WATER_SPLASH, (this.posX - 0.5D) + Math.random(), this.posY + 0.25D, (this.posZ - 0.5D) + Math.random(), 0.0D, 0.0D, 0.0D, new int[0]);
-    				}
-    				int itemId = Item.getIdFromItem(BEItems.arrow);
-    				int itemMeta = this.getArrowType().ordinal();
-    				for (int ii = 0; ii < 16; ++ii)
-    				{
-    					this.worldObj.spawnParticle(EnumParticleTypes.ITEM_CRACK, this.posX, this.posY, this.posZ, ((double)this.rand.nextFloat() - 0.5D) * 0.08D, ((double)this.rand.nextFloat() - 0.5D) * 0.08D, ((double)this.rand.nextFloat() - 0.5D) * 0.08D, new int[] {itemId, itemMeta});                
-    				}
-    				this.setDead();
-    			}
-    		}
-    		if (arrowType == ItemBEArrow.ArrowType.FIRE)
-    		{
-    			if (raytraceResultIn.entityHit instanceof EntityLivingBase)
-    			{
-    				raytraceResultIn.entityHit.setFire(10);
-    				this.worldObj.playSound((EntityPlayer)null, entity.getPosition(), SoundEvents.BLOCK_FIRE_EXTINGUISH, SoundCategory.BLOCKS, 0.5F, 2.6F + (this.worldObj.rand.nextFloat() - this.worldObj.rand.nextFloat()) * 0.8F);
-    				for (int i1 = 0; i1 < 8; ++i1)
-    				{
-    					this.worldObj.spawnParticle(EnumParticleTypes.SMOKE_LARGE, (this.posX - 0.5D) + Math.random(), this.posY + 0.25D, (this.posZ - 0.5D) + Math.random(), 0.0D, 0.0D, 0.0D, new int[0]);
-    				}
-    				int itemId = Item.getIdFromItem(BEItems.arrow);
-    				int itemMeta = this.getArrowType().ordinal();
-    				for (int ii = 0; ii < 16; ++ii)
-    				{
-    					this.worldObj.spawnParticle(EnumParticleTypes.ITEM_CRACK, this.posX, this.posY, this.posZ, ((double)this.rand.nextFloat() - 0.5D) * 0.08D, ((double)this.rand.nextFloat() - 0.5D) * 0.08D, ((double)this.rand.nextFloat() - 0.5D) * 0.08D, new int[] {itemId, itemMeta});                
-    				}
-    				this.setDead();
-    			}
-    		}
-    		if (arrowType == ItemBEArrow.ArrowType.ICE)
-    		{
-    			for (int i1 = 0; i1 < 8; ++i1)
-    			{
-    				Bullseye.proxy.spawnParticle(BEParticleTypes.SNOWFLAKE, (this.posX - 0.5D) + Math.random(), this.posY + 0.25D, (this.posZ - 0.5D) + Math.random(), 0.0D, 0.0D, 0.0D, new int[0]);
-    			}
-    			int itemId = Item.getIdFromItem(BEItems.arrow);
-    			int itemMeta = this.getArrowType().ordinal();
-    			for (int ii = 0; ii < 16; ++ii)
-    			{
-    				this.worldObj.spawnParticle(EnumParticleTypes.ITEM_CRACK, this.posX, this.posY, this.posZ, ((double)this.rand.nextFloat() - 0.5D) * 0.08D, ((double)this.rand.nextFloat() - 0.5D) * 0.08D, ((double)this.rand.nextFloat() - 0.5D) * 0.08D, new int[] {itemId, itemMeta});                
-    			}
-    			this.setDead();
-    		}
-    		if (arrowType == ItemBEArrow.ArrowType.BOMB)
-    		{
-    			if (!this.worldObj.isRemote)
-    			{	
-    				float f1 = 2.0F;
-    				this.worldObj.createExplosion(this, this.posX, this.posY, this.posZ, f1, true);
-    			}
-    			int itemId = Item.getIdFromItem(BEItems.arrow);
-    			int itemMeta = this.getArrowType().ordinal();
-    			for (int ii = 0; ii < 16; ++ii)
-    			{
-    				this.worldObj.spawnParticle(EnumParticleTypes.ITEM_CRACK, this.posX, this.posY, this.posZ, ((double)this.rand.nextFloat() - 0.5D) * 0.08D, ((double)this.rand.nextFloat() - 0.5D) * 0.08D, ((double)this.rand.nextFloat() - 0.5D) * 0.08D, new int[] {itemId, itemMeta});                
-    			}
-    			this.setDead();
-    		}
-    		if (arrowType == ItemBEArrow.ArrowType.LIGHTNING)
-    		{
-    			if (!this.worldObj.isRemote)
-    			{	
-    				EntityLightningBolt entityLightningBolt = new EntityLightningBolt(this.worldObj, this.posX, this.posY, this.posZ, inGround);
-    				this.worldObj.addWeatherEffect(entityLightningBolt);
-    			}
-    			int itemId = Item.getIdFromItem(BEItems.arrow);
-    			int itemMeta = this.getArrowType().ordinal();
-    			for (int ii = 0; ii < 16; ++ii)
-    			{
-    				this.worldObj.spawnParticle(EnumParticleTypes.ITEM_CRACK, this.posX, this.posY, this.posZ, ((double)this.rand.nextFloat() - 0.5D) * 0.08D, ((double)this.rand.nextFloat() - 0.5D) * 0.08D, ((double)this.rand.nextFloat() - 0.5D) * 0.08D, new int[] {itemId, itemMeta});                
-    			}
-    			this.setDead();
-    		}
-
     		if (entity.attackEntityFrom(damagesource, (float)i))
     		{
     			if (entity instanceof EntityLivingBase)
     			{
     				EntityLivingBase entitylivingbase = (EntityLivingBase)entity;
+    				
+    				//Arrow Effects
+    	    		if (arrowType == ItemBEArrow.ArrowType.EXTINGUISHING)
+    	    		{
+    	    			if (raytraceResultIn.entityHit instanceof EntityPlayer)
+    	    			{
+    	    				EntityPlayer entityplayer = (EntityPlayer)raytraceResultIn.entityHit;
+
+    	    				for (ItemStack itemstack : entityplayer.inventory.armorInventory)
+    	    				{
+    	    					if (itemstack != null && (itemstack.getItem() == Items.LEATHER_HELMET || itemstack.getItem() == Items.LEATHER_CHESTPLATE || itemstack.getItem() == Items.LEATHER_LEGGINGS || itemstack.getItem() == Items.LEATHER_BOOTS))
+    	    					{
+    	    						ItemArmor itemarmor = (ItemArmor)itemstack.getItem();
+    	    						itemarmor.removeColor(itemstack);
+    	    					}
+    	    				}
+    	    			}
+    	    			if (raytraceResultIn.entityHit instanceof EntityLivingBase)
+    	    			{
+    	    				this.worldObj.playSound((EntityPlayer)null, entity.getPosition(), SoundEvents.BLOCK_GLASS_BREAK, SoundCategory.BLOCKS, 0.5F, 2.6F + (this.worldObj.rand.nextFloat() - this.worldObj.rand.nextFloat()) * 0.8F);
+    	    				for (int i1 = 0; i1 < 8; ++i1)
+    	    				{
+    	    					this.worldObj.spawnParticle(EnumParticleTypes.WATER_SPLASH, (this.posX - 0.5D) + Math.random(), this.posY + 0.25D, (this.posZ - 0.5D) + Math.random(), 0.0D, 0.0D, 0.0D, new int[0]);
+    	    				}
+    	    				int itemId = Item.getIdFromItem(BEItems.arrow);
+    	    				int itemMeta = this.getArrowType().ordinal();
+    	    				for (int ii = 0; ii < 16; ++ii)
+    	    				{
+    	    					this.worldObj.spawnParticle(EnumParticleTypes.ITEM_CRACK, this.posX, this.posY, this.posZ, ((double)this.rand.nextFloat() - 0.5D) * 0.08D, ((double)this.rand.nextFloat() - 0.5D) * 0.08D, ((double)this.rand.nextFloat() - 0.5D) * 0.08D, new int[] {itemId, itemMeta});                
+    	    				}
+    	    				this.setDead();
+    	    			}
+    	    		}
+    	    		if (arrowType == ItemBEArrow.ArrowType.FIRE)
+    	    		{
+    	    			if (raytraceResultIn.entityHit instanceof EntityLivingBase)
+    	    			{
+    	    				raytraceResultIn.entityHit.setFire(10);
+    	    				this.worldObj.playSound((EntityPlayer)null, entity.getPosition(), SoundEvents.BLOCK_FIRE_EXTINGUISH, SoundCategory.BLOCKS, 0.5F, 2.6F + (this.worldObj.rand.nextFloat() - this.worldObj.rand.nextFloat()) * 0.8F);
+    	    				for (int i1 = 0; i1 < 8; ++i1)
+    	    				{
+    	    					this.worldObj.spawnParticle(EnumParticleTypes.SMOKE_LARGE, (this.posX - 0.5D) + Math.random(), this.posY + 0.25D, (this.posZ - 0.5D) + Math.random(), 0.0D, 0.0D, 0.0D, new int[0]);
+    	    				}
+    	    				int itemId = Item.getIdFromItem(BEItems.arrow);
+    	    				int itemMeta = this.getArrowType().ordinal();
+    	    				for (int ii = 0; ii < 16; ++ii)
+    	    				{
+    	    					this.worldObj.spawnParticle(EnumParticleTypes.ITEM_CRACK, this.posX, this.posY, this.posZ, ((double)this.rand.nextFloat() - 0.5D) * 0.08D, ((double)this.rand.nextFloat() - 0.5D) * 0.08D, ((double)this.rand.nextFloat() - 0.5D) * 0.08D, new int[] {itemId, itemMeta});                
+    	    				}
+    	    				this.setDead();
+    	    			}
+    	    		}
+    	    		if (arrowType == ItemBEArrow.ArrowType.ICE)
+    	    		{
+    	    			for (int i1 = 0; i1 < 8; ++i1)
+    	    			{
+    	    				Bullseye.proxy.spawnParticle(BEParticleTypes.SNOWFLAKE, (this.posX - 0.5D) + Math.random(), this.posY + 0.25D, (this.posZ - 0.5D) + Math.random(), 0.0D, 0.0D, 0.0D, new int[0]);
+    	    			}
+    	    			int itemId = Item.getIdFromItem(BEItems.arrow);
+    	    			int itemMeta = this.getArrowType().ordinal();
+    	    			for (int ii = 0; ii < 16; ++ii)
+    	    			{
+    	    				this.worldObj.spawnParticle(EnumParticleTypes.ITEM_CRACK, this.posX, this.posY, this.posZ, ((double)this.rand.nextFloat() - 0.5D) * 0.08D, ((double)this.rand.nextFloat() - 0.5D) * 0.08D, ((double)this.rand.nextFloat() - 0.5D) * 0.08D, new int[] {itemId, itemMeta});                
+    	    			}
+    	    			this.setDead();
+    	    		}
+    	    		if (arrowType == ItemBEArrow.ArrowType.BOMB)
+    	    		{
+    	    			if (!this.worldObj.isRemote)
+    	    			{	
+    	    				float f1 = 2.0F;
+    	    				this.worldObj.createExplosion(this, this.posX, this.posY, this.posZ, f1, true);
+    	    			}
+    	    			int itemId = Item.getIdFromItem(BEItems.arrow);
+    	    			int itemMeta = this.getArrowType().ordinal();
+    	    			for (int ii = 0; ii < 16; ++ii)
+    	    			{
+    	    				this.worldObj.spawnParticle(EnumParticleTypes.ITEM_CRACK, this.posX, this.posY, this.posZ, ((double)this.rand.nextFloat() - 0.5D) * 0.08D, ((double)this.rand.nextFloat() - 0.5D) * 0.08D, ((double)this.rand.nextFloat() - 0.5D) * 0.08D, new int[] {itemId, itemMeta});                
+    	    			}
+    	    			this.setDead();
+    	    		}
+    	    		if (arrowType == ItemBEArrow.ArrowType.LIGHTNING)
+    	    		{
+    	    			if (!this.worldObj.isRemote)
+    	    			{	
+    	    				EntityLightningBolt entityLightningBolt = new EntityLightningBolt(this.worldObj, this.posX, this.posY, this.posZ, inGround);
+    	    				this.worldObj.addWeatherEffect(entityLightningBolt);
+    	    			}
+    	    			int itemId = Item.getIdFromItem(BEItems.arrow);
+    	    			int itemMeta = this.getArrowType().ordinal();
+    	    			for (int ii = 0; ii < 16; ++ii)
+    	    			{
+    	    				this.worldObj.spawnParticle(EnumParticleTypes.ITEM_CRACK, this.posX, this.posY, this.posZ, ((double)this.rand.nextFloat() - 0.5D) * 0.08D, ((double)this.rand.nextFloat() - 0.5D) * 0.08D, ((double)this.rand.nextFloat() - 0.5D) * 0.08D, new int[] {itemId, itemMeta});                
+    	    			}
+    	    			this.setDead();
+    	    		}
 
     				if (!this.worldObj.isRemote)
     				{

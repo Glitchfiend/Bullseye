@@ -434,7 +434,7 @@ public class EntityBEArrow extends EntityArrow implements IProjectile
             this.damage = arrowType.getDamageInflicted();
             Vec3d vec3d1 = new Vec3d(this.posX, this.posY, this.posZ);
             Vec3d vec3d = new Vec3d(this.posX + this.motionX, this.posY + this.motionY, this.posZ + this.motionZ);
-            RayTraceResult raytraceresult = this.worldObj.rayTraceBlocks(vec3d1, vec3d, false, true, false);
+            RayTraceResult raytraceresult = this.worldObj.rayTraceBlocks(vec3d1, vec3d, (arrowType == ItemBEArrow.ArrowType.FIRE || arrowType == ItemBEArrow.ArrowType.ICE || arrowType == ItemBEArrow.ArrowType.EXTINGUISHING || arrowType == ItemBEArrow.ArrowType.LIGHTNING), (arrowType != ItemBEArrow.ArrowType.FIRE && arrowType != ItemBEArrow.ArrowType.ICE && arrowType != ItemBEArrow.ArrowType.EXTINGUISHING && arrowType != ItemBEArrow.ArrowType.LIGHTNING), false);
             vec3d1 = new Vec3d(this.posX, this.posY, this.posZ);
             vec3d = new Vec3d(this.posX + this.motionX, this.posY + this.motionY, this.posZ + this.motionZ);
 
@@ -566,9 +566,9 @@ public class EntityBEArrow extends EntityArrow implements IProjectile
     	Entity entity = raytraceResultIn.entityHit;
     	ItemBEArrow.ArrowType arrowType = this.getArrowType();
     	
-        if (raytraceResultIn != null)
+    	if (raytraceResultIn != null)
         {
-            if (raytraceResultIn.typeOfHit == RayTraceResult.Type.BLOCK)
+    		if (raytraceResultIn.typeOfHit == RayTraceResult.Type.BLOCK)
             {
                 BlockPos blockpos = raytraceResultIn.getBlockPos();
                 IBlockState iblockstate = this.worldObj.getBlockState(blockpos);
@@ -824,6 +824,25 @@ public class EntityBEArrow extends EntityArrow implements IProjectile
     			this.inTile.onEntityCollidedWithBlock(this.worldObj, blockpos, iblockstate, this);
     		}
     	}
+    }
+    
+    protected RayTraceResult rayTraceLiquid(World worldIn, boolean useLiquids)
+    {
+        float f = this.rotationPitch;
+        float f1 = this.rotationYaw;
+        double d0 = this.posX;
+        double d1 = this.posY + (double)this.getEyeHeight();
+        double d2 = this.posZ;
+        Vec3d vec3d = new Vec3d(d0, d1, d2);
+        float f2 = MathHelper.cos(-f1 * 0.017453292F - (float)Math.PI);
+        float f3 = MathHelper.sin(-f1 * 0.017453292F - (float)Math.PI);
+        float f4 = -MathHelper.cos(-f * 0.017453292F);
+        float f5 = MathHelper.sin(-f * 0.017453292F);
+        float f6 = f3 * f4;
+        float f7 = f2 * f4;
+        double d3 = 5.0D;
+        Vec3d vec3d1 = vec3d.addVector((double)f6 * d3, (double)f5 * d3, (double)f7 * d3);
+        return worldIn.rayTraceBlocks(vec3d, vec3d1, useLiquids, !useLiquids, false);
     }
 
     @Override

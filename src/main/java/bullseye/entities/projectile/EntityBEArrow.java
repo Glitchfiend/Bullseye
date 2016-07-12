@@ -327,7 +327,7 @@ public class EntityBEArrow extends EntityArrow implements IProjectile
             	{
             		if (!this.worldObj.isRemote)
             		{
-            			if (worldObj.isAirBlock(blockpos.up()))
+            			if (worldObj.isAirBlock(blockpos.up()) && worldObj.isBlockFullCube(blockpos))
             			{
             				this.worldObj.setBlockState(blockpos.up(), Blocks.FIRE.getDefaultState());
             			}
@@ -369,7 +369,7 @@ public class EntityBEArrow extends EntityArrow implements IProjectile
             			{
             				this.worldObj.setBlockState(blockpos, Blocks.PACKED_ICE.getDefaultState());
             			}
-            			if (worldObj.isAirBlock(blockpos.up()))
+            			if (worldObj.isAirBlock(blockpos.up()) && worldObj.isBlockFullCube(blockpos))
             			{
             				this.worldObj.setBlockState(blockpos.up(), Blocks.SNOW_LAYER.getDefaultState());
             			}
@@ -434,7 +434,7 @@ public class EntityBEArrow extends EntityArrow implements IProjectile
             this.damage = arrowType.getDamageInflicted();
             Vec3d vec3d1 = new Vec3d(this.posX, this.posY, this.posZ);
             Vec3d vec3d = new Vec3d(this.posX + this.motionX, this.posY + this.motionY, this.posZ + this.motionZ);
-            RayTraceResult raytraceresult = this.worldObj.rayTraceBlocks(vec3d1, vec3d, (arrowType == ItemBEArrow.ArrowType.FIRE || arrowType == ItemBEArrow.ArrowType.ICE || arrowType == ItemBEArrow.ArrowType.EXTINGUISHING || arrowType == ItemBEArrow.ArrowType.LIGHTNING), (arrowType != ItemBEArrow.ArrowType.FIRE && arrowType != ItemBEArrow.ArrowType.ICE && arrowType != ItemBEArrow.ArrowType.EXTINGUISHING && arrowType != ItemBEArrow.ArrowType.LIGHTNING), false);
+            RayTraceResult raytraceresult = this.worldObj.rayTraceBlocks(vec3d1, vec3d, (arrowType == ItemBEArrow.ArrowType.FIRE || arrowType == ItemBEArrow.ArrowType.ICE || arrowType == ItemBEArrow.ArrowType.EXTINGUISHING), (arrowType != ItemBEArrow.ArrowType.FIRE && arrowType != ItemBEArrow.ArrowType.ICE && arrowType != ItemBEArrow.ArrowType.EXTINGUISHING), false);
             vec3d1 = new Vec3d(this.posX, this.posY, this.posZ);
             vec3d = new Vec3d(this.posX + this.motionX, this.posY + this.motionY, this.posZ + this.motionZ);
 

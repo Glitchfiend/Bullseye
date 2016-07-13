@@ -42,15 +42,15 @@ public class ItemBEArrow extends ItemArrow
 	            case EXTINGUISHING:
 	                return 1.0D;
 	            case DIAMOND:
-                    return 4.0D;
+                    return 5.0D;
                 case FIRE:
-                    return 0.5D;
+                    return 1.5D;
                 case ICE:
                     return 1.0D;
                 case LIGHTNING:
                     return 0.5D;
                 case BOMB:
-                    return 0.5D;
+                    return 1.25D;
                 default:
                     return 2.0D;
             }

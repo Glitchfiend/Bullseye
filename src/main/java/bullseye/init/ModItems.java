@@ -1,7 +1,6 @@
 package bullseye.init;
 
 import static bullseye.api.BEItems.arrow;
-import static bullseye.api.BEItems.arrow_topper;
 import static bullseye.api.BEItems.be_icon;
 import static bullseye.api.BEItems.dye_arrow;
 
@@ -9,7 +8,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import bullseye.core.Bullseye;
-import bullseye.item.ItemArrowTopper;
 import bullseye.item.ItemBEArrow;
 import bullseye.item.ItemDyeArrow;
 import bullseye.util.inventory.CreativeTabBE;
@@ -42,7 +40,6 @@ public class ModItems
         //Main Items
         arrow = registerItem(new ItemBEArrow(), "arrow");
         dye_arrow = registerItem(new ItemDyeArrow(), "dye_arrow");
-        arrow_topper = registerItem(new ItemArrowTopper(), "arrow_topper");
     }
     
     public static Item registerItem(Item item, String name)

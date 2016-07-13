@@ -10,5 +10,4 @@ public class BEItems
 
 	public static Item dye_arrow;
     public static Item arrow;
-    public static Item arrow_topper;
 }

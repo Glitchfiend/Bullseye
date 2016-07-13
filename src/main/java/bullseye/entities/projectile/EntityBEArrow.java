@@ -396,7 +396,7 @@ public class EntityBEArrow extends EntityArrow implements IProjectile
             	{
             		if (!this.worldObj.isRemote)
                     {	
-                        float f = 2.0F;
+                        float f = 1.8F;
                         this.worldObj.createExplosion(this, this.posX, this.posY, this.posZ, f, ConfigurationHandler.explodeBombArrows);
                     }
         	        int itemId = Item.getIdFromItem(BEItems.arrow);
@@ -743,7 +743,7 @@ public class EntityBEArrow extends EntityArrow implements IProjectile
     	    		{
     	    			if (!this.worldObj.isRemote)
     	    			{	
-    	    				float f1 = 2.0F;
+    	    				float f1 = 1.8F;
     	    				this.worldObj.createExplosion(this, this.posX, this.posY, this.posZ, f1, ConfigurationHandler.explodeBombArrows);
     	    			}
     	    			int itemId = Item.getIdFromItem(BEItems.arrow);

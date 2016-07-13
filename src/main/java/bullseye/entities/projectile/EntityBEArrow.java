@@ -14,6 +14,7 @@ import bullseye.item.ItemBEArrow;
 import bullseye.particle.BEParticleTypes;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockLiquid;
+import net.minecraft.block.BlockTNT;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.enchantment.EnchantmentHelper;
@@ -21,6 +22,7 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.IProjectile;
 import net.minecraft.entity.effect.EntityLightningBolt;
+import net.minecraft.entity.item.EntityTNTPrimed;
 import net.minecraft.entity.monster.EntityEnderman;
 import net.minecraft.entity.passive.EntityChicken;
 import net.minecraft.entity.player.EntityPlayer;
@@ -254,7 +256,7 @@ public class EntityBEArrow extends EntityArrow implements IProjectile
             	{
             		if (!this.worldObj.isRemote)
                     {	
-            			int i = worldObj.rand.nextInt(4);
+            			int i = worldObj.rand.nextInt(12);
             			if (i == 0)
             			{
 	                        EntityChicken entitychicken = new EntityChicken(this.worldObj);
@@ -352,6 +354,13 @@ public class EntityBEArrow extends EntityArrow implements IProjectile
             			if (worldObj.getBlockState(blockpos) == Blocks.PACKED_ICE.getDefaultState())
             			{
             				this.worldObj.setBlockState(blockpos, Blocks.ICE.getDefaultState());
+            			}
+            			if (worldObj.getBlockState(blockpos) == Blocks.TNT.getDefaultState())
+            			{
+            				EntityTNTPrimed entitytntprimed = new EntityTNTPrimed(this.worldObj, (double)((float)blockpos.getX() + 0.5F), (double)blockpos.getY(), (double)((float)blockpos.getZ() + 0.5F), this.shootingEntity instanceof EntityLivingBase ? (EntityLivingBase)this.shootingEntity : null);
+            				this.worldObj.spawnEntityInWorld(entitytntprimed);
+            				this.worldObj.playSound((EntityPlayer)null, entitytntprimed.posX, entitytntprimed.posY, entitytntprimed.posZ, SoundEvents.ENTITY_TNT_PRIMED, SoundCategory.BLOCKS, 1.0F, 1.0F);
+            				this.worldObj.setBlockToAir(blockpos);
             			}
             		}
             		this.worldObj.playSound((EntityPlayer)null, blockpos, SoundEvents.BLOCK_FIRE_EXTINGUISH, SoundCategory.BLOCKS, 0.5F, 2.6F + (this.worldObj.rand.nextFloat() - this.worldObj.rand.nextFloat()) * 0.8F);
@@ -628,7 +637,7 @@ public class EntityBEArrow extends EntityArrow implements IProjectile
 		    		
 		    		BlockPos pos = raytraceResultIn.getBlockPos().offset(raytraceResultIn.sideHit);
 		    		
-		    		if (worldObj.isAirBlock(pos) && this.worldObj.isBlockFullCube(blockpos) && iblockstate.getMaterial() != Material.LAVA && iblockstate.getMaterial() != Material.WATER && iblockstate != Blocks.ICE.getDefaultState() && iblockstate != Blocks.SNOW_LAYER.getDefaultState() && iblockstate != Blocks.SNOW.getDefaultState() && iblockstate != Blocks.PACKED_ICE.getDefaultState())
+		    		if (worldObj.isAirBlock(pos) && this.worldObj.isBlockFullCube(blockpos) && iblockstate.getMaterial() != Material.LAVA && iblockstate.getMaterial() != Material.WATER && iblockstate != Blocks.ICE.getDefaultState() && iblockstate != Blocks.SNOW_LAYER.getDefaultState() && iblockstate != Blocks.SNOW.getDefaultState() && iblockstate != Blocks.PACKED_ICE.getDefaultState() && iblockstate != Blocks.TNT.getDefaultState())
         			{
 		    			if (ConfigurationHandler.burnFireArrows)
 		    			{

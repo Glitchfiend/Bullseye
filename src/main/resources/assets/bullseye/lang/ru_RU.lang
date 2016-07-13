@@ -3,16 +3,12 @@ itemGroup.tabBullseye=Bullseye
 config.category.arrowSettings.title=Настройки стрел
 
 item.bomb_arrow.name=Стрела с бомбой
-item.bomb_arrow_topper.name=Наконечник стрелы с бомбой
 item.diamond_arrow.name=Алмазная стрела
 item.egg_arrow.name=Стрела с яйцом
 item.extinguishing_arrow.name=Стрела пожаротушения
 item.fire_arrow.name=Огненная стрела
-item.fire_arrow_topper.name=Наконечник огненной стрелы
 item.ice_arrow.name=Ледяная стрела
-item.ice_arrow_topper.name=Наконечник ледяной стрелы
 item.lightning_arrow.name=Молниеносная стрела
-item.lightning_arrow_topper.name=Наконечник молниеносной стрелы
 item.training_arrow.name=Тренировочная стрела
 
 item.dye_arrow_red.name=Стрела с красным красителем

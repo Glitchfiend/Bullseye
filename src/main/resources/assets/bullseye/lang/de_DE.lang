@@ -1,0 +1,56 @@
+itemGroup.tabBullseye=Bullseye
+
+config.category.arrowSettings.title=Arrow Settings
+
+item.bomb_arrow.name=Bombenpfeil
+item.diamond_arrow.name=Diamantpfeil
+item.egg_arrow.name=Eierpfeil
+item.extinguishing_arrow.name=Löschpfeil
+item.fire_arrow.name=Feuerpfeil
+item.ice_arrow.name=Eispfeil
+item.lightning_arrow.name=Blitzpfeil
+item.training_arrow.name=Übungspfeil
+
+item.dye_arrow_red.name=Roter Farbpfeil
+item.dye_arrow_orange.name=Oranger Farbpfeil
+item.dye_arrow_yellow.name=Gelber Farbpfeil
+item.dye_arrow_lime.name=Hellgrüner Farbpfeil
+item.dye_arrow_green.name=Grüner Farbpfeil
+item.dye_arrow_cyan.name=Türkiser Farbpfeil
+item.dye_arrow_light_blue.name=Hellblauer Farbpfeil
+item.dye_arrow_blue.name=Blauer Farbpfeil
+item.dye_arrow_purple.name=Violetter Farbpfeil
+item.dye_arrow_magenta.name=Magenta Farbpfeil
+item.dye_arrow_pink.name=Rosa Farbpfeil
+item.dye_arrow_brown.name=Brauner Farbpfeil
+item.dye_arrow_white.name=Weißer Farbpfeil
+item.dye_arrow_silver.name=Hellgrauer Farbpfeil
+item.dye_arrow_gray.name=Grauer Farbpfeil
+item.dye_arrow_black.name=Schwarzer Farbpfeil
+
+entity.Bullseye.arrow.name=Pfeil
+entity.Bullseye.training_arrow.name=Übungspfeil
+entity.Bullseye.egg_arrow.name=Eierpfeil
+entity.Bullseye.extinguishing_arrow.name=Löschpfeil
+entity.Bullseye.diamond_arrow.name=Diamantpfeil
+entity.Bullseye.bomb_arrow.name=Bombenpfeil
+entity.Bullseye.fire_arrow.name=Feuerpfeil
+entity.Bullseye.ice_arrow.name=Eispfeil
+entity.Bullseye.lightning_arrow.name=Blitzpfeil
+
+entity.Bullseye.dye_arrow_red.name=Roter Farbpfeil
+entity.Bullseye.dye_arrow_orange.name=Oranger Farbpfeil
+entity.Bullseye.dye_arrow_yellow.name=Gelber Farbpfeil
+entity.Bullseye.dye_arrow_lime.name=Hellgrüner Farbpfeil
+entity.Bullseye.dye_arrow_green.name=Grüner Farbpfeil
+entity.Bullseye.dye_arrow_cyan.name=Türkiser Farbpfeil
+entity.Bullseye.dye_arrow_light_blue.name=Hellblauer Farbpfeil
+entity.Bullseye.dye_arrow_blue.name=Blauer Farbpfeil
+entity.Bullseye.dye_arrow_purple.name=Violetter Farbpfeil
+entity.Bullseye.dye_arrow_magenta.name=Magenta Farbpfeil
+entity.Bullseye.dye_arrow_pink.name=Rosa Farbpfeil
+entity.Bullseye.dye_arrow_brown.name=Brauner Farbpfeil
+entity.Bullseye.dye_arrow_white.name=Weißer Farbpfeil
+entity.Bullseye.dye_arrow_silver.name=Hellgrauer Farbpfeil
+entity.Bullseye.dye_arrow_gray.name=Grauer Farbpfeil
+entity.Bullseye.dye_arrow_black.name=Schwarzer Farbpfeil

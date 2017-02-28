@@ -1,8 +1,8 @@
 package bullseye.util.inventory;
 
-import net.minecraft.creativetab.CreativeTabs;
-import net.minecraft.item.Item;
 import bullseye.api.BEItems;
+import net.minecraft.creativetab.CreativeTabs;
+import net.minecraft.item.ItemStack;
 
 public class CreativeTabBE extends CreativeTabs
 {
@@ -14,8 +14,8 @@ public class CreativeTabBE extends CreativeTabs
     }
 
     @Override
-    public Item getTabIconItem()
+    public ItemStack getTabIconItem()
     {
-        return BEItems.be_icon;
+        return new ItemStack(BEItems.be_icon);
     }
 }

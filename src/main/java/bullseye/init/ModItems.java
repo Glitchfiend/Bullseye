@@ -16,6 +16,7 @@ import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.NonNullList;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.client.model.ModelLoader;
 import net.minecraftforge.fml.common.FMLCommonHandler;
@@ -54,7 +55,7 @@ public class ModItems
         {
             item.setCreativeTab(CreativeTabBE.instance);
         }
-        GameRegistry.registerItem(item,name);
+        GameRegistry.register(item, new ResourceLocation(Bullseye.MOD_ID, name));
         //BECommand.itemCount++;
         
         // register sub types if there are any
@@ -62,7 +63,7 @@ public class ModItems
         {
             if (item.getHasSubtypes())
             {
-                List<ItemStack> subItems = new ArrayList<ItemStack>();
+                NonNullList<ItemStack> subItems = NonNullList.create();
                 item.getSubItems(item, CreativeTabBE.instance, subItems);
                 for (ItemStack subItem : subItems)
                 {

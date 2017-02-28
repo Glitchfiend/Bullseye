@@ -158,7 +158,7 @@ public class EntityDyeArrow extends EntityArrow implements IProjectile
     @Override
     public void setThrowableHeading(double x, double y, double z, float velocity, float inaccuracy)
     {
-        float f = MathHelper.sqrt_double(x * x + y * y + z * z);
+        float f = MathHelper.sqrt(x * x + y * y + z * z);
         x = x / (double)f;
         y = y / (double)f;
         z = z / (double)f;
@@ -171,7 +171,7 @@ public class EntityDyeArrow extends EntityArrow implements IProjectile
         this.motionX = x;
         this.motionY = y;
         this.motionZ = z;
-        float f1 = MathHelper.sqrt_double(x * x + z * z);
+        float f1 = MathHelper.sqrt(x * x + z * z);
         this.prevRotationYaw = this.rotationYaw = (float)(MathHelper.atan2(x, z) * (180D / Math.PI));
         this.prevRotationPitch = this.rotationPitch = (float)(MathHelper.atan2(y, (double)f1) * (180D / Math.PI));
         this.ticksInGround = 0;
@@ -195,7 +195,7 @@ public class EntityDyeArrow extends EntityArrow implements IProjectile
 
         if (this.prevRotationPitch == 0.0F && this.prevRotationYaw == 0.0F)
         {
-            float f = MathHelper.sqrt_double(x * x + z * z);
+            float f = MathHelper.sqrt(x * x + z * z);
             this.prevRotationYaw = this.rotationYaw = (float)(MathHelper.atan2(x, z) * (180D / Math.PI));
             this.prevRotationPitch = this.rotationPitch = (float)(MathHelper.atan2(y, (double)f) * (180D / Math.PI));
             this.prevRotationPitch = this.rotationPitch;
@@ -210,18 +210,18 @@ public class EntityDyeArrow extends EntityArrow implements IProjectile
     {
     	if (this.prevRotationPitch == 0.0F && this.prevRotationYaw == 0.0F)
         {
-            float f = MathHelper.sqrt_double(this.motionX * this.motionX + this.motionZ * this.motionZ);
+            float f = MathHelper.sqrt(this.motionX * this.motionX + this.motionZ * this.motionZ);
             this.prevRotationYaw = this.rotationYaw = (float)(MathHelper.atan2(this.motionX, this.motionZ) * 180.0D / Math.PI);
             this.prevRotationPitch = this.rotationPitch = (float)(MathHelper.atan2(this.motionY, (double)f) * 180.0D / Math.PI);
         }
 
         BlockPos blockpos = new BlockPos(this.xTile, this.yTile, this.zTile);
-        IBlockState iblockstate = this.worldObj.getBlockState(blockpos);
+        IBlockState iblockstate = this.world.getBlockState(blockpos);
         Block block = iblockstate.getBlock();
 
         if (iblockstate.getMaterial() != Material.AIR)
         {
-        	AxisAlignedBB axisalignedbb = iblockstate.getCollisionBoundingBox(this.worldObj, blockpos);
+        	AxisAlignedBB axisalignedbb = iblockstate.getCollisionBoundingBox(this.world, blockpos);
 
             if (axisalignedbb != Block.NULL_AABB && axisalignedbb.offset(blockpos).isVecInside(new Vec3d(this.posX, this.posY, this.posZ)))
             {
@@ -242,46 +242,46 @@ public class EntityDyeArrow extends EntityArrow implements IProjectile
             {
             	//Arrow Effects
             	ItemDyeArrow.DyeType dyeType = this.getDyeType();
-        		if (!this.worldObj.isRemote)
+        		if (!this.world.isRemote)
         		{
         			if (block == Blocks.WOOL)
         			{
-        				worldObj.setBlockState(blockpos, iblockstate.withProperty(BlockColored.COLOR, EnumDyeColor.byMetadata(dyeType.ordinal())));
+        				world.setBlockState(blockpos, iblockstate.withProperty(BlockColored.COLOR, EnumDyeColor.byMetadata(dyeType.ordinal())));
         			}
         			if (block == Blocks.CARPET)
         			{
-        				worldObj.setBlockState(blockpos, iblockstate.withProperty(BlockColored.COLOR, EnumDyeColor.byMetadata(dyeType.ordinal())));
+        				world.setBlockState(blockpos, iblockstate.withProperty(BlockColored.COLOR, EnumDyeColor.byMetadata(dyeType.ordinal())));
         			}
         			if (block == Blocks.STAINED_HARDENED_CLAY)
         			{
-        				worldObj.setBlockState(blockpos, iblockstate.withProperty(BlockColored.COLOR, EnumDyeColor.byMetadata(dyeType.ordinal())));
+        				world.setBlockState(blockpos, iblockstate.withProperty(BlockColored.COLOR, EnumDyeColor.byMetadata(dyeType.ordinal())));
         			}
         			if (block == Blocks.STAINED_GLASS)
         			{
-        				worldObj.setBlockState(blockpos, iblockstate.withProperty(BlockColored.COLOR, EnumDyeColor.byMetadata(dyeType.ordinal())));
+        				world.setBlockState(blockpos, iblockstate.withProperty(BlockColored.COLOR, EnumDyeColor.byMetadata(dyeType.ordinal())));
         			}
         			if (block == Blocks.STAINED_GLASS_PANE)
         			{
-        				worldObj.setBlockState(blockpos, iblockstate.withProperty(BlockColored.COLOR, EnumDyeColor.byMetadata(dyeType.ordinal())));
+        				world.setBlockState(blockpos, iblockstate.withProperty(BlockColored.COLOR, EnumDyeColor.byMetadata(dyeType.ordinal())));
         			}
         			if (block == Blocks.GLASS)
         			{
-        				worldObj.setBlockState(blockpos, Blocks.STAINED_GLASS.getDefaultState().withProperty(BlockColored.COLOR, EnumDyeColor.byMetadata(dyeType.ordinal())));
+        				world.setBlockState(blockpos, Blocks.STAINED_GLASS.getDefaultState().withProperty(BlockColored.COLOR, EnumDyeColor.byMetadata(dyeType.ordinal())));
         			}
         			if (block == Blocks.HARDENED_CLAY)
         			{
-        				worldObj.setBlockState(blockpos, Blocks.STAINED_HARDENED_CLAY.getDefaultState().withProperty(BlockColored.COLOR, EnumDyeColor.byMetadata(dyeType.ordinal())));
+        				world.setBlockState(blockpos, Blocks.STAINED_HARDENED_CLAY.getDefaultState().withProperty(BlockColored.COLOR, EnumDyeColor.byMetadata(dyeType.ordinal())));
         			}
         			if (block == Blocks.GLASS_PANE)
         			{
-        				worldObj.setBlockState(blockpos, Blocks.STAINED_GLASS_PANE.getDefaultState().withProperty(BlockColored.COLOR, EnumDyeColor.byMetadata(dyeType.ordinal())));
+        				world.setBlockState(blockpos, Blocks.STAINED_GLASS_PANE.getDefaultState().withProperty(BlockColored.COLOR, EnumDyeColor.byMetadata(dyeType.ordinal())));
         			}
         		}
     	        int itemId = Item.getIdFromItem(BEItems.dye_arrow);
     	        int itemMeta = this.getDyeType().ordinal();
     	        for (int ii = 0; ii < 16; ++ii)
     	        {
-    	            this.worldObj.spawnParticle(EnumParticleTypes.ITEM_CRACK, this.posX, this.posY, this.posZ, ((double)this.rand.nextFloat() - 0.5D) * 0.08D, ((double)this.rand.nextFloat() - 0.5D) * 0.08D, ((double)this.rand.nextFloat() - 0.5D) * 0.08D, new int[] {itemId, itemMeta});                
+    	            this.world.spawnParticle(EnumParticleTypes.ITEM_CRACK, this.posX, this.posY, this.posZ, ((double)this.rand.nextFloat() - 0.5D) * 0.08D, ((double)this.rand.nextFloat() - 0.5D) * 0.08D, ((double)this.rand.nextFloat() - 0.5D) * 0.08D, new int[] {itemId, itemMeta});                
     	        }
     			this.setDead();
             }
@@ -302,7 +302,7 @@ public class EntityDyeArrow extends EntityArrow implements IProjectile
             this.damage = dyeType.getDamageInflicted();
             Vec3d vec3d1 = new Vec3d(this.posX, this.posY, this.posZ);
             Vec3d vec3d = new Vec3d(this.posX + this.motionX, this.posY + this.motionY, this.posZ + this.motionZ);
-            RayTraceResult raytraceresult = this.worldObj.rayTraceBlocks(vec3d1, vec3d, false, true, false);
+            RayTraceResult raytraceresult = this.world.rayTraceBlocks(vec3d1, vec3d, false, true, false);
             vec3d1 = new Vec3d(this.posX, this.posY, this.posZ);
             vec3d = new Vec3d(this.posX + this.motionX, this.posY + this.motionY, this.posZ + this.motionZ);
 
@@ -337,14 +337,14 @@ public class EntityDyeArrow extends EntityArrow implements IProjectile
             {
                 for (int k = 0; k < 4; ++k)
                 {
-                    this.worldObj.spawnParticle(EnumParticleTypes.CRIT, this.posX + this.motionX * (double)k / 4.0D, this.posY + this.motionY * (double)k / 4.0D, this.posZ + this.motionZ * (double)k / 4.0D, -this.motionX, -this.motionY + 0.2D, -this.motionZ, new int[0]);
+                    this.world.spawnParticle(EnumParticleTypes.CRIT, this.posX + this.motionX * (double)k / 4.0D, this.posY + this.motionY * (double)k / 4.0D, this.posZ + this.motionZ * (double)k / 4.0D, -this.motionX, -this.motionY + 0.2D, -this.motionZ, new int[0]);
                 }
             }
 
             this.posX += this.motionX;
             this.posY += this.motionY;
             this.posZ += this.motionZ;
-            float f3 = MathHelper.sqrt_double(this.motionX * this.motionX + this.motionZ * this.motionZ);
+            float f3 = MathHelper.sqrt(this.motionX * this.motionX + this.motionZ * this.motionZ);
             this.rotationYaw = (float)(MathHelper.atan2(this.motionX, this.motionZ) * 180.0D / Math.PI);
 
             for (this.rotationPitch = (float)(MathHelper.atan2(this.motionY, (double)f3) * 180.0D / Math.PI); this.rotationPitch - this.prevRotationPitch < -180.0F; this.prevRotationPitch -= 360.0F)
@@ -377,7 +377,7 @@ public class EntityDyeArrow extends EntityArrow implements IProjectile
                 for (int i1 = 0; i1 < 4; ++i1)
                 {
                     float f8 = 0.25F;
-                    this.worldObj.spawnParticle(EnumParticleTypes.WATER_BUBBLE, this.posX - this.motionX * (double)f8, this.posY - this.motionY * (double)f8, this.posZ - this.motionZ * (double)f8, this.motionX, this.motionY, this.motionZ, new int[0]);
+                    this.world.spawnParticle(EnumParticleTypes.WATER_BUBBLE, this.posX - this.motionX * (double)f8, this.posY - this.motionY * (double)f8, this.posZ - this.motionZ * (double)f8, this.motionX, this.motionY, this.motionZ, new int[0]);
                 }
 
                 f4 = 0.6F;
@@ -405,8 +405,8 @@ public class EntityDyeArrow extends EntityArrow implements IProjectile
 
         if (entity != null)
         {
-            float f = MathHelper.sqrt_double(this.motionX * this.motionX + this.motionY * this.motionY + this.motionZ * this.motionZ);
-            int i = MathHelper.ceiling_double_int((double)f * this.damage);
+            float f = MathHelper.sqrt(this.motionX * this.motionX + this.motionY * this.motionY + this.motionZ * this.motionZ);
+            int i = MathHelper.ceil((double)f * this.damage);
 
             if (this.getIsCritical())
             {
@@ -465,14 +465,14 @@ public class EntityDyeArrow extends EntityArrow implements IProjectile
                         }
                     }
 
-                    if (!this.worldObj.isRemote)
+                    if (!this.world.isRemote)
                     {
                         entitylivingbase.setArrowCountInEntity(entitylivingbase.getArrowCountInEntity() + 1);
                     }
 
                     if (this.knockbackStrength > 0)
                     {
-                        float f1 = MathHelper.sqrt_double(this.motionX * this.motionX + this.motionZ * this.motionZ);
+                        float f1 = MathHelper.sqrt(this.motionX * this.motionX + this.motionZ * this.motionZ);
 
                         if (f1 > 0.0F)
                         {
@@ -510,7 +510,7 @@ public class EntityDyeArrow extends EntityArrow implements IProjectile
                 this.prevRotationYaw += 180.0F;
                 this.ticksInAir = 0;
 
-                if (!this.worldObj.isRemote && this.motionX * this.motionX + this.motionY * this.motionY + this.motionZ * this.motionZ < 0.0010000000474974513D)
+                if (!this.world.isRemote && this.motionX * this.motionX + this.motionY * this.motionY + this.motionZ * this.motionZ < 0.0010000000474974513D)
                 {
                     if (this.pickupStatus == EntityDyeArrow.PickupStatus.ALLOWED)
                     {
@@ -527,13 +527,13 @@ public class EntityDyeArrow extends EntityArrow implements IProjectile
             this.xTile = blockpos.getX();
             this.yTile = blockpos.getY();
             this.zTile = blockpos.getZ();
-            IBlockState iblockstate = this.worldObj.getBlockState(blockpos);
+            IBlockState iblockstate = this.world.getBlockState(blockpos);
             this.inTile = iblockstate.getBlock();
             this.inData = this.inTile.getMetaFromState(iblockstate);
             this.motionX = (double)((float)(raytraceResultIn.hitVec.xCoord - this.posX));
             this.motionY = (double)((float)(raytraceResultIn.hitVec.yCoord - this.posY));
             this.motionZ = (double)((float)(raytraceResultIn.hitVec.zCoord - this.posZ));
-            float f2 = MathHelper.sqrt_double(this.motionX * this.motionX + this.motionY * this.motionY + this.motionZ * this.motionZ);
+            float f2 = MathHelper.sqrt(this.motionX * this.motionX + this.motionY * this.motionY + this.motionZ * this.motionZ);
             this.posX -= this.motionX / (double)f2 * 0.05000000074505806D;
             this.posY -= this.motionY / (double)f2 * 0.05000000074505806D;
             this.posZ -= this.motionZ / (double)f2 * 0.05000000074505806D;
@@ -544,7 +544,7 @@ public class EntityDyeArrow extends EntityArrow implements IProjectile
 
             if (iblockstate.getMaterial() != Material.AIR)
             {
-                this.inTile.onEntityCollidedWithBlock(this.worldObj, blockpos, iblockstate, this);
+                this.inTile.onEntityCollidedWithBlock(this.world, blockpos, iblockstate, this);
             }
         }
     }
@@ -559,7 +559,7 @@ public class EntityDyeArrow extends EntityArrow implements IProjectile
     protected Entity findEntityOnPath(Vec3d start, Vec3d end)
     {
         Entity entity = null;
-        List<Entity> list = this.worldObj.getEntitiesInAABBexcluding(this, this.getEntityBoundingBox().addCoord(this.motionX, this.motionY, this.motionZ).expandXyz(1.0D), ARROW_TARGETS);
+        List<Entity> list = this.world.getEntitiesInAABBexcluding(this, this.getEntityBoundingBox().addCoord(this.motionX, this.motionY, this.motionZ).expandXyz(1.0D), ARROW_TARGETS);
         double d0 = 0.0D;
 
         for (int i = 0; i < list.size(); ++i)
@@ -648,7 +648,7 @@ public class EntityDyeArrow extends EntityArrow implements IProjectile
     @Override
     public void onCollideWithPlayer(EntityPlayer entityIn)
     {
-        if (!this.worldObj.isRemote && this.inGround && this.arrowShake <= 0)
+        if (!this.world.isRemote && this.inGround && this.arrowShake <= 0)
         {
             boolean flag = this.pickupStatus == EntityDyeArrow.PickupStatus.ALLOWED || this.pickupStatus == EntityDyeArrow.PickupStatus.CREATIVE_ONLY && entityIn.capabilities.isCreativeMode;
 

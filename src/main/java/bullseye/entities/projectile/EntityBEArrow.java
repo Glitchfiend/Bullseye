@@ -159,7 +159,7 @@ public class EntityBEArrow extends EntityArrow implements IProjectile
     @Override
     public void setThrowableHeading(double x, double y, double z, float velocity, float inaccuracy)
     {
-        float f = MathHelper.sqrt_double(x * x + y * y + z * z);
+        float f = MathHelper.sqrt(x * x + y * y + z * z);
         x = x / (double)f;
         y = y / (double)f;
         z = z / (double)f;
@@ -172,7 +172,7 @@ public class EntityBEArrow extends EntityArrow implements IProjectile
         this.motionX = x;
         this.motionY = y;
         this.motionZ = z;
-        float f1 = MathHelper.sqrt_double(x * x + z * z);
+        float f1 = MathHelper.sqrt(x * x + z * z);
         this.prevRotationYaw = this.rotationYaw = (float)(MathHelper.atan2(x, z) * (180D / Math.PI));
         this.prevRotationPitch = this.rotationPitch = (float)(MathHelper.atan2(y, (double)f1) * (180D / Math.PI));
         this.ticksInGround = 0;
@@ -196,7 +196,7 @@ public class EntityBEArrow extends EntityArrow implements IProjectile
 
         if (this.prevRotationPitch == 0.0F && this.prevRotationYaw == 0.0F)
         {
-            float f = MathHelper.sqrt_double(x * x + z * z);
+            float f = MathHelper.sqrt(x * x + z * z);
             this.prevRotationYaw = this.rotationYaw = (float)(MathHelper.atan2(x, z) * (180D / Math.PI));
             this.prevRotationPitch = this.rotationPitch = (float)(MathHelper.atan2(y, (double)f) * (180D / Math.PI));
             this.prevRotationPitch = this.rotationPitch;
@@ -211,18 +211,18 @@ public class EntityBEArrow extends EntityArrow implements IProjectile
     {
         if (this.prevRotationPitch == 0.0F && this.prevRotationYaw == 0.0F)
         {
-            float f = MathHelper.sqrt_double(this.motionX * this.motionX + this.motionZ * this.motionZ);
+            float f = MathHelper.sqrt(this.motionX * this.motionX + this.motionZ * this.motionZ);
             this.prevRotationYaw = this.rotationYaw = (float)(MathHelper.atan2(this.motionX, this.motionZ) * 180.0D / Math.PI);
             this.prevRotationPitch = this.rotationPitch = (float)(MathHelper.atan2(this.motionY, (double)f) * 180.0D / Math.PI);
         }
 
         BlockPos blockpos = new BlockPos(this.xTile, this.yTile, this.zTile);
-        IBlockState iblockstate = this.worldObj.getBlockState(blockpos);
+        IBlockState iblockstate = this.world.getBlockState(blockpos);
         Block block = iblockstate.getBlock();
 
         if (iblockstate.getMaterial() != Material.AIR)
         {
-        	AxisAlignedBB axisalignedbb = iblockstate.getCollisionBoundingBox(this.worldObj, blockpos);
+        	AxisAlignedBB axisalignedbb = iblockstate.getCollisionBoundingBox(this.world, blockpos);
 
             if (axisalignedbb != Block.NULL_AABB && axisalignedbb.offset(blockpos).isVecInside(new Vec3d(this.posX, this.posY, this.posZ)))
             {
@@ -254,28 +254,28 @@ public class EntityBEArrow extends EntityArrow implements IProjectile
             	}
             	if (arrowType == ItemBEArrow.ArrowType.EGG)
             	{
-            		if (!this.worldObj.isRemote)
+            		if (!this.world.isRemote)
                     {	
-            			int i = worldObj.rand.nextInt(12);
+            			int i = world.rand.nextInt(12);
             			if (i == 0)
             			{
-	                        EntityChicken entitychicken = new EntityChicken(this.worldObj);
+	                        EntityChicken entitychicken = new EntityChicken(this.world);
 	                        entitychicken.setGrowingAge(-24000);
 	                        entitychicken.setLocationAndAngles(this.posX, this.posY, this.posZ, this.rotationYaw, 0.0F);
-	                        this.worldObj.spawnEntityInWorld(entitychicken);
+	                        this.world.spawnEntity(entitychicken);
             			}
                     }
         	        int itemId = Item.getIdFromItem(BEItems.arrow);
         	        int itemMeta = this.getArrowType().ordinal();
         	        for (int ii = 0; ii < 16; ++ii)
         	        {
-        	            this.worldObj.spawnParticle(EnumParticleTypes.ITEM_CRACK, this.posX, this.posY, this.posZ, ((double)this.rand.nextFloat() - 0.5D) * 0.08D, ((double)this.rand.nextFloat() - 0.5D) * 0.08D, ((double)this.rand.nextFloat() - 0.5D) * 0.08D, new int[] {itemId, itemMeta});                
+        	            this.world.spawnParticle(EnumParticleTypes.ITEM_CRACK, this.posX, this.posY, this.posZ, ((double)this.rand.nextFloat() - 0.5D) * 0.08D, ((double)this.rand.nextFloat() - 0.5D) * 0.08D, ((double)this.rand.nextFloat() - 0.5D) * 0.08D, new int[] {itemId, itemMeta});                
         	        }
         			this.setDead();
             	}
             	if (arrowType == ItemBEArrow.ArrowType.EXTINGUISHING)
             	{
-            		if (!this.worldObj.isRemote)
+            		if (!this.world.isRemote)
             		{
             			for (int xx = -2; xx <= 2; xx++)
             	        {
@@ -285,40 +285,40 @@ public class EntityBEArrow extends EntityArrow implements IProjectile
             	                {
             	                    BlockPos pos = blockpos.add(xx, yy - 1, zz);
             	                
-			            			if (this.worldObj.getBlockState(pos).getBlock() == Blocks.FIRE)
+			            			if (this.world.getBlockState(pos).getBlock() == Blocks.FIRE)
 			            			{
-			            				worldObj.setBlockToAir(pos);
+			            				world.setBlockToAir(pos);
 			            			}
-			            			if (this.worldObj.getBlockState(pos).getBlock() == Blocks.TORCH)
+			            			if (this.world.getBlockState(pos).getBlock() == Blocks.TORCH)
 			            			{
-			            				worldObj.destroyBlock(pos, true);
+			            				world.destroyBlock(pos, true);
 			            			}
             	                }
             	            }
             	        }
             			if (block == Blocks.STAINED_HARDENED_CLAY)
             			{
-            				worldObj.setBlockState(blockpos, Blocks.HARDENED_CLAY.getDefaultState());
+            				world.setBlockState(blockpos, Blocks.HARDENED_CLAY.getDefaultState());
             			}
             			if (block == Blocks.STAINED_GLASS)
             			{
-            				worldObj.setBlockState(blockpos, Blocks.GLASS.getDefaultState());
+            				world.setBlockState(blockpos, Blocks.GLASS.getDefaultState());
             			}
             			if (block == Blocks.STAINED_GLASS_PANE)
             			{
-            				worldObj.setBlockState(blockpos, Blocks.GLASS_PANE.getDefaultState());
+            				world.setBlockState(blockpos, Blocks.GLASS_PANE.getDefaultState());
             			}
             		}
-            		this.worldObj.playSound((EntityPlayer)null, blockpos, SoundEvents.BLOCK_GLASS_BREAK, SoundCategory.BLOCKS, 0.5F, 2.6F + (this.worldObj.rand.nextFloat() - this.worldObj.rand.nextFloat()) * 0.8F);
+            		this.world.playSound((EntityPlayer)null, blockpos, SoundEvents.BLOCK_GLASS_BREAK, SoundCategory.BLOCKS, 0.5F, 2.6F + (this.world.rand.nextFloat() - this.world.rand.nextFloat()) * 0.8F);
                 	for (int i = 0; i < 8; ++i)
                     {
-                        this.worldObj.spawnParticle(EnumParticleTypes.WATER_SPLASH, (this.posX - 0.5D) + Math.random(), this.posY + 0.25D, (this.posZ - 0.5D) + Math.random(), 0.0D, 0.0D, 0.0D, new int[0]);
+                        this.world.spawnParticle(EnumParticleTypes.WATER_SPLASH, (this.posX - 0.5D) + Math.random(), this.posY + 0.25D, (this.posZ - 0.5D) + Math.random(), 0.0D, 0.0D, 0.0D, new int[0]);
                     }
         	        int itemId = Item.getIdFromItem(BEItems.arrow);
         	        int itemMeta = this.getArrowType().ordinal();
         	        for (int ii = 0; ii < 16; ++ii)
         	        {
-        	            this.worldObj.spawnParticle(EnumParticleTypes.ITEM_CRACK, this.posX, this.posY, this.posZ, ((double)this.rand.nextFloat() - 0.5D) * 0.08D, ((double)this.rand.nextFloat() - 0.5D) * 0.08D, ((double)this.rand.nextFloat() - 0.5D) * 0.08D, new int[] {itemId, itemMeta});                
+        	            this.world.spawnParticle(EnumParticleTypes.ITEM_CRACK, this.posX, this.posY, this.posZ, ((double)this.rand.nextFloat() - 0.5D) * 0.08D, ((double)this.rand.nextFloat() - 0.5D) * 0.08D, ((double)this.rand.nextFloat() - 0.5D) * 0.08D, new int[] {itemId, itemMeta});                
         	        }
         			this.setDead();
             	}
@@ -333,60 +333,60 @@ public class EntityBEArrow extends EntityArrow implements IProjectile
             	}
             	if (arrowType == ItemBEArrow.ArrowType.FIRE)
             	{
-            		if (!this.worldObj.isRemote)
+            		if (!this.world.isRemote)
             		{
-            			if (worldObj.getBlockState(blockpos) == Blocks.ICE.getDefaultState())
+            			if (world.getBlockState(blockpos) == Blocks.ICE.getDefaultState())
             			{
-            				this.worldObj.setBlockState(blockpos, Blocks.WATER.getDefaultState());
+            				this.world.setBlockState(blockpos, Blocks.WATER.getDefaultState());
             			}
-            			if (worldObj.getBlockState(blockpos) == Blocks.FROSTED_ICE.getDefaultState())
+            			if (world.getBlockState(blockpos) == Blocks.FROSTED_ICE.getDefaultState())
             			{
-            				this.worldObj.setBlockState(blockpos, Blocks.WATER.getDefaultState());
+            				this.world.setBlockState(blockpos, Blocks.WATER.getDefaultState());
             			}
-            			if (worldObj.getBlockState(blockpos) == Blocks.SNOW_LAYER.getDefaultState())
+            			if (world.getBlockState(blockpos) == Blocks.SNOW_LAYER.getDefaultState())
             			{
-            				this.worldObj.setBlockState(blockpos, Blocks.AIR.getDefaultState());
+            				this.world.setBlockState(blockpos, Blocks.AIR.getDefaultState());
             			}
-            			if (worldObj.getBlockState(blockpos) == Blocks.SNOW.getDefaultState())
+            			if (world.getBlockState(blockpos) == Blocks.SNOW.getDefaultState())
             			{
-            				this.worldObj.setBlockState(blockpos, Blocks.AIR.getDefaultState());
+            				this.world.setBlockState(blockpos, Blocks.AIR.getDefaultState());
             			}
-            			if (worldObj.getBlockState(blockpos) == Blocks.PACKED_ICE.getDefaultState())
+            			if (world.getBlockState(blockpos) == Blocks.PACKED_ICE.getDefaultState())
             			{
-            				this.worldObj.setBlockState(blockpos, Blocks.ICE.getDefaultState());
+            				this.world.setBlockState(blockpos, Blocks.ICE.getDefaultState());
             			}
-            			if (worldObj.getBlockState(blockpos) == Blocks.TNT.getDefaultState())
+            			if (world.getBlockState(blockpos) == Blocks.TNT.getDefaultState())
             			{
-            				EntityTNTPrimed entitytntprimed = new EntityTNTPrimed(this.worldObj, (double)((float)blockpos.getX() + 0.5F), (double)blockpos.getY(), (double)((float)blockpos.getZ() + 0.5F), this.shootingEntity instanceof EntityLivingBase ? (EntityLivingBase)this.shootingEntity : null);
-            				this.worldObj.spawnEntityInWorld(entitytntprimed);
-            				this.worldObj.playSound((EntityPlayer)null, entitytntprimed.posX, entitytntprimed.posY, entitytntprimed.posZ, SoundEvents.ENTITY_TNT_PRIMED, SoundCategory.BLOCKS, 1.0F, 1.0F);
-            				this.worldObj.setBlockToAir(blockpos);
+            				EntityTNTPrimed entitytntprimed = new EntityTNTPrimed(this.world, (double)((float)blockpos.getX() + 0.5F), (double)blockpos.getY(), (double)((float)blockpos.getZ() + 0.5F), this.shootingEntity instanceof EntityLivingBase ? (EntityLivingBase)this.shootingEntity : null);
+            				this.world.spawnEntity(entitytntprimed);
+            				this.world.playSound((EntityPlayer)null, entitytntprimed.posX, entitytntprimed.posY, entitytntprimed.posZ, SoundEvents.ENTITY_TNT_PRIMED, SoundCategory.BLOCKS, 1.0F, 1.0F);
+            				this.world.setBlockToAir(blockpos);
             			}
             		}
-            		this.worldObj.playSound((EntityPlayer)null, blockpos, SoundEvents.BLOCK_FIRE_EXTINGUISH, SoundCategory.BLOCKS, 0.5F, 2.6F + (this.worldObj.rand.nextFloat() - this.worldObj.rand.nextFloat()) * 0.8F);
+            		this.world.playSound((EntityPlayer)null, blockpos, SoundEvents.BLOCK_FIRE_EXTINGUISH, SoundCategory.BLOCKS, 0.5F, 2.6F + (this.world.rand.nextFloat() - this.world.rand.nextFloat()) * 0.8F);
                 	for (int i = 0; i < 8; ++i)
                     {
-                        this.worldObj.spawnParticle(EnumParticleTypes.SMOKE_LARGE, (this.posX - 0.5D) + Math.random(), this.posY + 0.25D, (this.posZ - 0.5D) + Math.random(), 0.0D, 0.0D, 0.0D, new int[0]);
+                        this.world.spawnParticle(EnumParticleTypes.SMOKE_LARGE, (this.posX - 0.5D) + Math.random(), this.posY + 0.25D, (this.posZ - 0.5D) + Math.random(), 0.0D, 0.0D, 0.0D, new int[0]);
                     }
         	        int itemId = Item.getIdFromItem(BEItems.arrow);
         	        int itemMeta = this.getArrowType().ordinal();
         	        for (int ii = 0; ii < 16; ++ii)
         	        {
-        	            this.worldObj.spawnParticle(EnumParticleTypes.ITEM_CRACK, this.posX, this.posY, this.posZ, ((double)this.rand.nextFloat() - 0.5D) * 0.08D, ((double)this.rand.nextFloat() - 0.5D) * 0.08D, ((double)this.rand.nextFloat() - 0.5D) * 0.08D, new int[] {itemId, itemMeta});                
+        	            this.world.spawnParticle(EnumParticleTypes.ITEM_CRACK, this.posX, this.posY, this.posZ, ((double)this.rand.nextFloat() - 0.5D) * 0.08D, ((double)this.rand.nextFloat() - 0.5D) * 0.08D, ((double)this.rand.nextFloat() - 0.5D) * 0.08D, new int[] {itemId, itemMeta});                
         	        }
         			this.setDead();
             	}
             	if (arrowType == ItemBEArrow.ArrowType.ICE)
             	{
-            		if (!this.worldObj.isRemote)
+            		if (!this.world.isRemote)
             		{
-            			if (worldObj.getBlockState(blockpos) == Blocks.ICE.getDefaultState())
+            			if (world.getBlockState(blockpos) == Blocks.ICE.getDefaultState())
             			{
-            				this.worldObj.setBlockState(blockpos, Blocks.PACKED_ICE.getDefaultState());
+            				this.world.setBlockState(blockpos, Blocks.PACKED_ICE.getDefaultState());
             			}
-            			if (worldObj.isAirBlock(blockpos.up()) && worldObj.isBlockFullCube(blockpos))
+            			if (world.isAirBlock(blockpos.up()) && world.isBlockFullCube(blockpos))
             			{
-            				this.worldObj.setBlockState(blockpos.up(), Blocks.SNOW_LAYER.getDefaultState());
+            				this.world.setBlockState(blockpos.up(), Blocks.SNOW_LAYER.getDefaultState());
             			}
             		}
                 	for (int i = 0; i < 8; ++i)
@@ -397,36 +397,36 @@ public class EntityBEArrow extends EntityArrow implements IProjectile
         	        int itemMeta = this.getArrowType().ordinal();
         	        for (int ii = 0; ii < 16; ++ii)
         	        {
-        	            this.worldObj.spawnParticle(EnumParticleTypes.ITEM_CRACK, this.posX, this.posY, this.posZ, ((double)this.rand.nextFloat() - 0.5D) * 0.08D, ((double)this.rand.nextFloat() - 0.5D) * 0.08D, ((double)this.rand.nextFloat() - 0.5D) * 0.08D, new int[] {itemId, itemMeta});                
+        	            this.world.spawnParticle(EnumParticleTypes.ITEM_CRACK, this.posX, this.posY, this.posZ, ((double)this.rand.nextFloat() - 0.5D) * 0.08D, ((double)this.rand.nextFloat() - 0.5D) * 0.08D, ((double)this.rand.nextFloat() - 0.5D) * 0.08D, new int[] {itemId, itemMeta});                
         	        }
         			this.setDead();
             	}
             	if (arrowType == ItemBEArrow.ArrowType.BOMB)
             	{
-            		if (!this.worldObj.isRemote)
+            		if (!this.world.isRemote)
                     {	
                         float f = 1.8F;
-                        this.worldObj.createExplosion(this, this.posX, this.posY, this.posZ, f, ConfigurationHandler.explodeBombArrows);
+                        this.world.createExplosion(this, this.posX, this.posY, this.posZ, f, ConfigurationHandler.explodeBombArrows);
                     }
         	        int itemId = Item.getIdFromItem(BEItems.arrow);
         	        int itemMeta = this.getArrowType().ordinal();
         	        for (int ii = 0; ii < 16; ++ii)
         	        {
-        	            this.worldObj.spawnParticle(EnumParticleTypes.ITEM_CRACK, this.posX, this.posY, this.posZ, ((double)this.rand.nextFloat() - 0.5D) * 0.08D, ((double)this.rand.nextFloat() - 0.5D) * 0.08D, ((double)this.rand.nextFloat() - 0.5D) * 0.08D, new int[] {itemId, itemMeta});                
+        	            this.world.spawnParticle(EnumParticleTypes.ITEM_CRACK, this.posX, this.posY, this.posZ, ((double)this.rand.nextFloat() - 0.5D) * 0.08D, ((double)this.rand.nextFloat() - 0.5D) * 0.08D, ((double)this.rand.nextFloat() - 0.5D) * 0.08D, new int[] {itemId, itemMeta});                
         	        }
                     this.setDead();
             	}
             	if (arrowType == ItemBEArrow.ArrowType.LIGHTNING)
             	{
-            		if (!this.worldObj.isRemote)
+            		if (!this.world.isRemote)
                     {	
-                        EntityLightningBolt entityLightningBolt = new EntityLightningBolt(this.worldObj, this.posX, this.posY, this.posZ, !(ConfigurationHandler.fireLightningArrows));
-                        this.worldObj.addWeatherEffect(entityLightningBolt);
+                        EntityLightningBolt entityLightningBolt = new EntityLightningBolt(this.world, this.posX, this.posY, this.posZ, !(ConfigurationHandler.fireLightningArrows));
+                        this.world.addWeatherEffect(entityLightningBolt);
                         
                         if (!(ConfigurationHandler.fireLightningArrows))
     	    			{
     	    				double d0 = 3.0D;
-    	                    List<Entity> list = this.worldObj.getEntitiesWithinAABBExcludingEntity(this, new AxisAlignedBB(entityLightningBolt.posX - d0, entityLightningBolt.posY - d0, entityLightningBolt.posZ - d0, entityLightningBolt.posX + d0, entityLightningBolt.posY + 6.0D + d0, entityLightningBolt.posZ + d0));
+    	                    List<Entity> list = this.world.getEntitiesWithinAABBExcludingEntity(this, new AxisAlignedBB(entityLightningBolt.posX - d0, entityLightningBolt.posY - d0, entityLightningBolt.posZ - d0, entityLightningBolt.posX + d0, entityLightningBolt.posY + 6.0D + d0, entityLightningBolt.posZ + d0));
 
     	                    for (int i1 = 0; i1 < list.size(); ++i1)
     	                    {
@@ -440,7 +440,7 @@ public class EntityBEArrow extends EntityArrow implements IProjectile
         	        int itemMeta = this.getArrowType().ordinal();
         	        for (int ii = 0; ii < 16; ++ii)
         	        {
-        	            this.worldObj.spawnParticle(EnumParticleTypes.ITEM_CRACK, this.posX, this.posY, this.posZ, ((double)this.rand.nextFloat() - 0.5D) * 0.08D, ((double)this.rand.nextFloat() - 0.5D) * 0.08D, ((double)this.rand.nextFloat() - 0.5D) * 0.08D, new int[] {itemId, itemMeta});                
+        	            this.world.spawnParticle(EnumParticleTypes.ITEM_CRACK, this.posX, this.posY, this.posZ, ((double)this.rand.nextFloat() - 0.5D) * 0.08D, ((double)this.rand.nextFloat() - 0.5D) * 0.08D, ((double)this.rand.nextFloat() - 0.5D) * 0.08D, new int[] {itemId, itemMeta});                
         	        }
                     this.setDead();
             	}
@@ -462,7 +462,7 @@ public class EntityBEArrow extends EntityArrow implements IProjectile
             this.damage = arrowType.getDamageInflicted();
             Vec3d vec3d1 = new Vec3d(this.posX, this.posY, this.posZ);
             Vec3d vec3d = new Vec3d(this.posX + this.motionX, this.posY + this.motionY, this.posZ + this.motionZ);
-            RayTraceResult raytraceresult = this.worldObj.rayTraceBlocks(vec3d1, vec3d, (arrowType == ItemBEArrow.ArrowType.FIRE || arrowType == ItemBEArrow.ArrowType.ICE || arrowType == ItemBEArrow.ArrowType.EXTINGUISHING), (arrowType != ItemBEArrow.ArrowType.FIRE && arrowType != ItemBEArrow.ArrowType.ICE && arrowType != ItemBEArrow.ArrowType.EXTINGUISHING), false);
+            RayTraceResult raytraceresult = this.world.rayTraceBlocks(vec3d1, vec3d, (arrowType == ItemBEArrow.ArrowType.FIRE || arrowType == ItemBEArrow.ArrowType.ICE || arrowType == ItemBEArrow.ArrowType.EXTINGUISHING), (arrowType != ItemBEArrow.ArrowType.FIRE && arrowType != ItemBEArrow.ArrowType.ICE && arrowType != ItemBEArrow.ArrowType.EXTINGUISHING), false);
             vec3d1 = new Vec3d(this.posX, this.posY, this.posZ);
             vec3d = new Vec3d(this.posX + this.motionX, this.posY + this.motionY, this.posZ + this.motionZ);
 
@@ -499,7 +499,7 @@ public class EntityBEArrow extends EntityArrow implements IProjectile
 	            {
 	                for (int k = 0; k < 4; ++k)
 	                {
-	                    this.worldObj.spawnParticle(EnumParticleTypes.CRIT, this.posX + this.motionX * (double)k / 4.0D, this.posY + this.motionY * (double)k / 4.0D, this.posZ + this.motionZ * (double)k / 4.0D, -this.motionX, -this.motionY + 0.2D, -this.motionZ, new int[0]);
+	                    this.world.spawnParticle(EnumParticleTypes.CRIT, this.posX + this.motionX * (double)k / 4.0D, this.posY + this.motionY * (double)k / 4.0D, this.posZ + this.motionZ * (double)k / 4.0D, -this.motionX, -this.motionY + 0.2D, -this.motionZ, new int[0]);
 	                }
 	            }
             }
@@ -507,7 +507,7 @@ public class EntityBEArrow extends EntityArrow implements IProjectile
             {
             	for (int k = 0; k < 8; ++k)
                 {
-            		this.worldObj.spawnParticle(EnumParticleTypes.FLAME, this.posX + this.motionX * (double)k / 8.0D, this.posY + this.motionY * (double)k / 8.0D, this.posZ + this.motionZ * (double)k / 8.0D, 0.0D, 0.0D, 0.0D, new int[0]);
+            		this.world.spawnParticle(EnumParticleTypes.FLAME, this.posX + this.motionX * (double)k / 8.0D, this.posY + this.motionY * (double)k / 8.0D, this.posZ + this.motionZ * (double)k / 8.0D, 0.0D, 0.0D, 0.0D, new int[0]);
                 }
             }
             if (arrowType == ItemBEArrow.ArrowType.ICE)
@@ -521,21 +521,21 @@ public class EntityBEArrow extends EntityArrow implements IProjectile
             {
             	for (int k = 0; k < 8; ++k)
                 {
-            		this.worldObj.spawnParticle(EnumParticleTypes.FIREWORKS_SPARK, this.posX + this.motionX * (double)k / 8.0D, this.posY + this.motionY * (double)k / 8.0D, this.posZ + this.motionZ * (double)k / 8.0D, 0.0D, 0.0D, 0.0D, new int[0]);
+            		this.world.spawnParticle(EnumParticleTypes.FIREWORKS_SPARK, this.posX + this.motionX * (double)k / 8.0D, this.posY + this.motionY * (double)k / 8.0D, this.posZ + this.motionZ * (double)k / 8.0D, 0.0D, 0.0D, 0.0D, new int[0]);
                 }
             }
             if (arrowType == ItemBEArrow.ArrowType.BOMB)
             {
             	for (int k = 0; k < 8; ++k)
                 {
-            		this.worldObj.spawnParticle(EnumParticleTypes.SMOKE_NORMAL, this.posX + this.motionX * (double)k / 8.0D, this.posY + this.motionY * (double)k / 8.0D, this.posZ + this.motionZ * (double)k / 8.0D, 0.0D, 0.0D, 0.0D, new int[0]);
+            		this.world.spawnParticle(EnumParticleTypes.SMOKE_NORMAL, this.posX + this.motionX * (double)k / 8.0D, this.posY + this.motionY * (double)k / 8.0D, this.posZ + this.motionZ * (double)k / 8.0D, 0.0D, 0.0D, 0.0D, new int[0]);
                 }
             }
 
             this.posX += this.motionX;
             this.posY += this.motionY;
             this.posZ += this.motionZ;
-            float f3 = MathHelper.sqrt_double(this.motionX * this.motionX + this.motionZ * this.motionZ);
+            float f3 = MathHelper.sqrt(this.motionX * this.motionX + this.motionZ * this.motionZ);
             this.rotationYaw = (float)(MathHelper.atan2(this.motionX, this.motionZ) * 180.0D / Math.PI);
 
             for (this.rotationPitch = (float)(MathHelper.atan2(this.motionY, (double)f3) * 180.0D / Math.PI); this.rotationPitch - this.prevRotationPitch < -180.0F; this.prevRotationPitch -= 360.0F)
@@ -568,7 +568,7 @@ public class EntityBEArrow extends EntityArrow implements IProjectile
                 for (int i1 = 0; i1 < 4; ++i1)
                 {
                     float f8 = 0.25F;
-                    this.worldObj.spawnParticle(EnumParticleTypes.WATER_BUBBLE, this.posX - this.motionX * (double)f8, this.posY - this.motionY * (double)f8, this.posZ - this.motionZ * (double)f8, this.motionX, this.motionY, this.motionZ, new int[0]);
+                    this.world.spawnParticle(EnumParticleTypes.WATER_BUBBLE, this.posX - this.motionX * (double)f8, this.posY - this.motionY * (double)f8, this.posZ - this.motionZ * (double)f8, this.motionX, this.motionY, this.motionZ, new int[0]);
                 }
 
                 f4 = 0.6F;
@@ -599,19 +599,19 @@ public class EntityBEArrow extends EntityArrow implements IProjectile
     		if (raytraceResultIn.typeOfHit == RayTraceResult.Type.BLOCK)
             {
                 BlockPos blockpos = raytraceResultIn.getBlockPos();
-                IBlockState iblockstate = this.worldObj.getBlockState(blockpos);
+                IBlockState iblockstate = this.world.getBlockState(blockpos);
 
 		    	//Water/Lava
 		    	if (arrowType == ItemBEArrow.ArrowType.EXTINGUISHING)
 		    	{
 	                if (iblockstate.getMaterial() == Material.LAVA && ((Integer)iblockstate.getValue(BlockLiquid.LEVEL)).intValue() == 0)
 	                {
-	                	this.worldObj.playSound((EntityPlayer)null, blockpos, SoundEvents.BLOCK_GLASS_BREAK, SoundCategory.BLOCKS, 0.5F, 2.6F + (this.worldObj.rand.nextFloat() - this.worldObj.rand.nextFloat()) * 0.8F);
+	                	this.world.playSound((EntityPlayer)null, blockpos, SoundEvents.BLOCK_GLASS_BREAK, SoundCategory.BLOCKS, 0.5F, 2.6F + (this.world.rand.nextFloat() - this.world.rand.nextFloat()) * 0.8F);
 						for (int i = 0; i < 8; ++i)
 						{
-							this.worldObj.spawnParticle(EnumParticleTypes.WATER_SPLASH, (this.posX - 0.5D) + Math.random(), this.posY + 0.25D, (this.posZ - 0.5D) + Math.random(), 0.0D, 0.0D, 0.0D, new int[0]);
+							this.world.spawnParticle(EnumParticleTypes.WATER_SPLASH, (this.posX - 0.5D) + Math.random(), this.posY + 0.25D, (this.posZ - 0.5D) + Math.random(), 0.0D, 0.0D, 0.0D, new int[0]);
 						}
-						this.worldObj.setBlockState(blockpos, Blocks.OBSIDIAN.getDefaultState());
+						this.world.setBlockState(blockpos, Blocks.OBSIDIAN.getDefaultState());
 						this.setDead();
 	                }
 		    	}
@@ -619,7 +619,7 @@ public class EntityBEArrow extends EntityArrow implements IProjectile
 		    	{
 	                if (iblockstate.getMaterial() == Material.WATER && ((Integer)iblockstate.getValue(BlockLiquid.LEVEL)).intValue() == 0)
 	                {
-	    				this.worldObj.setBlockState(blockpos, Blocks.FROSTED_ICE.getDefaultState(), 2);
+	    				this.world.setBlockState(blockpos, Blocks.FROSTED_ICE.getDefaultState(), 2);
 	    				this.setDead();
 		    		}
 		    	}
@@ -627,21 +627,21 @@ public class EntityBEArrow extends EntityArrow implements IProjectile
 		    	{
 		    		if (iblockstate.getMaterial() == Material.WATER && ((Integer)iblockstate.getValue(BlockLiquid.LEVEL)).intValue() == 0)
 	                {
-		    			this.worldObj.playSound((EntityPlayer)null, blockpos, SoundEvents.BLOCK_FIRE_EXTINGUISH, SoundCategory.BLOCKS, 0.5F, 2.6F + (this.worldObj.rand.nextFloat() - this.worldObj.rand.nextFloat()) * 0.8F);
+		    			this.world.playSound((EntityPlayer)null, blockpos, SoundEvents.BLOCK_FIRE_EXTINGUISH, SoundCategory.BLOCKS, 0.5F, 2.6F + (this.world.rand.nextFloat() - this.world.rand.nextFloat()) * 0.8F);
 	    				for (int i = 0; i < 8; ++i)
 	    				{
-	    					this.worldObj.spawnParticle(EnumParticleTypes.SMOKE_LARGE, (this.posX - 0.5D) + Math.random(), this.posY + 0.25D, (this.posZ - 0.5D) + Math.random(), 0.0D, 0.0D, 0.0D, new int[0]);
+	    					this.world.spawnParticle(EnumParticleTypes.SMOKE_LARGE, (this.posX - 0.5D) + Math.random(), this.posY + 0.25D, (this.posZ - 0.5D) + Math.random(), 0.0D, 0.0D, 0.0D, new int[0]);
 	    				}
 	    				this.setDead();
 		    		}
 		    		
 		    		BlockPos pos = raytraceResultIn.getBlockPos().offset(raytraceResultIn.sideHit);
 		    		
-		    		if (worldObj.isAirBlock(pos) && this.worldObj.isBlockFullCube(blockpos) && iblockstate.getMaterial() != Material.LAVA && iblockstate.getMaterial() != Material.WATER && iblockstate != Blocks.ICE.getDefaultState() && iblockstate != Blocks.SNOW_LAYER.getDefaultState() && iblockstate != Blocks.SNOW.getDefaultState() && iblockstate != Blocks.PACKED_ICE.getDefaultState() && iblockstate != Blocks.TNT.getDefaultState())
+		    		if (world.isAirBlock(pos) && this.world.isBlockFullCube(blockpos) && iblockstate.getMaterial() != Material.LAVA && iblockstate.getMaterial() != Material.WATER && iblockstate != Blocks.ICE.getDefaultState() && iblockstate != Blocks.SNOW_LAYER.getDefaultState() && iblockstate != Blocks.SNOW.getDefaultState() && iblockstate != Blocks.PACKED_ICE.getDefaultState() && iblockstate != Blocks.TNT.getDefaultState())
         			{
 		    			if (ConfigurationHandler.burnFireArrows)
 		    			{
-	        				this.worldObj.setBlockState(pos, Blocks.FIRE.getDefaultState(), 11);
+	        				this.world.setBlockState(pos, Blocks.FIRE.getDefaultState(), 11);
 		    			}
 		    			
 		    			this.setDead();
@@ -652,8 +652,8 @@ public class EntityBEArrow extends EntityArrow implements IProjectile
 
     	if (entity != null)
     	{
-    		float f = MathHelper.sqrt_double(this.motionX * this.motionX + this.motionY * this.motionY + this.motionZ * this.motionZ);
-    		int i = MathHelper.ceiling_double_int((double)f * this.damage);
+    		float f = MathHelper.sqrt(this.motionX * this.motionX + this.motionY * this.motionY + this.motionZ * this.motionZ);
+    		int i = MathHelper.ceil((double)f * this.damage);
 
     		if (this.getIsCritical())
     		{
@@ -701,16 +701,16 @@ public class EntityBEArrow extends EntityArrow implements IProjectile
     	    			}
     	    			if (raytraceResultIn.entityHit instanceof EntityLivingBase)
     	    			{
-    	    				this.worldObj.playSound((EntityPlayer)null, entity.getPosition(), SoundEvents.BLOCK_GLASS_BREAK, SoundCategory.BLOCKS, 0.5F, 2.6F + (this.worldObj.rand.nextFloat() - this.worldObj.rand.nextFloat()) * 0.8F);
+    	    				this.world.playSound((EntityPlayer)null, entity.getPosition(), SoundEvents.BLOCK_GLASS_BREAK, SoundCategory.BLOCKS, 0.5F, 2.6F + (this.world.rand.nextFloat() - this.world.rand.nextFloat()) * 0.8F);
     	    				for (int i1 = 0; i1 < 8; ++i1)
     	    				{
-    	    					this.worldObj.spawnParticle(EnumParticleTypes.WATER_SPLASH, (this.posX - 0.5D) + Math.random(), this.posY + 0.25D, (this.posZ - 0.5D) + Math.random(), 0.0D, 0.0D, 0.0D, new int[0]);
+    	    					this.world.spawnParticle(EnumParticleTypes.WATER_SPLASH, (this.posX - 0.5D) + Math.random(), this.posY + 0.25D, (this.posZ - 0.5D) + Math.random(), 0.0D, 0.0D, 0.0D, new int[0]);
     	    				}
     	    				int itemId = Item.getIdFromItem(BEItems.arrow);
     	    				int itemMeta = this.getArrowType().ordinal();
     	    				for (int ii = 0; ii < 16; ++ii)
     	    				{
-    	    					this.worldObj.spawnParticle(EnumParticleTypes.ITEM_CRACK, this.posX, this.posY, this.posZ, ((double)this.rand.nextFloat() - 0.5D) * 0.08D, ((double)this.rand.nextFloat() - 0.5D) * 0.08D, ((double)this.rand.nextFloat() - 0.5D) * 0.08D, new int[] {itemId, itemMeta});                
+    	    					this.world.spawnParticle(EnumParticleTypes.ITEM_CRACK, this.posX, this.posY, this.posZ, ((double)this.rand.nextFloat() - 0.5D) * 0.08D, ((double)this.rand.nextFloat() - 0.5D) * 0.08D, ((double)this.rand.nextFloat() - 0.5D) * 0.08D, new int[] {itemId, itemMeta});                
     	    				}
     	    				this.setDead();
     	    			}
@@ -720,16 +720,16 @@ public class EntityBEArrow extends EntityArrow implements IProjectile
     	    			if (raytraceResultIn.entityHit instanceof EntityLivingBase)
     	    			{
     	    				raytraceResultIn.entityHit.setFire(10);
-    	    				this.worldObj.playSound((EntityPlayer)null, entity.getPosition(), SoundEvents.BLOCK_FIRE_EXTINGUISH, SoundCategory.BLOCKS, 0.5F, 2.6F + (this.worldObj.rand.nextFloat() - this.worldObj.rand.nextFloat()) * 0.8F);
+    	    				this.world.playSound((EntityPlayer)null, entity.getPosition(), SoundEvents.BLOCK_FIRE_EXTINGUISH, SoundCategory.BLOCKS, 0.5F, 2.6F + (this.world.rand.nextFloat() - this.world.rand.nextFloat()) * 0.8F);
     	    				for (int i1 = 0; i1 < 8; ++i1)
     	    				{
-    	    					this.worldObj.spawnParticle(EnumParticleTypes.SMOKE_LARGE, (this.posX - 0.5D) + Math.random(), this.posY + 0.25D, (this.posZ - 0.5D) + Math.random(), 0.0D, 0.0D, 0.0D, new int[0]);
+    	    					this.world.spawnParticle(EnumParticleTypes.SMOKE_LARGE, (this.posX - 0.5D) + Math.random(), this.posY + 0.25D, (this.posZ - 0.5D) + Math.random(), 0.0D, 0.0D, 0.0D, new int[0]);
     	    				}
     	    				int itemId = Item.getIdFromItem(BEItems.arrow);
     	    				int itemMeta = this.getArrowType().ordinal();
     	    				for (int ii = 0; ii < 16; ++ii)
     	    				{
-    	    					this.worldObj.spawnParticle(EnumParticleTypes.ITEM_CRACK, this.posX, this.posY, this.posZ, ((double)this.rand.nextFloat() - 0.5D) * 0.08D, ((double)this.rand.nextFloat() - 0.5D) * 0.08D, ((double)this.rand.nextFloat() - 0.5D) * 0.08D, new int[] {itemId, itemMeta});                
+    	    					this.world.spawnParticle(EnumParticleTypes.ITEM_CRACK, this.posX, this.posY, this.posZ, ((double)this.rand.nextFloat() - 0.5D) * 0.08D, ((double)this.rand.nextFloat() - 0.5D) * 0.08D, ((double)this.rand.nextFloat() - 0.5D) * 0.08D, new int[] {itemId, itemMeta});                
     	    				}
     	    				this.setDead();
     	    			}
@@ -744,36 +744,36 @@ public class EntityBEArrow extends EntityArrow implements IProjectile
     	    			int itemMeta = this.getArrowType().ordinal();
     	    			for (int ii = 0; ii < 16; ++ii)
     	    			{
-    	    				this.worldObj.spawnParticle(EnumParticleTypes.ITEM_CRACK, this.posX, this.posY, this.posZ, ((double)this.rand.nextFloat() - 0.5D) * 0.08D, ((double)this.rand.nextFloat() - 0.5D) * 0.08D, ((double)this.rand.nextFloat() - 0.5D) * 0.08D, new int[] {itemId, itemMeta});                
+    	    				this.world.spawnParticle(EnumParticleTypes.ITEM_CRACK, this.posX, this.posY, this.posZ, ((double)this.rand.nextFloat() - 0.5D) * 0.08D, ((double)this.rand.nextFloat() - 0.5D) * 0.08D, ((double)this.rand.nextFloat() - 0.5D) * 0.08D, new int[] {itemId, itemMeta});                
     	    			}
     	    			this.setDead();
     	    		}
     	    		if (arrowType == ItemBEArrow.ArrowType.BOMB)
     	    		{
-    	    			if (!this.worldObj.isRemote)
+    	    			if (!this.world.isRemote)
     	    			{	
     	    				float f1 = 1.8F;
-    	    				this.worldObj.createExplosion(this, this.posX, this.posY, this.posZ, f1, ConfigurationHandler.explodeBombArrows);
+    	    				this.world.createExplosion(this, this.posX, this.posY, this.posZ, f1, ConfigurationHandler.explodeBombArrows);
     	    			}
     	    			int itemId = Item.getIdFromItem(BEItems.arrow);
     	    			int itemMeta = this.getArrowType().ordinal();
     	    			for (int ii = 0; ii < 16; ++ii)
     	    			{
-    	    				this.worldObj.spawnParticle(EnumParticleTypes.ITEM_CRACK, this.posX, this.posY, this.posZ, ((double)this.rand.nextFloat() - 0.5D) * 0.08D, ((double)this.rand.nextFloat() - 0.5D) * 0.08D, ((double)this.rand.nextFloat() - 0.5D) * 0.08D, new int[] {itemId, itemMeta});                
+    	    				this.world.spawnParticle(EnumParticleTypes.ITEM_CRACK, this.posX, this.posY, this.posZ, ((double)this.rand.nextFloat() - 0.5D) * 0.08D, ((double)this.rand.nextFloat() - 0.5D) * 0.08D, ((double)this.rand.nextFloat() - 0.5D) * 0.08D, new int[] {itemId, itemMeta});                
     	    			}
     	    			this.setDead();
     	    		}
     	    		if (arrowType == ItemBEArrow.ArrowType.LIGHTNING)
     	    		{
-    	    			if (!this.worldObj.isRemote)
+    	    			if (!this.world.isRemote)
     	    			{	
-    	    				EntityLightningBolt entityLightningBolt = new EntityLightningBolt(this.worldObj, this.posX, this.posY, this.posZ, !(ConfigurationHandler.fireLightningArrows));
-    	    				this.worldObj.addWeatherEffect(entityLightningBolt);
+    	    				EntityLightningBolt entityLightningBolt = new EntityLightningBolt(this.world, this.posX, this.posY, this.posZ, !(ConfigurationHandler.fireLightningArrows));
+    	    				this.world.addWeatherEffect(entityLightningBolt);
 	    	    			
 	    	    			if (!(ConfigurationHandler.fireLightningArrows))
 	    	    			{
 	    	    				double d0 = 3.0D;
-	    	                    List<Entity> list = this.worldObj.getEntitiesWithinAABBExcludingEntity(this, new AxisAlignedBB(entityLightningBolt.posX - d0, entityLightningBolt.posY - d0, entityLightningBolt.posZ - d0, entityLightningBolt.posX + d0, entityLightningBolt.posY + 6.0D + d0, entityLightningBolt.posZ + d0));
+	    	                    List<Entity> list = this.world.getEntitiesWithinAABBExcludingEntity(this, new AxisAlignedBB(entityLightningBolt.posX - d0, entityLightningBolt.posY - d0, entityLightningBolt.posZ - d0, entityLightningBolt.posX + d0, entityLightningBolt.posY + 6.0D + d0, entityLightningBolt.posZ + d0));
 	
 	    	                    for (int i1 = 0; i1 < list.size(); ++i1)
 	    	                    {
@@ -788,19 +788,19 @@ public class EntityBEArrow extends EntityArrow implements IProjectile
     	    			int itemMeta = this.getArrowType().ordinal();
     	    			for (int ii = 0; ii < 16; ++ii)
     	    			{
-    	    				this.worldObj.spawnParticle(EnumParticleTypes.ITEM_CRACK, this.posX, this.posY, this.posZ, ((double)this.rand.nextFloat() - 0.5D) * 0.08D, ((double)this.rand.nextFloat() - 0.5D) * 0.08D, ((double)this.rand.nextFloat() - 0.5D) * 0.08D, new int[] {itemId, itemMeta});                
+    	    				this.world.spawnParticle(EnumParticleTypes.ITEM_CRACK, this.posX, this.posY, this.posZ, ((double)this.rand.nextFloat() - 0.5D) * 0.08D, ((double)this.rand.nextFloat() - 0.5D) * 0.08D, ((double)this.rand.nextFloat() - 0.5D) * 0.08D, new int[] {itemId, itemMeta});                
     	    			}
     	    			this.setDead();
     	    		}
 
-    				if (!this.worldObj.isRemote)
+    				if (!this.world.isRemote)
     				{
     					entitylivingbase.setArrowCountInEntity(entitylivingbase.getArrowCountInEntity() + 1);
     				}
 
     				if (this.knockbackStrength > 0)
     				{
-    					float f1 = MathHelper.sqrt_double(this.motionX * this.motionX + this.motionZ * this.motionZ);
+    					float f1 = MathHelper.sqrt(this.motionX * this.motionX + this.motionZ * this.motionZ);
 
     					if (f1 > 0.0F)
     					{
@@ -841,7 +841,7 @@ public class EntityBEArrow extends EntityArrow implements IProjectile
     			this.prevRotationYaw += 180.0F;
     			this.ticksInAir = 0;
 
-    			if (!this.worldObj.isRemote && this.motionX * this.motionX + this.motionY * this.motionY + this.motionZ * this.motionZ < 0.0010000000474974513D)
+    			if (!this.world.isRemote && this.motionX * this.motionX + this.motionY * this.motionY + this.motionZ * this.motionZ < 0.0010000000474974513D)
     			{
     				if (this.pickupStatus == EntityBEArrow.PickupStatus.ALLOWED)
     				{
@@ -858,13 +858,13 @@ public class EntityBEArrow extends EntityArrow implements IProjectile
     		this.xTile = blockpos.getX();
     		this.yTile = blockpos.getY();
     		this.zTile = blockpos.getZ();
-    		IBlockState iblockstate = this.worldObj.getBlockState(blockpos);
+    		IBlockState iblockstate = this.world.getBlockState(blockpos);
     		this.inTile = iblockstate.getBlock();
     		this.inData = this.inTile.getMetaFromState(iblockstate);
     		this.motionX = (double)((float)(raytraceResultIn.hitVec.xCoord - this.posX));
     		this.motionY = (double)((float)(raytraceResultIn.hitVec.yCoord - this.posY));
     		this.motionZ = (double)((float)(raytraceResultIn.hitVec.zCoord - this.posZ));
-    		float f2 = MathHelper.sqrt_double(this.motionX * this.motionX + this.motionY * this.motionY + this.motionZ * this.motionZ);
+    		float f2 = MathHelper.sqrt(this.motionX * this.motionX + this.motionY * this.motionY + this.motionZ * this.motionZ);
     		this.posX -= this.motionX / (double)f2 * 0.05000000074505806D;
     		this.posY -= this.motionY / (double)f2 * 0.05000000074505806D;
     		this.posZ -= this.motionZ / (double)f2 * 0.05000000074505806D;
@@ -875,7 +875,7 @@ public class EntityBEArrow extends EntityArrow implements IProjectile
 
     		if (iblockstate.getMaterial() != Material.AIR)
     		{
-    			this.inTile.onEntityCollidedWithBlock(this.worldObj, blockpos, iblockstate, this);
+    			this.inTile.onEntityCollidedWithBlock(this.world, blockpos, iblockstate, this);
     		}
     	}
     }
@@ -909,7 +909,7 @@ public class EntityBEArrow extends EntityArrow implements IProjectile
     protected Entity findEntityOnPath(Vec3d start, Vec3d end)
     {
         Entity entity = null;
-        List<Entity> list = this.worldObj.getEntitiesInAABBexcluding(this, this.getEntityBoundingBox().addCoord(this.motionX, this.motionY, this.motionZ).expandXyz(1.0D), ARROW_TARGETS);
+        List<Entity> list = this.world.getEntitiesInAABBexcluding(this, this.getEntityBoundingBox().addCoord(this.motionX, this.motionY, this.motionZ).expandXyz(1.0D), ARROW_TARGETS);
         double d0 = 0.0D;
 
         for (int i = 0; i < list.size(); ++i)
@@ -998,7 +998,7 @@ public class EntityBEArrow extends EntityArrow implements IProjectile
     @Override
     public void onCollideWithPlayer(EntityPlayer entityIn)
     {
-        if (!this.worldObj.isRemote && this.inGround && this.arrowShake <= 0)
+        if (!this.world.isRemote && this.inGround && this.arrowShake <= 0)
         {
             boolean flag = this.pickupStatus == EntityBEArrow.PickupStatus.ALLOWED || this.pickupStatus == EntityBEArrow.PickupStatus.CREATIVE_ONLY && entityIn.capabilities.isCreativeMode;
 

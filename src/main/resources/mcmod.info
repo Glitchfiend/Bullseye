@@ -1,5 +1,5 @@
 [{
-    "modid": "Bullseye",
+    "modid": "bullseye",
     "name": "Bullseye",
     "description": "Adds new arrows, including fire arrows, dye arrows, bomb arrows, and more!",
     "version": "${mod_version}",

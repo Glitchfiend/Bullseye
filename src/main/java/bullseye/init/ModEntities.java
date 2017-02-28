@@ -4,6 +4,7 @@ import java.util.Map;
 
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityList.EntityEggInfo;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.common.ModContainer;
@@ -34,7 +35,7 @@ public class ModEntities
     {
         int beEntityId = nextBEEntityId;
         nextBEEntityId++;
-        EntityRegistry.registerModEntity(entityClass, entityName, beEntityId, Bullseye.instance, trackingRange, updateFrequency, sendsVelocityUpdates);
+        EntityRegistry.registerModEntity(new ResourceLocation(Bullseye.MOD_ID, entityName), entityClass, entityName, beEntityId, Bullseye.instance, trackingRange, updateFrequency, sendsVelocityUpdates);
         idToBEEntityName.put(beEntityId, entityName);
         return beEntityId;
     }

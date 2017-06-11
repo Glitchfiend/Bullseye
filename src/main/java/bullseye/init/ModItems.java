@@ -64,7 +64,7 @@ public class ModItems
             if (item.getHasSubtypes())
             {
                 NonNullList<ItemStack> subItems = NonNullList.create();
-                item.getSubItems(item, CreativeTabBE.instance, subItems);
+                item.getSubItems(CreativeTabBE.instance, subItems);
                 for (ItemStack subItem : subItems)
                 {
                     String subItemName = item.getUnlocalizedName(subItem);

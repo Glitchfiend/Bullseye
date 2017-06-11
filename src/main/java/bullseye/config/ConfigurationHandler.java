@@ -19,7 +19,7 @@ public class ConfigurationHandler
 {
     public static Configuration config;
 
-    public static String arrowSettings = "Arrow Settings";
+    public static final String ARROW_SETTINGS = "Arrow Settings";
     
     public static boolean explodeBombArrows;
     public static boolean burnFireArrows;
@@ -38,9 +38,9 @@ public class ConfigurationHandler
     {
         try
         {
-            explodeBombArrows = config.getBoolean("Bombs Arrows Destroy Blocks", arrowSettings, true, "Allow Bomb Arrows to destroy blocks.");
-            burnFireArrows = config.getBoolean("Fire Arrows Burn Blocks", arrowSettings, true, "Allow Fire Arrows to catch fire to blocks.");
-            fireLightningArrows = config.getBoolean("Lightning Arrows Burn Blocks", arrowSettings, true, "Allow Lightning Arrows to catch fire to blocks.");
+            explodeBombArrows = config.getBoolean("Bombs Arrows Destroy Blocks", ARROW_SETTINGS, true, "Allow Bomb Arrows to destroy blocks.");
+            burnFireArrows = config.getBoolean("Fire Arrows Burn Blocks", ARROW_SETTINGS, true, "Allow Fire Arrows to catch fire to blocks.");
+            fireLightningArrows = config.getBoolean("Lightning Arrows Burn Blocks", ARROW_SETTINGS, true, "Allow Lightning Arrows to catch fire to blocks.");
         }
         catch (Exception e)
         {

@@ -63,11 +63,14 @@ public class ItemDyeArrow extends ItemArrow
     // add all the gem types as separate items in the creative tab
     @Override
     @SideOnly(Side.CLIENT)
-    public void getSubItems(Item itemIn, CreativeTabs tab, NonNullList<ItemStack> subItems)
+    public void getSubItems(CreativeTabs tab, NonNullList<ItemStack> subItems)
     {
-        for (DyeType dyeType : DyeType.values())
+        if (this.func_194125_a(tab))
         {
-            subItems.add(new ItemStack(itemIn, 1, dyeType.ordinal()));
+            for (DyeType dyeType : DyeType.values())
+            {
+                subItems.add(new ItemStack(this, 1, dyeType.ordinal()));
+            }
         }
     }
     

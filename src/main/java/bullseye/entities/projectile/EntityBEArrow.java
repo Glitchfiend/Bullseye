@@ -1030,13 +1030,6 @@ public class EntityBEArrow extends EntityArrow implements IProjectile
         return false;
     }
 
-    @SideOnly(Side.CLIENT)
-    @Override
-    public int getBrightnessForRender(float partialTicks)
-    {
-        return 15728880;
-    }
-
     @Override
     public void setDamage(double damageIn)
     {

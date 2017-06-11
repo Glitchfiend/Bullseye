@@ -1,6 +1,5 @@
 package bullseye.entities.projectile;
 
-import java.util.Collection;
 import java.util.List;
 
 import javax.annotation.Nullable;
@@ -26,7 +25,6 @@ import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.entity.projectile.EntityArrow;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
-import net.minecraft.init.PotionTypes;
 import net.minecraft.init.SoundEvents;
 import net.minecraft.item.EnumDyeColor;
 import net.minecraft.item.Item;
@@ -37,8 +35,6 @@ import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.network.datasync.DataSerializers;
 import net.minecraft.network.datasync.EntityDataManager;
 import net.minecraft.network.play.server.SPacketChangeGameState;
-import net.minecraft.potion.PotionEffect;
-import net.minecraft.potion.PotionUtils;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.EntitySelectors;
 import net.minecraft.util.EnumParticleTypes;
@@ -460,7 +456,7 @@ public class EntityDyeArrow extends EntityArrow implements IProjectile
                             if (itemstack != null && (itemstack.getItem() == Items.LEATHER_HELMET || itemstack.getItem() == Items.LEATHER_CHESTPLATE || itemstack.getItem() == Items.LEATHER_LEGGINGS || itemstack.getItem() == Items.LEATHER_BOOTS))
                             {
                                 ItemArmor itemarmor = (ItemArmor)itemstack.getItem();
-                                itemarmor.setColor(itemstack, EnumDyeColor.byMetadata(dyeType.ordinal()).getMapColor().colorValue);
+                                itemarmor.setColor(itemstack, EnumDyeColor.byMetadata(dyeType.ordinal()).func_193350_e());
                             }
                         }
                     }
@@ -680,13 +676,6 @@ public class EntityDyeArrow extends EntityArrow implements IProjectile
         return false;
     }
 
-    @SideOnly(Side.CLIENT)
-    @Override
-    public int getBrightnessForRender(float partialTicks)
-    {
-        return 15728880;
-    }
-    
     @Override
     public void setDamage(double damageIn)
     {

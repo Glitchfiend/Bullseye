@@ -1,11 +1,9 @@
 package bullseye.entities.projectile;
 
-import org.lwjgl.opengl.GL11;
-
 import bullseye.item.ItemDyeArrow;
+import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.Tessellator;
-import net.minecraft.client.renderer.VertexBuffer;
 import net.minecraft.client.renderer.entity.Render;
 import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
@@ -40,7 +38,7 @@ public class RenderDyeArrow extends Render<EntityDyeArrow>
         GlStateManager.rotate(arrow.prevRotationYaw + (arrow.rotationYaw - arrow.prevRotationYaw) * partialTicks - 90.0F, 0.0F, 1.0F, 0.0F);
         GlStateManager.rotate(arrow.prevRotationPitch + (arrow.rotationPitch - arrow.prevRotationPitch) * partialTicks, 0.0F, 0.0F, 1.0F);
         Tessellator tessellator = Tessellator.getInstance();
-        VertexBuffer vertexbuffer = tessellator.getBuffer();
+        BufferBuilder bufferbuilder = tessellator.getBuffer();
         int i = 0;
         float f = 0.0F;
         float f1 = 0.5F;
@@ -71,29 +69,29 @@ public class RenderDyeArrow extends Render<EntityDyeArrow>
         }
 
         GlStateManager.glNormal3f(f8, 0.0F, 0.0F);
-        vertexbuffer.begin(7, DefaultVertexFormats.POSITION_TEX);
-        vertexbuffer.pos(-7.0D, -2.0D, -2.0D).tex((double)f4, (double)f6).endVertex();
-        vertexbuffer.pos(-7.0D, -2.0D, 2.0D).tex((double)f5, (double)f6).endVertex();
-        vertexbuffer.pos(-7.0D, 2.0D, 2.0D).tex((double)f5, (double)f7).endVertex();
-        vertexbuffer.pos(-7.0D, 2.0D, -2.0D).tex((double)f4, (double)f7).endVertex();
+        bufferbuilder.begin(7, DefaultVertexFormats.POSITION_TEX);
+        bufferbuilder.pos(-7.0D, -2.0D, -2.0D).tex((double)f4, (double)f6).endVertex();
+        bufferbuilder.pos(-7.0D, -2.0D, 2.0D).tex((double)f5, (double)f6).endVertex();
+        bufferbuilder.pos(-7.0D, 2.0D, 2.0D).tex((double)f5, (double)f7).endVertex();
+        bufferbuilder.pos(-7.0D, 2.0D, -2.0D).tex((double)f4, (double)f7).endVertex();
         tessellator.draw();
         GlStateManager.glNormal3f(-f8, 0.0F, 0.0F);
-        vertexbuffer.begin(7, DefaultVertexFormats.POSITION_TEX);
-        vertexbuffer.pos(-7.0D, 2.0D, -2.0D).tex((double)f4, (double)f6).endVertex();
-        vertexbuffer.pos(-7.0D, 2.0D, 2.0D).tex((double)f5, (double)f6).endVertex();
-        vertexbuffer.pos(-7.0D, -2.0D, 2.0D).tex((double)f5, (double)f7).endVertex();
-        vertexbuffer.pos(-7.0D, -2.0D, -2.0D).tex((double)f4, (double)f7).endVertex();
+        bufferbuilder.begin(7, DefaultVertexFormats.POSITION_TEX);
+        bufferbuilder.pos(-7.0D, 2.0D, -2.0D).tex((double)f4, (double)f6).endVertex();
+        bufferbuilder.pos(-7.0D, 2.0D, 2.0D).tex((double)f5, (double)f6).endVertex();
+        bufferbuilder.pos(-7.0D, -2.0D, 2.0D).tex((double)f5, (double)f7).endVertex();
+        bufferbuilder.pos(-7.0D, -2.0D, -2.0D).tex((double)f4, (double)f7).endVertex();
         tessellator.draw();
 
         for (int j = 0; j < 4; ++j)
         {
             GlStateManager.rotate(90.0F, 1.0F, 0.0F, 0.0F);
             GlStateManager.glNormal3f(0.0F, 0.0F, f8);
-            vertexbuffer.begin(7, DefaultVertexFormats.POSITION_TEX);
-            vertexbuffer.pos(-8.0D, -2.0D, 0.0D).tex((double)f, (double)f2).endVertex();
-            vertexbuffer.pos(8.0D, -2.0D, 0.0D).tex((double)f1, (double)f2).endVertex();
-            vertexbuffer.pos(8.0D, 2.0D, 0.0D).tex((double)f1, (double)f3).endVertex();
-            vertexbuffer.pos(-8.0D, 2.0D, 0.0D).tex((double)f, (double)f3).endVertex();
+            bufferbuilder.begin(7, DefaultVertexFormats.POSITION_TEX);
+            bufferbuilder.pos(-8.0D, -2.0D, 0.0D).tex((double)f, (double)f2).endVertex();
+            bufferbuilder.pos(8.0D, -2.0D, 0.0D).tex((double)f1, (double)f2).endVertex();
+            bufferbuilder.pos(8.0D, 2.0D, 0.0D).tex((double)f1, (double)f3).endVertex();
+            bufferbuilder.pos(-8.0D, 2.0D, 0.0D).tex((double)f, (double)f3).endVertex();
             tessellator.draw();
         }
 

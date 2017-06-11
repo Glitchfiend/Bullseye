@@ -79,11 +79,14 @@ public class ItemBEArrow extends ItemArrow
     // add all the gem types as separate items in the creative tab
     @Override
     @SideOnly(Side.CLIENT)
-    public void getSubItems(Item itemIn, CreativeTabs tab, NonNullList<ItemStack> subItems)
+    public void getSubItems(CreativeTabs tab, NonNullList<ItemStack> subItems)
     {
-        for (ArrowType arrowType : ArrowType.values())
+        if (this.func_194125_a(tab))
         {
-            subItems.add(new ItemStack(itemIn, 1, arrowType.ordinal()));
+            for (ArrowType arrowType : ArrowType.values())
+            {
+                subItems.add(new ItemStack(this, 1, arrowType.ordinal()));
+            }
         }
     }
     

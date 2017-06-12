@@ -13,6 +13,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import bullseye.init.ModConfiguration;
+import bullseye.init.ModCrafting;
 import bullseye.init.ModEntities;
 import bullseye.init.ModItems;
 import bullseye.init.ModVanillaCompat;
@@ -48,6 +49,7 @@ public class Bullseye
     	ModEntities.init();
         ModItems.init();
         ModVanillaCompat.init();
+        ModCrafting.init();
         
         proxy.registerRenderers();
     }

@@ -1,6 +1,7 @@
 itemGroup.tabBullseye=Bullseye
 
 config.category.arrowSettings.title=Arrow Settings
+config.category.arrowSettings.tooltip=Toggle properties for different types of arrows
 
 item.bomb_arrow.name=Bomb Arrow
 item.diamond_arrow.name=Diamond Arrow

@@ -30,6 +30,7 @@ public class ModCrafting
         addShapedRecipe(new ItemStack(BEItems.arrow, 4, ItemBEArrow.ArrowType.FIRE.ordinal()), new Object [] {"T", "S", "F", 'T', Items.BLAZE_POWDER, 'S', "stickWood", 'F', Items.FEATHER});
         addShapedRecipe(new ItemStack(BEItems.arrow, 4, ItemBEArrow.ArrowType.ICE.ordinal()), new Object [] {"T", "S", "F", 'T', Items.SNOWBALL, 'S', "stickWood", 'F', Items.FEATHER});
         addShapedRecipe(new ItemStack(BEItems.arrow, 4, ItemBEArrow.ArrowType.LIGHTNING.ordinal()), new Object [] {"T", "S", "F", 'T', Items.NETHER_STAR, 'S', "stickWood", 'F', Items.FEATHER});
+        addShapedRecipe(new ItemStack(BEItems.arrow, 4, ItemBEArrow.ArrowType.PRISMARINE.ordinal()), new Object [] {"T", "S", "F", 'T', Items.PRISMARINE_SHARD, 'S', "stickWood", 'F', Items.FEATHER});
         
         addShapedRecipe(new ItemStack(BEItems.dye_arrow, 4, ItemDyeArrow.DyeType.RED.ordinal()), new Object [] {"D", "S", "F", 'D', "dyeRed", 'S', "stickWood", 'F', Items.FEATHER});
         addShapedRecipe(new ItemStack(BEItems.dye_arrow, 4, ItemDyeArrow.DyeType.ORANGE.ordinal()), new Object [] {"D", "S", "F", 'D', "dyeOrange", 'S', "stickWood", 'F', Items.FEATHER});

@@ -20,7 +20,7 @@ public class ItemBEArrow extends ItemArrow
 {
     public static enum ArrowType implements IStringSerializable
     {
-        TRAINING, EGG, EXTINGUISHING, DIAMOND, BOMB, FIRE, ICE, LIGHTNING;
+        TRAINING, EGG, EXTINGUISHING, DIAMOND, BOMB, FIRE, ICE, LIGHTNING, PRISMARINE;
         @Override
         public String getName()
         {
@@ -43,7 +43,7 @@ public class ItemBEArrow extends ItemArrow
 	            case EXTINGUISHING:
 	                return 1.0D;
 	            case DIAMOND:
-                    return 5.0D;
+                    return 4.0D;
                 case FIRE:
                     return 1.5D;
                 case ICE:
@@ -52,6 +52,8 @@ public class ItemBEArrow extends ItemArrow
                     return 0.5D;
                 case BOMB:
                     return 1.25D;
+                case PRISMARINE:
+                    return 1.75D;
                 default:
                     return 2.0D;
             }

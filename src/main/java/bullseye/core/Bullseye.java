@@ -28,7 +28,7 @@ public class Bullseye
 {
     public static final String MOD_NAME = "Bullseye";
     public static final String MOD_ID = "bullseye";
-    public static final String MOD_VERSION = "@MOD_VERSION@";
+    public static final String MOD_VERSION = "3.0.1";
     public static final String GUI_FACTORY = "bullseye.client.gui.GuiBEFactory";
     
     @Instance(MOD_ID)

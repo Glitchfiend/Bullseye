@@ -21,6 +21,7 @@ import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.IProjectile;
+import net.minecraft.entity.MoverType;
 import net.minecraft.entity.effect.EntityLightningBolt;
 import net.minecraft.entity.item.EntityTNTPrimed;
 import net.minecraft.entity.monster.EntityEnderman;
@@ -29,6 +30,7 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.entity.projectile.EntityArrow;
 import net.minecraft.init.Blocks;
+import net.minecraft.init.Enchantments;
 import net.minecraft.init.Items;
 import net.minecraft.init.SoundEvents;
 import net.minecraft.item.Item;
@@ -141,18 +143,18 @@ public class EntityBEArrow extends EntityArrow implements IProjectile
     }
     
     @Override
-    public void setAim(Entity p_184547_1_, float p_184547_2_, float p_184547_3_, float p_184547_4_, float p_184547_5_, float p_184547_6_)
+    public void setAim(Entity shooter, float pitch, float yaw, float p_184547_4_, float velocity, float inaccuracy)
     {
-        float f = -MathHelper.sin(p_184547_3_ * 0.017453292F) * MathHelper.cos(p_184547_2_ * 0.017453292F);
-        float f1 = -MathHelper.sin(p_184547_2_ * 0.017453292F);
-        float f2 = MathHelper.cos(p_184547_3_ * 0.017453292F) * MathHelper.cos(p_184547_2_ * 0.017453292F);
-        this.setThrowableHeading((double)f, (double)f1, (double)f2, p_184547_5_, p_184547_6_);
-        this.motionX += p_184547_1_.motionX;
-        this.motionZ += p_184547_1_.motionZ;
+        float f = -MathHelper.sin(yaw * 0.017453292F) * MathHelper.cos(pitch * 0.017453292F);
+        float f1 = -MathHelper.sin(pitch * 0.017453292F);
+        float f2 = MathHelper.cos(yaw * 0.017453292F) * MathHelper.cos(pitch * 0.017453292F);
+        this.setThrowableHeading((double)f, (double)f1, (double)f2, velocity, inaccuracy);
+        this.motionX += shooter.motionX;
+        this.motionZ += shooter.motionZ;
 
-        if (!p_184547_1_.onGround)
+        if (!shooter.onGround)
         {
-            this.motionY += p_184547_1_.motionY;
+            this.motionY += shooter.motionY;
         }
     }
     
@@ -173,8 +175,10 @@ public class EntityBEArrow extends EntityArrow implements IProjectile
         this.motionY = y;
         this.motionZ = z;
         float f1 = MathHelper.sqrt(x * x + z * z);
-        this.prevRotationYaw = this.rotationYaw = (float)(MathHelper.atan2(x, z) * (180D / Math.PI));
-        this.prevRotationPitch = this.rotationPitch = (float)(MathHelper.atan2(y, (double)f1) * (180D / Math.PI));
+        this.rotationYaw = (float)(MathHelper.atan2(x, z) * (180D / Math.PI));
+        this.rotationPitch = (float)(MathHelper.atan2(y, (double)f1) * (180D / Math.PI));
+        this.prevRotationYaw = this.rotationYaw;
+        this.prevRotationPitch = this.rotationPitch;
         this.ticksInGround = 0;
     }
 
@@ -197,8 +201,8 @@ public class EntityBEArrow extends EntityArrow implements IProjectile
         if (this.prevRotationPitch == 0.0F && this.prevRotationYaw == 0.0F)
         {
             float f = MathHelper.sqrt(x * x + z * z);
-            this.prevRotationYaw = this.rotationYaw = (float)(MathHelper.atan2(x, z) * (180D / Math.PI));
-            this.prevRotationPitch = this.rotationPitch = (float)(MathHelper.atan2(y, (double)f) * (180D / Math.PI));
+            this.rotationPitch = (float)(MathHelper.atan2(y, (double)f) * (180D / Math.PI));
+            this.rotationYaw = (float)(MathHelper.atan2(x, z) * (180D / Math.PI));
             this.prevRotationPitch = this.rotationPitch;
             this.prevRotationYaw = this.rotationYaw;
             this.setLocationAndAngles(this.posX, this.posY, this.posZ, this.rotationYaw, this.rotationPitch);
@@ -212,8 +216,10 @@ public class EntityBEArrow extends EntityArrow implements IProjectile
         if (this.prevRotationPitch == 0.0F && this.prevRotationYaw == 0.0F)
         {
             float f = MathHelper.sqrt(this.motionX * this.motionX + this.motionZ * this.motionZ);
-            this.prevRotationYaw = this.rotationYaw = (float)(MathHelper.atan2(this.motionX, this.motionZ) * 180.0D / Math.PI);
-            this.prevRotationPitch = this.rotationPitch = (float)(MathHelper.atan2(this.motionY, (double)f) * 180.0D / Math.PI);
+            this.rotationYaw = (float)(MathHelper.atan2(this.motionX, this.motionZ) * (180D / Math.PI));
+            this.rotationPitch = (float)(MathHelper.atan2(this.motionY, (double)f) * (180D / Math.PI));
+            this.prevRotationYaw = this.rotationYaw;
+            this.prevRotationPitch = this.rotationPitch;
         }
 
         BlockPos blockpos = new BlockPos(this.xTile, this.yTile, this.zTile);
@@ -239,11 +245,20 @@ public class EntityBEArrow extends EntityArrow implements IProjectile
         {
             int j = block.getMetaFromState(iblockstate);
 
-            if (block == this.inTile && j == this.inData)
+            if ((block != this.inTile || j != this.inData) && !this.world.collidesWithAnyBlock(this.getEntityBoundingBox().expandXyz(0.05D)))
             {
-            	//Arrow Effects
+                this.inGround = false;
+                this.motionX *= (double)(this.rand.nextFloat() * 0.2F);
+                this.motionY *= (double)(this.rand.nextFloat() * 0.2F);
+                this.motionZ *= (double)(this.rand.nextFloat() * 0.2F);
+                this.ticksInGround = 0;
+                this.ticksInAir = 0;
+            }
+            else
+            {
+            	//Normal Arrows
             	ItemBEArrow.ArrowType arrowType = this.getArrowType();
-            	if (arrowType == ItemBEArrow.ArrowType.TRAINING)
+            	if (arrowType == ItemBEArrow.ArrowType.TRAINING || arrowType == ItemBEArrow.ArrowType.DIAMOND || arrowType == ItemBEArrow.ArrowType.PRISMARINE)
             	{
                 	++this.ticksInGround;
 
@@ -252,6 +267,8 @@ public class EntityBEArrow extends EntityArrow implements IProjectile
                         this.setDead();
                     }
             	}
+            	
+            	//Egg Arrows
             	if (arrowType == ItemBEArrow.ArrowType.EGG)
             	{
             		if (!this.world.isRemote)
@@ -273,6 +290,8 @@ public class EntityBEArrow extends EntityArrow implements IProjectile
         	        }
         			this.setDead();
             	}
+            	
+            	//Extinguishing Arrows
             	if (arrowType == ItemBEArrow.ArrowType.EXTINGUISHING)
             	{
             		if (!this.world.isRemote)
@@ -322,15 +341,8 @@ public class EntityBEArrow extends EntityArrow implements IProjectile
         	        }
         			this.setDead();
             	}
-            	if (arrowType == ItemBEArrow.ArrowType.DIAMOND)
-            	{
-                	++this.ticksInGround;
-
-                    if (this.ticksInGround >= 1200)
-                    {
-                        this.setDead();
-                    }
-            	}
+            	
+            	//Fire Arrows
             	if (arrowType == ItemBEArrow.ArrowType.FIRE)
             	{
             		if (!this.world.isRemote)
@@ -376,6 +388,8 @@ public class EntityBEArrow extends EntityArrow implements IProjectile
         	        }
         			this.setDead();
             	}
+            	
+            	//Ice Arrows
             	if (arrowType == ItemBEArrow.ArrowType.ICE)
             	{
             		if (!this.world.isRemote)
@@ -401,6 +415,8 @@ public class EntityBEArrow extends EntityArrow implements IProjectile
         	        }
         			this.setDead();
             	}
+            	
+            	//Bomb Arrows
             	if (arrowType == ItemBEArrow.ArrowType.BOMB)
             	{
             		if (!this.world.isRemote)
@@ -416,6 +432,8 @@ public class EntityBEArrow extends EntityArrow implements IProjectile
         	        }
                     this.setDead();
             	}
+            	
+            	//Lightning Arrows
             	if (arrowType == ItemBEArrow.ArrowType.LIGHTNING)
             	{
             		if (!this.world.isRemote)
@@ -445,18 +463,12 @@ public class EntityBEArrow extends EntityArrow implements IProjectile
                     this.setDead();
             	}
             }
-            else
-            {
-                this.inGround = false;
-                this.motionX *= (double)(this.rand.nextFloat() * 0.2F);
-                this.motionY *= (double)(this.rand.nextFloat() * 0.2F);
-                this.motionZ *= (double)(this.rand.nextFloat() * 0.2F);
-                this.ticksInGround = 0;
-                this.ticksInAir = 0;
-            }
+            
+            ++this.timeInGround;
         }
         else
         {
+            this.timeInGround = 0;
             ++this.ticksInAir;
             ItemBEArrow.ArrowType arrowType = this.getArrowType();
             this.damage = arrowType.getDamageInflicted();
@@ -478,7 +490,7 @@ public class EntityBEArrow extends EntityArrow implements IProjectile
                 raytraceresult = new RayTraceResult(entity);
             }
 
-            if (raytraceresult != null && raytraceresult.entityHit != null && raytraceresult.entityHit instanceof EntityPlayer)
+            if (raytraceresult != null && raytraceresult.entityHit instanceof EntityPlayer)
             {
                 EntityPlayer entityplayer = (EntityPlayer)raytraceresult.entityHit;
 
@@ -493,7 +505,7 @@ public class EntityBEArrow extends EntityArrow implements IProjectile
                 this.onHit(raytraceresult);
             }
             
-            if (arrowType == ItemBEArrow.ArrowType.TRAINING || arrowType == ItemBEArrow.ArrowType.EGG || arrowType == ItemBEArrow.ArrowType.DIAMOND)
+            if (arrowType == ItemBEArrow.ArrowType.TRAINING || arrowType == ItemBEArrow.ArrowType.EGG || arrowType == ItemBEArrow.ArrowType.DIAMOND || arrowType == ItemBEArrow.ArrowType.PRISMARINE)
             {
 	            if (this.getIsCritical())
 	            {
@@ -571,7 +583,10 @@ public class EntityBEArrow extends EntityArrow implements IProjectile
                     this.world.spawnParticle(EnumParticleTypes.WATER_BUBBLE, this.posX - this.motionX * (double)f8, this.posY - this.motionY * (double)f8, this.posZ - this.motionZ * (double)f8, this.motionX, this.motionY, this.motionZ, new int[0]);
                 }
 
-                f4 = 0.6F;
+                if (arrowType != ItemBEArrow.ArrowType.PRISMARINE)
+                {
+                    f4 = 0.6F;
+                }
             }
 
             if (this.isWet())
@@ -582,7 +597,12 @@ public class EntityBEArrow extends EntityArrow implements IProjectile
             this.motionX *= (double)f4;
             this.motionY *= (double)f4;
             this.motionZ *= (double)f4;
-            this.motionY -= (double)f6;
+            
+            if (!this.hasNoGravity())
+            {
+                this.motionY -= 0.05000000074505806D;
+            }
+            
             this.setPosition(this.posX, this.posY, this.posZ);
             this.doBlockCollisions();
         }
@@ -591,7 +611,7 @@ public class EntityBEArrow extends EntityArrow implements IProjectile
     @Override
     protected void onHit(RayTraceResult raytraceResultIn)
     {
-    	Entity entity = raytraceResultIn.entityHit;
+        Entity entity = raytraceResultIn.entityHit;
     	ItemBEArrow.ArrowType arrowType = this.getArrowType();
     	
     	if (raytraceResultIn != null)
@@ -880,6 +900,19 @@ public class EntityBEArrow extends EntityArrow implements IProjectile
     	}
     }
     
+    @Override
+    public void move(MoverType type, double x, double y, double z)
+    {
+        super.move(type, x, y, z);
+
+        if (this.inGround)
+        {
+            this.xTile = MathHelper.floor(this.posX);
+            this.yTile = MathHelper.floor(this.posY);
+            this.zTile = MathHelper.floor(this.posZ);
+        }
+    }
+    
     protected RayTraceResult rayTraceLiquid(World worldIn, boolean useLiquids)
     {
         float f = this.rotationPitch;
@@ -914,7 +947,7 @@ public class EntityBEArrow extends EntityArrow implements IProjectile
 
         for (int i = 0; i < list.size(); ++i)
         {
-            Entity entity1 = (Entity)list.get(i);
+            Entity entity1 = list.get(i);
 
             if (entity1 != this.shootingEntity || this.ticksInAir >= 5)
             {
@@ -1009,7 +1042,6 @@ public class EntityBEArrow extends EntityArrow implements IProjectile
 
             if (flag)
             {
-                this.playSound(SoundEvents.ENTITY_ITEM_PICKUP, 0.2F, ((this.rand.nextFloat() - this.rand.nextFloat()) * 0.7F + 1.0F) * 2.0F);
                 entityIn.onItemPickup(this, 1);
                 this.setDead();
             }
@@ -1080,6 +1112,29 @@ public class EntityBEArrow extends EntityArrow implements IProjectile
     {
         byte b0 = ((Byte)this.dataManager.get(CRITICAL)).byteValue();
         return (b0 & 1) != 0;
+    }
+    
+    @Override
+    public void setEnchantmentEffectsFromEntity(EntityLivingBase p_190547_1_, float p_190547_2_)
+    {
+        int i = EnchantmentHelper.getMaxEnchantmentLevel(Enchantments.POWER, p_190547_1_);
+        int j = EnchantmentHelper.getMaxEnchantmentLevel(Enchantments.PUNCH, p_190547_1_);
+        this.setDamage((double)(p_190547_2_ * 2.0F) + this.rand.nextGaussian() * 0.25D + (double)((float)this.world.getDifficulty().getDifficultyId() * 0.11F));
+
+        if (i > 0)
+        {
+            this.setDamage(this.getDamage() + (double)i * 0.5D + 0.5D);
+        }
+
+        if (j > 0)
+        {
+            this.setKnockbackStrength(j);
+        }
+
+        if (EnchantmentHelper.getMaxEnchantmentLevel(Enchantments.FLAME, p_190547_1_) > 0)
+        {
+            this.setFire(100);
+        }
     }
 
     public static enum PickupStatus

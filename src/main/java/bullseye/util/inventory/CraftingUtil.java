@@ -42,7 +42,7 @@ public class CraftingUtil
             throw new IllegalArgumentException("Too many ingredients for shapeless recipe");
         }
 
-        ShapelessRecipes recipe = new ShapelessRecipes("Bullseye", output, ingredients);
+        ShapelessRecipes recipe = new ShapelessRecipes("bullseye", output, ingredients);
         CraftingManager.func_193372_a(unusedLocForOutput(output), recipe);
     }
 
@@ -56,7 +56,7 @@ public class CraftingUtil
         int height = pattern.size();
 
         NonNullList<Ingredient> ingredients = ShapedRecipes.func_192402_a(pattern.toArray(new String[pattern.size()]), key, width, height);
-        ShapedRecipes recipe = new ShapedRecipes("Bullseye", width, height, ingredients, output);
+        ShapedRecipes recipe = new ShapedRecipes("bullseye", width, height, ingredients, output);
         CraftingManager.func_193372_a(unusedLocForOutput(output), recipe);
     }
 

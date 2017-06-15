@@ -8,10 +8,10 @@ item.diamond_arrow.name=Diamond Arrow
 item.egg_arrow.name=Egg Arrow
 item.extinguishing_arrow.name=Extinguishing Arrow
 item.fire_arrow.name=Fire Arrow
-item.growth_arrow.name=Growth Arrow
 item.ice_arrow.name=Ice Arrow
 item.light_arrow.name=Light Arrow
 item.lightning_arrow.name=Lightning Arrow
+item.prismarine_arrow.name=Prismarine Arrow
 item.training_arrow.name=Training Arrow
 
 item.dye_arrow_red.name=Red Dye Arrow
@@ -38,10 +38,10 @@ entity.Bullseye.extinguishing_arrow.name=Extinguishing Arrow
 entity.Bullseye.diamond_arrow.name=Diamond Arrow
 entity.Bullseye.bomb_arrow.name=Bomb Arrow
 entity.Bullseye.fire_arrow.name=Fire Arrow
-entity.Bullseye.growth_arrow.name=Growth Arrow
 entity.Bullseye.ice_arrow.name=Ice Arrow
 entity.Bullseye.light_arrow.name=Light Arrow
 entity.Bullseye.lightning_arrow.name=Lightning Arrow
+entity.Bullseye.prismarine_arrow.name=Prismarine Arrow
 
 entity.Bullseye.dye_arrow_red.name=Red Dye Arrow
 entity.Bullseye.dye_arrow_orange.name=Orange Dye Arrow

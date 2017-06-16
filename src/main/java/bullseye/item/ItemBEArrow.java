@@ -73,9 +73,9 @@ public class ItemBEArrow extends ItemArrow
     @Override
     public EntityArrow createArrow(World worldIn, ItemStack stack, EntityLivingBase shooter)
     {
-        EntityBEArrow entitybearrow = new EntityBEArrow(worldIn, shooter);
-        entitybearrow.setArrowType(ItemBEArrow.ArrowType.fromMeta(stack.getMetadata()));
-        return entitybearrow;
+        EntityBEArrow entityBEArrow = new EntityBEArrow(worldIn, shooter);
+        entityBEArrow.setArrowType(ItemBEArrow.ArrowType.fromMeta(stack.getMetadata()));
+        return entityBEArrow;
     }
    
     // add all the gem types as separate items in the creative tab

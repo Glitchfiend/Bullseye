@@ -46,6 +46,7 @@ import net.minecraft.util.EntitySelectors;
 import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundCategory;
+import net.minecraft.util.datafix.DataFixer;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
@@ -110,8 +111,8 @@ public class EntityBEArrow extends EntityArrow implements IProjectile
         }
     }
     
-    @SideOnly(Side.CLIENT)
     @Override
+    @SideOnly(Side.CLIENT)
     public boolean isInRangeToRenderDist(double distance)
     {
         double d0 = this.getEntityBoundingBox().getAverageEdgeLength() * 10.0D;
@@ -157,7 +158,7 @@ public class EntityBEArrow extends EntityArrow implements IProjectile
             this.motionY += shooter.motionY;
         }
     }
-    
+
     @Override
     public void setThrowableHeading(double x, double y, double z, float velocity, float inaccuracy)
     {
@@ -182,16 +183,16 @@ public class EntityBEArrow extends EntityArrow implements IProjectile
         this.ticksInGround = 0;
     }
 
-    @SideOnly(Side.CLIENT)
     @Override
+    @SideOnly(Side.CLIENT)
     public void setPositionAndRotationDirect(double x, double y, double z, float yaw, float pitch, int posRotationIncrements, boolean teleport)
     {
         this.setPosition(x, y, z);
         this.setRotation(yaw, pitch);
     }
 
-    @SideOnly(Side.CLIENT)
     @Override
+    @SideOnly(Side.CLIENT)
     public void setVelocity(double x, double y, double z)
     {
         this.motionX = x;
@@ -228,7 +229,7 @@ public class EntityBEArrow extends EntityArrow implements IProjectile
 
         if (iblockstate.getMaterial() != Material.AIR)
         {
-        	AxisAlignedBB axisalignedbb = iblockstate.getCollisionBoundingBox(this.world, blockpos);
+            AxisAlignedBB axisalignedbb = iblockstate.getCollisionBoundingBox(this.world, blockpos);
 
             if (axisalignedbb != Block.NULL_AABB && axisalignedbb.offset(blockpos).isVecInside(new Vec3d(this.posX, this.posY, this.posZ)))
             {
@@ -258,6 +259,7 @@ public class EntityBEArrow extends EntityArrow implements IProjectile
             {
             	//Normal Arrows
             	ItemBEArrow.ArrowType arrowType = this.getArrowType();
+            	
             	if (arrowType == ItemBEArrow.ArrowType.TRAINING || arrowType == ItemBEArrow.ArrowType.DIAMOND || arrowType == ItemBEArrow.ArrowType.PRISMARINE)
             	{
                 	++this.ticksInGround;
@@ -268,213 +270,20 @@ public class EntityBEArrow extends EntityArrow implements IProjectile
                     }
             	}
             	
-            	//Egg Arrows
-            	if (arrowType == ItemBEArrow.ArrowType.EGG)
-            	{
-            		if (!this.world.isRemote)
-                    {	
-            			int i = world.rand.nextInt(12);
-            			if (i == 0)
-            			{
-	                        EntityChicken entitychicken = new EntityChicken(this.world);
-	                        entitychicken.setGrowingAge(-24000);
-	                        entitychicken.setLocationAndAngles(this.posX, this.posY, this.posZ, this.rotationYaw, 0.0F);
-	                        this.world.spawnEntity(entitychicken);
-            			}
-                    }
-        	        int itemId = Item.getIdFromItem(BEItems.arrow);
-        	        int itemMeta = this.getArrowType().ordinal();
-        	        for (int ii = 0; ii < 16; ++ii)
-        	        {
-        	            this.world.spawnParticle(EnumParticleTypes.ITEM_CRACK, this.posX, this.posY, this.posZ, ((double)this.rand.nextFloat() - 0.5D) * 0.08D, ((double)this.rand.nextFloat() - 0.5D) * 0.08D, ((double)this.rand.nextFloat() - 0.5D) * 0.08D, new int[] {itemId, itemMeta});                
-        	        }
-        			this.setDead();
-            	}
-            	
-            	//Extinguishing Arrows
-            	if (arrowType == ItemBEArrow.ArrowType.EXTINGUISHING)
-            	{
-            		if (!this.world.isRemote)
-            		{
-            			for (int xx = -2; xx <= 2; xx++)
-            	        {
-            	            for (int yy = -2; yy <= 2; yy++)
-            	            {
-            	                for (int zz = -2; zz <= 2; zz++)
-            	                {
-            	                    BlockPos pos = blockpos.add(xx, yy - 1, zz);
-            	                
-			            			if (this.world.getBlockState(pos).getBlock() == Blocks.FIRE)
-			            			{
-			            				world.setBlockToAir(pos);
-			            			}
-			            			if (this.world.getBlockState(pos).getBlock() == Blocks.TORCH)
-			            			{
-			            				world.destroyBlock(pos, true);
-			            			}
-            	                }
-            	            }
-            	        }
-            			if (block == Blocks.STAINED_HARDENED_CLAY)
-            			{
-            				world.setBlockState(blockpos, Blocks.HARDENED_CLAY.getDefaultState());
-            			}
-            			if (block == Blocks.STAINED_GLASS)
-            			{
-            				world.setBlockState(blockpos, Blocks.GLASS.getDefaultState());
-            			}
-            			if (block == Blocks.STAINED_GLASS_PANE)
-            			{
-            				world.setBlockState(blockpos, Blocks.GLASS_PANE.getDefaultState());
-            			}
-            		}
-            		this.world.playSound((EntityPlayer)null, blockpos, SoundEvents.BLOCK_GLASS_BREAK, SoundCategory.BLOCKS, 0.5F, 2.6F + (this.world.rand.nextFloat() - this.world.rand.nextFloat()) * 0.8F);
-                	for (int i = 0; i < 8; ++i)
-                    {
-                        this.world.spawnParticle(EnumParticleTypes.WATER_SPLASH, (this.posX - 0.5D) + Math.random(), this.posY + 0.25D, (this.posZ - 0.5D) + Math.random(), 0.0D, 0.0D, 0.0D, new int[0]);
-                    }
-        	        int itemId = Item.getIdFromItem(BEItems.arrow);
-        	        int itemMeta = this.getArrowType().ordinal();
-        	        for (int ii = 0; ii < 16; ++ii)
-        	        {
-        	            this.world.spawnParticle(EnumParticleTypes.ITEM_CRACK, this.posX, this.posY, this.posZ, ((double)this.rand.nextFloat() - 0.5D) * 0.08D, ((double)this.rand.nextFloat() - 0.5D) * 0.08D, ((double)this.rand.nextFloat() - 0.5D) * 0.08D, new int[] {itemId, itemMeta});                
-        	        }
-        			this.setDead();
-            	}
-            	
-            	//Fire Arrows
-            	if (arrowType == ItemBEArrow.ArrowType.FIRE)
-            	{
-            		if (!this.world.isRemote)
-            		{
-            			if (world.getBlockState(blockpos) == Blocks.ICE.getDefaultState())
-            			{
-            				this.world.setBlockState(blockpos, Blocks.WATER.getDefaultState());
-            			}
-            			if (world.getBlockState(blockpos) == Blocks.FROSTED_ICE.getDefaultState())
-            			{
-            				this.world.setBlockState(blockpos, Blocks.WATER.getDefaultState());
-            			}
-            			if (world.getBlockState(blockpos) == Blocks.SNOW_LAYER.getDefaultState())
-            			{
-            				this.world.setBlockState(blockpos, Blocks.AIR.getDefaultState());
-            			}
-            			if (world.getBlockState(blockpos) == Blocks.SNOW.getDefaultState())
-            			{
-            				this.world.setBlockState(blockpos, Blocks.AIR.getDefaultState());
-            			}
-            			if (world.getBlockState(blockpos) == Blocks.PACKED_ICE.getDefaultState())
-            			{
-            				this.world.setBlockState(blockpos, Blocks.ICE.getDefaultState());
-            			}
-            			if (world.getBlockState(blockpos) == Blocks.TNT.getDefaultState())
-            			{
-            				EntityTNTPrimed entitytntprimed = new EntityTNTPrimed(this.world, (double)((float)blockpos.getX() + 0.5F), (double)blockpos.getY(), (double)((float)blockpos.getZ() + 0.5F), this.shootingEntity instanceof EntityLivingBase ? (EntityLivingBase)this.shootingEntity : null);
-            				this.world.spawnEntity(entitytntprimed);
-            				this.world.playSound((EntityPlayer)null, entitytntprimed.posX, entitytntprimed.posY, entitytntprimed.posZ, SoundEvents.ENTITY_TNT_PRIMED, SoundCategory.BLOCKS, 1.0F, 1.0F);
-            				this.world.setBlockToAir(blockpos);
-            			}
-            		}
-            		this.world.playSound((EntityPlayer)null, blockpos, SoundEvents.BLOCK_FIRE_EXTINGUISH, SoundCategory.BLOCKS, 0.5F, 2.6F + (this.world.rand.nextFloat() - this.world.rand.nextFloat()) * 0.8F);
-                	for (int i = 0; i < 8; ++i)
-                    {
-                        this.world.spawnParticle(EnumParticleTypes.SMOKE_LARGE, (this.posX - 0.5D) + Math.random(), this.posY + 0.25D, (this.posZ - 0.5D) + Math.random(), 0.0D, 0.0D, 0.0D, new int[0]);
-                    }
-        	        int itemId = Item.getIdFromItem(BEItems.arrow);
-        	        int itemMeta = this.getArrowType().ordinal();
-        	        for (int ii = 0; ii < 16; ++ii)
-        	        {
-        	            this.world.spawnParticle(EnumParticleTypes.ITEM_CRACK, this.posX, this.posY, this.posZ, ((double)this.rand.nextFloat() - 0.5D) * 0.08D, ((double)this.rand.nextFloat() - 0.5D) * 0.08D, ((double)this.rand.nextFloat() - 0.5D) * 0.08D, new int[] {itemId, itemMeta});                
-        	        }
-        			this.setDead();
-            	}
-            	
-            	//Ice Arrows
-            	if (arrowType == ItemBEArrow.ArrowType.ICE)
-            	{
-            		if (!this.world.isRemote)
-            		{
-            			if (world.getBlockState(blockpos) == Blocks.ICE.getDefaultState())
-            			{
-            				this.world.setBlockState(blockpos, Blocks.PACKED_ICE.getDefaultState());
-            			}
-            			if (world.isAirBlock(blockpos.up()) && world.isBlockFullCube(blockpos))
-            			{
-            				this.world.setBlockState(blockpos.up(), Blocks.SNOW_LAYER.getDefaultState());
-            			}
-            		}
-                	for (int i = 0; i < 8; ++i)
-                    {
-                		Bullseye.proxy.spawnParticle(BEParticleTypes.SNOWFLAKE, (this.posX - 0.5D) + Math.random(), this.posY + 0.25D, (this.posZ - 0.5D) + Math.random(), 0.0D, 0.0D, 0.0D, new int[0]);
-                    }
-        	        int itemId = Item.getIdFromItem(BEItems.arrow);
-        	        int itemMeta = this.getArrowType().ordinal();
-        	        for (int ii = 0; ii < 16; ++ii)
-        	        {
-        	            this.world.spawnParticle(EnumParticleTypes.ITEM_CRACK, this.posX, this.posY, this.posZ, ((double)this.rand.nextFloat() - 0.5D) * 0.08D, ((double)this.rand.nextFloat() - 0.5D) * 0.08D, ((double)this.rand.nextFloat() - 0.5D) * 0.08D, new int[] {itemId, itemMeta});                
-        	        }
-        			this.setDead();
-            	}
-            	
-            	//Bomb Arrows
-            	if (arrowType == ItemBEArrow.ArrowType.BOMB)
-            	{
-            		if (!this.world.isRemote)
-                    {	
-                        float f = 1.8F;
-                        this.world.createExplosion(this, this.posX, this.posY, this.posZ, f, ConfigurationHandler.explodeBombArrows);
-                    }
-        	        int itemId = Item.getIdFromItem(BEItems.arrow);
-        	        int itemMeta = this.getArrowType().ordinal();
-        	        for (int ii = 0; ii < 16; ++ii)
-        	        {
-        	            this.world.spawnParticle(EnumParticleTypes.ITEM_CRACK, this.posX, this.posY, this.posZ, ((double)this.rand.nextFloat() - 0.5D) * 0.08D, ((double)this.rand.nextFloat() - 0.5D) * 0.08D, ((double)this.rand.nextFloat() - 0.5D) * 0.08D, new int[] {itemId, itemMeta});                
-        	        }
-                    this.setDead();
-            	}
-            	
-            	//Lightning Arrows
-            	if (arrowType == ItemBEArrow.ArrowType.LIGHTNING)
-            	{
-            		if (!this.world.isRemote)
-                    {	
-                        EntityLightningBolt entityLightningBolt = new EntityLightningBolt(this.world, this.posX, this.posY, this.posZ, !(ConfigurationHandler.fireLightningArrows));
-                        this.world.addWeatherEffect(entityLightningBolt);
-                        
-                        if (!(ConfigurationHandler.fireLightningArrows))
-    	    			{
-    	    				double d0 = 3.0D;
-    	                    List<Entity> list = this.world.getEntitiesWithinAABBExcludingEntity(this, new AxisAlignedBB(entityLightningBolt.posX - d0, entityLightningBolt.posY - d0, entityLightningBolt.posZ - d0, entityLightningBolt.posX + d0, entityLightningBolt.posY + 6.0D + d0, entityLightningBolt.posZ + d0));
-
-    	                    for (int i1 = 0; i1 < list.size(); ++i1)
-    	                    {
-    	                        Entity entity1 = (Entity)list.get(i1);
-    	                        if (!net.minecraftforge.event.ForgeEventFactory.onEntityStruckByLightning(entity1, entityLightningBolt))
-    	                            entity1.onStruckByLightning(entityLightningBolt);
-    	                    }
-    	    			}
-                    }
-        	        int itemId = Item.getIdFromItem(BEItems.arrow);
-        	        int itemMeta = this.getArrowType().ordinal();
-        	        for (int ii = 0; ii < 16; ++ii)
-        	        {
-        	            this.world.spawnParticle(EnumParticleTypes.ITEM_CRACK, this.posX, this.posY, this.posZ, ((double)this.rand.nextFloat() - 0.5D) * 0.08D, ((double)this.rand.nextFloat() - 0.5D) * 0.08D, ((double)this.rand.nextFloat() - 0.5D) * 0.08D, new int[] {itemId, itemMeta});                
-        	        }
-                    this.setDead();
-            	}
+            	this.arrowLand(blockpos);
             }
             
             ++this.timeInGround;
         }
         else
         {
+            ItemBEArrow.ArrowType arrowType = this.getArrowType();
+            
             this.timeInGround = 0;
             ++this.ticksInAir;
-            ItemBEArrow.ArrowType arrowType = this.getArrowType();
-            this.damage = arrowType.getDamageInflicted();
             Vec3d vec3d1 = new Vec3d(this.posX, this.posY, this.posZ);
             Vec3d vec3d = new Vec3d(this.posX + this.motionX, this.posY + this.motionY, this.posZ + this.motionZ);
-            RayTraceResult raytraceresult = this.world.rayTraceBlocks(vec3d1, vec3d, (arrowType == ItemBEArrow.ArrowType.FIRE || arrowType == ItemBEArrow.ArrowType.ICE || arrowType == ItemBEArrow.ArrowType.EXTINGUISHING), (arrowType != ItemBEArrow.ArrowType.FIRE && arrowType != ItemBEArrow.ArrowType.ICE && arrowType != ItemBEArrow.ArrowType.EXTINGUISHING), false);
+            RayTraceResult raytraceresult = this.world.rayTraceBlocks(vec3d1, vec3d, false, true, false);
             vec3d1 = new Vec3d(this.posX, this.posY, this.posZ);
             vec3d = new Vec3d(this.posX + this.motionX, this.posY + this.motionY, this.posZ + this.motionZ);
 
@@ -505,13 +314,14 @@ public class EntityBEArrow extends EntityArrow implements IProjectile
                 this.onHit(raytraceresult);
             }
             
+            //Particles
             if (arrowType == ItemBEArrow.ArrowType.TRAINING || arrowType == ItemBEArrow.ArrowType.EGG || arrowType == ItemBEArrow.ArrowType.DIAMOND || arrowType == ItemBEArrow.ArrowType.PRISMARINE)
             {
 	            if (this.getIsCritical())
 	            {
 	                for (int k = 0; k < 4; ++k)
 	                {
-	                    this.world.spawnParticle(EnumParticleTypes.CRIT, this.posX + this.motionX * (double)k / 4.0D, this.posY + this.motionY * (double)k / 4.0D, this.posZ + this.motionZ * (double)k / 4.0D, -this.motionX, -this.motionY + 0.2D, -this.motionZ, new int[0]);
+	                    this.world.spawnParticle(EnumParticleTypes.CRIT, this.posX + this.motionX * (double)k / 4.0D, this.posY + this.motionY * (double)k / 4.0D, this.posZ + this.motionZ * (double)k / 4.0D, -this.motionX, -this.motionY + 0.2D, -this.motionZ);
 	                }
 	            }
             }
@@ -519,38 +329,38 @@ public class EntityBEArrow extends EntityArrow implements IProjectile
             {
             	for (int k = 0; k < 8; ++k)
                 {
-            		this.world.spawnParticle(EnumParticleTypes.FLAME, this.posX + this.motionX * (double)k / 8.0D, this.posY + this.motionY * (double)k / 8.0D, this.posZ + this.motionZ * (double)k / 8.0D, 0.0D, 0.0D, 0.0D, new int[0]);
+            		this.world.spawnParticle(EnumParticleTypes.FLAME, this.posX + this.motionX * (double)k / 4.0D, this.posY + this.motionY * (double)k / 4.0D, this.posZ + this.motionZ * (double)k / 4.0D, -this.motionX, -this.motionY + 0.2D, -this.motionZ);
                 }
             }
             if (arrowType == ItemBEArrow.ArrowType.ICE)
             {
             	for (int k = 0; k < 8; ++k)
                 {
-            		Bullseye.proxy.spawnParticle(BEParticleTypes.SNOWFLAKE, this.posX + this.motionX * (double)k / 8.0D, this.posY + this.motionY * (double)k / 8.0D, this.posZ + this.motionZ * (double)k / 8.0D, 0.0D, 0.0D, 0.0D, new int[0]);
+            		Bullseye.proxy.spawnParticle(BEParticleTypes.SNOWFLAKE, this.posX + this.motionX * (double)k / 4.0D, this.posY + this.motionY * (double)k / 4.0D, this.posZ + this.motionZ * (double)k / 4.0D, -this.motionX, -this.motionY + 0.2D, -this.motionZ);
                 }
             }
             if (arrowType == ItemBEArrow.ArrowType.LIGHTNING)
             {
             	for (int k = 0; k < 8; ++k)
                 {
-            		this.world.spawnParticle(EnumParticleTypes.FIREWORKS_SPARK, this.posX + this.motionX * (double)k / 8.0D, this.posY + this.motionY * (double)k / 8.0D, this.posZ + this.motionZ * (double)k / 8.0D, 0.0D, 0.0D, 0.0D, new int[0]);
+            		this.world.spawnParticle(EnumParticleTypes.FIREWORKS_SPARK, this.posX + this.motionX * (double)k / 4.0D, this.posY + this.motionY * (double)k / 4.0D, this.posZ + this.motionZ * (double)k / 4.0D, -this.motionX, -this.motionY + 0.2D, -this.motionZ);
                 }
             }
             if (arrowType == ItemBEArrow.ArrowType.BOMB)
             {
             	for (int k = 0; k < 8; ++k)
                 {
-            		this.world.spawnParticle(EnumParticleTypes.SMOKE_NORMAL, this.posX + this.motionX * (double)k / 8.0D, this.posY + this.motionY * (double)k / 8.0D, this.posZ + this.motionZ * (double)k / 8.0D, 0.0D, 0.0D, 0.0D, new int[0]);
+            		this.world.spawnParticle(EnumParticleTypes.SMOKE_NORMAL, this.posX + this.motionX * (double)k / 4.0D, this.posY + this.motionY * (double)k / 4.0D, this.posZ + this.motionZ * (double)k / 4.0D, -this.motionX, -this.motionY + 0.2D, -this.motionZ);
                 }
             }
 
             this.posX += this.motionX;
             this.posY += this.motionY;
             this.posZ += this.motionZ;
-            float f3 = MathHelper.sqrt(this.motionX * this.motionX + this.motionZ * this.motionZ);
-            this.rotationYaw = (float)(MathHelper.atan2(this.motionX, this.motionZ) * 180.0D / Math.PI);
+            float f4 = MathHelper.sqrt(this.motionX * this.motionX + this.motionZ * this.motionZ);
+            this.rotationYaw = (float)(MathHelper.atan2(this.motionX, this.motionZ) * (180D / Math.PI));
 
-            for (this.rotationPitch = (float)(MathHelper.atan2(this.motionY, (double)f3) * 180.0D / Math.PI); this.rotationPitch - this.prevRotationPitch < -180.0F; this.prevRotationPitch -= 360.0F)
+            for (this.rotationPitch = (float)(MathHelper.atan2(this.motionY, (double)f4) * (180D / Math.PI)); this.rotationPitch - this.prevRotationPitch < -180.0F; this.prevRotationPitch -= 360.0F)
             {
                 ;
             }
@@ -572,20 +382,20 @@ public class EntityBEArrow extends EntityArrow implements IProjectile
 
             this.rotationPitch = this.prevRotationPitch + (this.rotationPitch - this.prevRotationPitch) * 0.2F;
             this.rotationYaw = this.prevRotationYaw + (this.rotationYaw - this.prevRotationYaw) * 0.2F;
-            float f4 = 0.99F;
-            float f6 = 0.05F;
+            float f1 = 0.99F;
+            float f2 = 0.05F;
 
             if (this.isInWater())
             {
-                for (int i1 = 0; i1 < 4; ++i1)
+                for (int i = 0; i < 4; ++i)
                 {
-                    float f8 = 0.25F;
-                    this.world.spawnParticle(EnumParticleTypes.WATER_BUBBLE, this.posX - this.motionX * (double)f8, this.posY - this.motionY * (double)f8, this.posZ - this.motionZ * (double)f8, this.motionX, this.motionY, this.motionZ, new int[0]);
+                    float f3 = 0.25F;
+                    this.world.spawnParticle(EnumParticleTypes.WATER_BUBBLE, this.posX - this.motionX * 0.25D, this.posY - this.motionY * 0.25D, this.posZ - this.motionZ * 0.25D, this.motionX, this.motionY, this.motionZ);
                 }
 
                 if (arrowType != ItemBEArrow.ArrowType.PRISMARINE)
                 {
-                    f4 = 0.6F;
+                    f1 = 0.6F;
                 }
             }
 
@@ -594,9 +404,9 @@ public class EntityBEArrow extends EntityArrow implements IProjectile
                 this.extinguish();
             }
 
-            this.motionX *= (double)f4;
-            this.motionY *= (double)f4;
-            this.motionZ *= (double)f4;
+            this.motionX *= (double)f1;
+            this.motionY *= (double)f1;
+            this.motionZ *= (double)f1;
             
             if (!this.hasNoGravity())
             {
@@ -612,63 +422,7 @@ public class EntityBEArrow extends EntityArrow implements IProjectile
     protected void onHit(RayTraceResult raytraceResultIn)
     {
         Entity entity = raytraceResultIn.entityHit;
-    	ItemBEArrow.ArrowType arrowType = this.getArrowType();
-    	
-    	if (raytraceResultIn != null)
-        {
-    		if (raytraceResultIn.typeOfHit == RayTraceResult.Type.BLOCK)
-            {
-                BlockPos blockpos = raytraceResultIn.getBlockPos();
-                IBlockState iblockstate = this.world.getBlockState(blockpos);
-
-		    	//Water/Lava
-		    	if (arrowType == ItemBEArrow.ArrowType.EXTINGUISHING)
-		    	{
-	                if (iblockstate.getMaterial() == Material.LAVA && ((Integer)iblockstate.getValue(BlockLiquid.LEVEL)).intValue() == 0)
-	                {
-	                	this.world.playSound((EntityPlayer)null, blockpos, SoundEvents.BLOCK_GLASS_BREAK, SoundCategory.BLOCKS, 0.5F, 2.6F + (this.world.rand.nextFloat() - this.world.rand.nextFloat()) * 0.8F);
-						for (int i = 0; i < 8; ++i)
-						{
-							this.world.spawnParticle(EnumParticleTypes.WATER_SPLASH, (this.posX - 0.5D) + Math.random(), this.posY + 0.25D, (this.posZ - 0.5D) + Math.random(), 0.0D, 0.0D, 0.0D, new int[0]);
-						}
-						this.world.setBlockState(blockpos, Blocks.OBSIDIAN.getDefaultState());
-						this.setDead();
-	                }
-		    	}
-		    	if (arrowType == ItemBEArrow.ArrowType.ICE)
-		    	{
-	                if (iblockstate.getMaterial() == Material.WATER && ((Integer)iblockstate.getValue(BlockLiquid.LEVEL)).intValue() == 0)
-	                {
-	    				this.world.setBlockState(blockpos, Blocks.FROSTED_ICE.getDefaultState(), 2);
-	    				this.setDead();
-		    		}
-		    	}
-		    	if (arrowType == ItemBEArrow.ArrowType.FIRE)
-		    	{
-		    		if (iblockstate.getMaterial() == Material.WATER && ((Integer)iblockstate.getValue(BlockLiquid.LEVEL)).intValue() == 0)
-	                {
-		    			this.world.playSound((EntityPlayer)null, blockpos, SoundEvents.BLOCK_FIRE_EXTINGUISH, SoundCategory.BLOCKS, 0.5F, 2.6F + (this.world.rand.nextFloat() - this.world.rand.nextFloat()) * 0.8F);
-	    				for (int i = 0; i < 8; ++i)
-	    				{
-	    					this.world.spawnParticle(EnumParticleTypes.SMOKE_LARGE, (this.posX - 0.5D) + Math.random(), this.posY + 0.25D, (this.posZ - 0.5D) + Math.random(), 0.0D, 0.0D, 0.0D, new int[0]);
-	    				}
-	    				this.setDead();
-		    		}
-		    		
-		    		BlockPos pos = raytraceResultIn.getBlockPos().offset(raytraceResultIn.sideHit);
-		    		
-		    		if (world.isAirBlock(pos) && this.world.isBlockFullCube(blockpos) && iblockstate.getMaterial() != Material.LAVA && iblockstate.getMaterial() != Material.WATER && iblockstate != Blocks.ICE.getDefaultState() && iblockstate != Blocks.SNOW_LAYER.getDefaultState() && iblockstate != Blocks.SNOW.getDefaultState() && iblockstate != Blocks.PACKED_ICE.getDefaultState() && iblockstate != Blocks.TNT.getDefaultState())
-        			{
-		    			if (ConfigurationHandler.burnFireArrows)
-		    			{
-	        				this.world.setBlockState(pos, Blocks.FIRE.getDefaultState(), 11);
-		    			}
-		    			
-		    			this.setDead();
-        			}
-		    	}
-            }
-        }
+        ItemBEArrow.ArrowType arrowType = this.getArrowType();
 
     	if (entity != null)
     	{
@@ -681,7 +435,6 @@ public class EntityBEArrow extends EntityArrow implements IProjectile
     		}
 
     		DamageSource damagesource;
-
     		
     		if (this.shootingEntity == null)
     		{
@@ -702,116 +455,6 @@ public class EntityBEArrow extends EntityArrow implements IProjectile
     			if (entity instanceof EntityLivingBase)
     			{
     				EntityLivingBase entitylivingbase = (EntityLivingBase)entity;
-    				
-    				//Arrow Effects
-    	    		if (arrowType == ItemBEArrow.ArrowType.EXTINGUISHING)
-    	    		{
-    	    			if (raytraceResultIn.entityHit instanceof EntityPlayer)
-    	    			{
-    	    				EntityPlayer entityplayer = (EntityPlayer)raytraceResultIn.entityHit;
-
-    	    				for (ItemStack itemstack : entityplayer.inventory.armorInventory)
-    	    				{
-    	    					if (itemstack != null && (itemstack.getItem() == Items.LEATHER_HELMET || itemstack.getItem() == Items.LEATHER_CHESTPLATE || itemstack.getItem() == Items.LEATHER_LEGGINGS || itemstack.getItem() == Items.LEATHER_BOOTS))
-    	    					{
-    	    						ItemArmor itemarmor = (ItemArmor)itemstack.getItem();
-    	    						itemarmor.removeColor(itemstack);
-    	    					}
-    	    				}
-    	    			}
-    	    			if (raytraceResultIn.entityHit instanceof EntityLivingBase)
-    	    			{
-    	    				this.world.playSound((EntityPlayer)null, entity.getPosition(), SoundEvents.BLOCK_GLASS_BREAK, SoundCategory.BLOCKS, 0.5F, 2.6F + (this.world.rand.nextFloat() - this.world.rand.nextFloat()) * 0.8F);
-    	    				for (int i1 = 0; i1 < 8; ++i1)
-    	    				{
-    	    					this.world.spawnParticle(EnumParticleTypes.WATER_SPLASH, (this.posX - 0.5D) + Math.random(), this.posY + 0.25D, (this.posZ - 0.5D) + Math.random(), 0.0D, 0.0D, 0.0D, new int[0]);
-    	    				}
-    	    				int itemId = Item.getIdFromItem(BEItems.arrow);
-    	    				int itemMeta = this.getArrowType().ordinal();
-    	    				for (int ii = 0; ii < 16; ++ii)
-    	    				{
-    	    					this.world.spawnParticle(EnumParticleTypes.ITEM_CRACK, this.posX, this.posY, this.posZ, ((double)this.rand.nextFloat() - 0.5D) * 0.08D, ((double)this.rand.nextFloat() - 0.5D) * 0.08D, ((double)this.rand.nextFloat() - 0.5D) * 0.08D, new int[] {itemId, itemMeta});                
-    	    				}
-    	    				this.setDead();
-    	    			}
-    	    		}
-    	    		if (arrowType == ItemBEArrow.ArrowType.FIRE)
-    	    		{
-    	    			if (raytraceResultIn.entityHit instanceof EntityLivingBase)
-    	    			{
-    	    				raytraceResultIn.entityHit.setFire(10);
-    	    				this.world.playSound((EntityPlayer)null, entity.getPosition(), SoundEvents.BLOCK_FIRE_EXTINGUISH, SoundCategory.BLOCKS, 0.5F, 2.6F + (this.world.rand.nextFloat() - this.world.rand.nextFloat()) * 0.8F);
-    	    				for (int i1 = 0; i1 < 8; ++i1)
-    	    				{
-    	    					this.world.spawnParticle(EnumParticleTypes.SMOKE_LARGE, (this.posX - 0.5D) + Math.random(), this.posY + 0.25D, (this.posZ - 0.5D) + Math.random(), 0.0D, 0.0D, 0.0D, new int[0]);
-    	    				}
-    	    				int itemId = Item.getIdFromItem(BEItems.arrow);
-    	    				int itemMeta = this.getArrowType().ordinal();
-    	    				for (int ii = 0; ii < 16; ++ii)
-    	    				{
-    	    					this.world.spawnParticle(EnumParticleTypes.ITEM_CRACK, this.posX, this.posY, this.posZ, ((double)this.rand.nextFloat() - 0.5D) * 0.08D, ((double)this.rand.nextFloat() - 0.5D) * 0.08D, ((double)this.rand.nextFloat() - 0.5D) * 0.08D, new int[] {itemId, itemMeta});                
-    	    				}
-    	    				this.setDead();
-    	    			}
-    	    		}
-    	    		if (arrowType == ItemBEArrow.ArrowType.ICE)
-    	    		{
-    	    			for (int i1 = 0; i1 < 8; ++i1)
-    	    			{
-    	    				Bullseye.proxy.spawnParticle(BEParticleTypes.SNOWFLAKE, (this.posX - 0.5D) + Math.random(), this.posY + 0.25D, (this.posZ - 0.5D) + Math.random(), 0.0D, 0.0D, 0.0D, new int[0]);
-    	    			}
-    	    			int itemId = Item.getIdFromItem(BEItems.arrow);
-    	    			int itemMeta = this.getArrowType().ordinal();
-    	    			for (int ii = 0; ii < 16; ++ii)
-    	    			{
-    	    				this.world.spawnParticle(EnumParticleTypes.ITEM_CRACK, this.posX, this.posY, this.posZ, ((double)this.rand.nextFloat() - 0.5D) * 0.08D, ((double)this.rand.nextFloat() - 0.5D) * 0.08D, ((double)this.rand.nextFloat() - 0.5D) * 0.08D, new int[] {itemId, itemMeta});                
-    	    			}
-    	    			this.setDead();
-    	    		}
-    	    		if (arrowType == ItemBEArrow.ArrowType.BOMB)
-    	    		{
-    	    			if (!this.world.isRemote)
-    	    			{	
-    	    				float f1 = 1.8F;
-    	    				this.world.createExplosion(this, this.posX, this.posY, this.posZ, f1, ConfigurationHandler.explodeBombArrows);
-    	    			}
-    	    			int itemId = Item.getIdFromItem(BEItems.arrow);
-    	    			int itemMeta = this.getArrowType().ordinal();
-    	    			for (int ii = 0; ii < 16; ++ii)
-    	    			{
-    	    				this.world.spawnParticle(EnumParticleTypes.ITEM_CRACK, this.posX, this.posY, this.posZ, ((double)this.rand.nextFloat() - 0.5D) * 0.08D, ((double)this.rand.nextFloat() - 0.5D) * 0.08D, ((double)this.rand.nextFloat() - 0.5D) * 0.08D, new int[] {itemId, itemMeta});                
-    	    			}
-    	    			this.setDead();
-    	    		}
-    	    		if (arrowType == ItemBEArrow.ArrowType.LIGHTNING)
-    	    		{
-    	    			if (!this.world.isRemote)
-    	    			{	
-    	    				EntityLightningBolt entityLightningBolt = new EntityLightningBolt(this.world, this.posX, this.posY, this.posZ, !(ConfigurationHandler.fireLightningArrows));
-    	    				this.world.addWeatherEffect(entityLightningBolt);
-	    	    			
-	    	    			if (!(ConfigurationHandler.fireLightningArrows))
-	    	    			{
-	    	    				double d0 = 3.0D;
-	    	                    List<Entity> list = this.world.getEntitiesWithinAABBExcludingEntity(this, new AxisAlignedBB(entityLightningBolt.posX - d0, entityLightningBolt.posY - d0, entityLightningBolt.posZ - d0, entityLightningBolt.posX + d0, entityLightningBolt.posY + 6.0D + d0, entityLightningBolt.posZ + d0));
-	
-	    	                    for (int i1 = 0; i1 < list.size(); ++i1)
-	    	                    {
-	    	                        Entity entity1 = (Entity)list.get(i1);
-	    	                        if (!net.minecraftforge.event.ForgeEventFactory.onEntityStruckByLightning(entity1, entityLightningBolt))
-	    	                            entity1.onStruckByLightning(entityLightningBolt);
-	    	                    }
-	    	    			}
-    	    			}
-    	    			
-    	    			int itemId = Item.getIdFromItem(BEItems.arrow);
-    	    			int itemMeta = this.getArrowType().ordinal();
-    	    			for (int ii = 0; ii < 16; ++ii)
-    	    			{
-    	    				this.world.spawnParticle(EnumParticleTypes.ITEM_CRACK, this.posX, this.posY, this.posZ, ((double)this.rand.nextFloat() - 0.5D) * 0.08D, ((double)this.rand.nextFloat() - 0.5D) * 0.08D, ((double)this.rand.nextFloat() - 0.5D) * 0.08D, new int[] {itemId, itemMeta});                
-    	    			}
-    	    			this.setDead();
-    	    		}
 
     				if (!this.world.isRemote)
     				{
@@ -848,7 +491,7 @@ public class EntityBEArrow extends EntityArrow implements IProjectile
     			{
     				if (arrowType != ItemBEArrow.ArrowType.TRAINING)
     				{
-    				this.setDead();
+    				    this.setDead();
     				}
     			}
     		}
@@ -897,6 +540,57 @@ public class EntityBEArrow extends EntityArrow implements IProjectile
     		{
     			this.inTile.onEntityCollidedWithBlock(this.world, blockpos, iblockstate, this);
     		}
+    		
+    		//Extinguishing Arrows
+    		if (arrowType == ItemBEArrow.ArrowType.EXTINGUISHING)
+            {
+                if (iblockstate.getMaterial() == Material.LAVA && ((Integer)iblockstate.getValue(BlockLiquid.LEVEL)).intValue() == 0)
+                {
+                    this.world.playSound((EntityPlayer)null, blockpos, SoundEvents.BLOCK_GLASS_BREAK, SoundCategory.BLOCKS, 0.5F, 2.6F + (this.world.rand.nextFloat() - this.world.rand.nextFloat()) * 0.8F);
+                    for (int i = 0; i < 8; ++i)
+                    {
+                        this.world.spawnParticle(EnumParticleTypes.WATER_SPLASH, (this.posX - 0.5D) + Math.random(), this.posY + 0.25D, (this.posZ - 0.5D) + Math.random(), 0.0D, 0.0D, 0.0D, new int[0]);
+                    }
+                    this.world.setBlockState(blockpos, Blocks.OBSIDIAN.getDefaultState());
+                    this.setDead();
+                }
+            }
+    		
+    		//Ice Arrows
+            if (arrowType == ItemBEArrow.ArrowType.ICE)
+            {
+                if (iblockstate.getMaterial() == Material.WATER && ((Integer)iblockstate.getValue(BlockLiquid.LEVEL)).intValue() == 0)
+                {
+                    this.world.setBlockState(blockpos, Blocks.FROSTED_ICE.getDefaultState(), 2);
+                    this.setDead();
+                }
+            }
+            
+            //Fire Arrows
+            if (arrowType == ItemBEArrow.ArrowType.FIRE)
+            {
+                if (iblockstate.getMaterial() == Material.WATER && ((Integer)iblockstate.getValue(BlockLiquid.LEVEL)).intValue() == 0)
+                {
+                    this.world.playSound((EntityPlayer)null, blockpos, SoundEvents.BLOCK_FIRE_EXTINGUISH, SoundCategory.BLOCKS, 0.5F, 2.6F + (this.world.rand.nextFloat() - this.world.rand.nextFloat()) * 0.8F);
+                    for (int i = 0; i < 8; ++i)
+                    {
+                        this.world.spawnParticle(EnumParticleTypes.SMOKE_LARGE, (this.posX - 0.5D) + Math.random(), this.posY + 0.25D, (this.posZ - 0.5D) + Math.random(), 0.0D, 0.0D, 0.0D, new int[0]);
+                    }
+                    this.setDead();
+                }
+                
+                BlockPos pos = raytraceResultIn.getBlockPos().offset(raytraceResultIn.sideHit);
+                
+                if (world.isAirBlock(pos) && this.world.isBlockFullCube(blockpos) && iblockstate.getMaterial() != Material.LAVA && iblockstate.getMaterial() != Material.WATER && iblockstate != Blocks.ICE.getDefaultState() && iblockstate != Blocks.SNOW_LAYER.getDefaultState() && iblockstate != Blocks.SNOW.getDefaultState() && iblockstate != Blocks.PACKED_ICE.getDefaultState() && iblockstate != Blocks.TNT.getDefaultState())
+                {
+                    if (ConfigurationHandler.burnFireArrows)
+                    {
+                        this.world.setBlockState(pos, Blocks.FIRE.getDefaultState(), 11);
+                    }
+                    
+                    this.setDead();
+                }
+            }
     	}
     }
     
@@ -912,33 +606,338 @@ public class EntityBEArrow extends EntityArrow implements IProjectile
             this.zTile = MathHelper.floor(this.posZ);
         }
     }
-    
-    protected RayTraceResult rayTraceLiquid(World worldIn, boolean useLiquids)
-    {
-        float f = this.rotationPitch;
-        float f1 = this.rotationYaw;
-        double d0 = this.posX;
-        double d1 = this.posY + (double)this.getEyeHeight();
-        double d2 = this.posZ;
-        Vec3d vec3d = new Vec3d(d0, d1, d2);
-        float f2 = MathHelper.cos(-f1 * 0.017453292F - (float)Math.PI);
-        float f3 = MathHelper.sin(-f1 * 0.017453292F - (float)Math.PI);
-        float f4 = -MathHelper.cos(-f * 0.017453292F);
-        float f5 = MathHelper.sin(-f * 0.017453292F);
-        float f6 = f3 * f4;
-        float f7 = f2 * f4;
-        double d3 = 5.0D;
-        Vec3d vec3d1 = vec3d.addVector((double)f6 * d3, (double)f5 * d3, (double)f7 * d3);
-        return worldIn.rayTraceBlocks(vec3d, vec3d1, useLiquids, !useLiquids, false);
-    }
 
     @Override
     protected void arrowHit(EntityLivingBase living)
     {
+        ItemBEArrow.ArrowType arrowType = this.getArrowType();
+        
+        //Extinguishing Arrows
+        if (arrowType == ItemBEArrow.ArrowType.EXTINGUISHING)
+        {
+            if (living instanceof EntityPlayer)
+            {
+                EntityPlayer entityplayer = (EntityPlayer)living;
+
+                for (ItemStack itemstack : entityplayer.inventory.armorInventory)
+                {
+                    if (itemstack != null && (itemstack.getItem() == Items.LEATHER_HELMET || itemstack.getItem() == Items.LEATHER_CHESTPLATE || itemstack.getItem() == Items.LEATHER_LEGGINGS || itemstack.getItem() == Items.LEATHER_BOOTS))
+                    {
+                        ItemArmor itemarmor = (ItemArmor)itemstack.getItem();
+                        itemarmor.removeColor(itemstack);
+                    }
+                }
+            }
+
+            this.world.playSound((EntityPlayer)null, living.getPosition(), SoundEvents.BLOCK_GLASS_BREAK, SoundCategory.BLOCKS, 0.5F, 2.6F + (this.world.rand.nextFloat() - this.world.rand.nextFloat()) * 0.8F);
+            
+            for (int i1 = 0; i1 < 8; ++i1)
+            {
+                this.world.spawnParticle(EnumParticleTypes.WATER_SPLASH, (this.posX - 0.5D) + Math.random(), this.posY + 0.25D, (this.posZ - 0.5D) + Math.random(), 0.0D, 0.0D, 0.0D, new int[0]);
+            }
+            int itemId = Item.getIdFromItem(BEItems.arrow);
+            int itemMeta = this.getArrowType().ordinal();
+            for (int ii = 0; ii < 16; ++ii)
+            {
+                this.world.spawnParticle(EnumParticleTypes.ITEM_CRACK, this.posX, this.posY, this.posZ, ((double)this.rand.nextFloat() - 0.5D) * 0.08D, ((double)this.rand.nextFloat() - 0.5D) * 0.08D, ((double)this.rand.nextFloat() - 0.5D) * 0.08D, new int[] {itemId, itemMeta});                
+            }
+            
+            this.setDead();
+        }
+        
+        //Fire Arrows
+        if (arrowType == ItemBEArrow.ArrowType.FIRE)
+        {
+            living.setFire(10);
+            
+            this.world.playSound((EntityPlayer)null, living.getPosition(), SoundEvents.BLOCK_FIRE_EXTINGUISH, SoundCategory.BLOCKS, 0.5F, 2.6F + (this.world.rand.nextFloat() - this.world.rand.nextFloat()) * 0.8F);
+            
+            for (int i1 = 0; i1 < 8; ++i1)
+            {
+                this.world.spawnParticle(EnumParticleTypes.SMOKE_LARGE, (this.posX - 0.5D) + Math.random(), this.posY + 0.25D, (this.posZ - 0.5D) + Math.random(), 0.0D, 0.0D, 0.0D, new int[0]);
+            }
+            int itemId = Item.getIdFromItem(BEItems.arrow);
+            int itemMeta = this.getArrowType().ordinal();
+            for (int ii = 0; ii < 16; ++ii)
+            {
+                this.world.spawnParticle(EnumParticleTypes.ITEM_CRACK, this.posX, this.posY, this.posZ, ((double)this.rand.nextFloat() - 0.5D) * 0.08D, ((double)this.rand.nextFloat() - 0.5D) * 0.08D, ((double)this.rand.nextFloat() - 0.5D) * 0.08D, new int[] {itemId, itemMeta});                
+            }
+            
+            this.setDead();
+        }
+        
+        //Ice Arrows
+        if (arrowType == ItemBEArrow.ArrowType.ICE)
+        {
+            for (int i1 = 0; i1 < 8; ++i1)
+            {
+                Bullseye.proxy.spawnParticle(BEParticleTypes.SNOWFLAKE, (this.posX - 0.5D) + Math.random(), this.posY + 0.25D, (this.posZ - 0.5D) + Math.random(), 0.0D, 0.0D, 0.0D, new int[0]);
+            }
+            int itemId = Item.getIdFromItem(BEItems.arrow);
+            int itemMeta = this.getArrowType().ordinal();
+            for (int ii = 0; ii < 16; ++ii)
+            {
+                this.world.spawnParticle(EnumParticleTypes.ITEM_CRACK, this.posX, this.posY, this.posZ, ((double)this.rand.nextFloat() - 0.5D) * 0.08D, ((double)this.rand.nextFloat() - 0.5D) * 0.08D, ((double)this.rand.nextFloat() - 0.5D) * 0.08D, new int[] {itemId, itemMeta});                
+            }
+            
+            this.setDead();
+        }
+        
+        //Bomb Arrows
+        if (arrowType == ItemBEArrow.ArrowType.BOMB)
+        {
+            if (!this.world.isRemote)
+            {   
+                float f1 = 1.8F;
+                this.world.createExplosion(this, this.posX, this.posY, this.posZ, f1, ConfigurationHandler.explodeBombArrows);
+            }
+            int itemId = Item.getIdFromItem(BEItems.arrow);
+            int itemMeta = this.getArrowType().ordinal();
+            for (int ii = 0; ii < 16; ++ii)
+            {
+                this.world.spawnParticle(EnumParticleTypes.ITEM_CRACK, this.posX, this.posY, this.posZ, ((double)this.rand.nextFloat() - 0.5D) * 0.08D, ((double)this.rand.nextFloat() - 0.5D) * 0.08D, ((double)this.rand.nextFloat() - 0.5D) * 0.08D, new int[] {itemId, itemMeta});                
+            }
+            
+            this.setDead();
+        }
+        
+        //Lightning Arrows
+        if (arrowType == ItemBEArrow.ArrowType.LIGHTNING)
+        {
+            if (!this.world.isRemote)
+            {   
+                EntityLightningBolt entityLightningBolt = new EntityLightningBolt(this.world, this.posX, this.posY, this.posZ, !(ConfigurationHandler.fireLightningArrows));
+                this.world.addWeatherEffect(entityLightningBolt);
+                
+                if (!(ConfigurationHandler.fireLightningArrows))
+                {
+                    double d0 = 3.0D;
+                    List<Entity> list = this.world.getEntitiesWithinAABBExcludingEntity(this, new AxisAlignedBB(entityLightningBolt.posX - d0, entityLightningBolt.posY - d0, entityLightningBolt.posZ - d0, entityLightningBolt.posX + d0, entityLightningBolt.posY + 6.0D + d0, entityLightningBolt.posZ + d0));
+
+                    for (int i1 = 0; i1 < list.size(); ++i1)
+                    {
+                        Entity entity1 = (Entity)list.get(i1);
+                        if (!net.minecraftforge.event.ForgeEventFactory.onEntityStruckByLightning(entity1, entityLightningBolt))
+                            entity1.onStruckByLightning(entityLightningBolt);
+                    }
+                }
+            }
+            
+            int itemId = Item.getIdFromItem(BEItems.arrow);
+            int itemMeta = this.getArrowType().ordinal();
+            for (int ii = 0; ii < 16; ++ii)
+            {
+                this.world.spawnParticle(EnumParticleTypes.ITEM_CRACK, this.posX, this.posY, this.posZ, ((double)this.rand.nextFloat() - 0.5D) * 0.08D, ((double)this.rand.nextFloat() - 0.5D) * 0.08D, ((double)this.rand.nextFloat() - 0.5D) * 0.08D, new int[] {itemId, itemMeta});                
+            }
+            
+            this.setDead();
+        }
     }
     
-    @Nullable
+    protected void arrowLand(BlockPos blockpos)
+    {
+        ItemBEArrow.ArrowType arrowType = this.getArrowType();
+        
+        //Egg Arrows
+        if (arrowType == ItemBEArrow.ArrowType.EGG)
+        {
+            if (!this.world.isRemote)
+            {   
+                int i = world.rand.nextInt(12);
+                if (i == 0)
+                {
+                    EntityChicken entitychicken = new EntityChicken(this.world);
+                    entitychicken.setGrowingAge(-24000);
+                    entitychicken.setLocationAndAngles(this.posX, this.posY, this.posZ, this.rotationYaw, 0.0F);
+                    this.world.spawnEntity(entitychicken);
+                }
+            }
+            int itemId = Item.getIdFromItem(BEItems.arrow);
+            int itemMeta = this.getArrowType().ordinal();
+            for (int ii = 0; ii < 16; ++ii)
+            {
+                this.world.spawnParticle(EnumParticleTypes.ITEM_CRACK, this.posX, this.posY, this.posZ, ((double)this.rand.nextFloat() - 0.5D) * 0.08D, ((double)this.rand.nextFloat() - 0.5D) * 0.08D, ((double)this.rand.nextFloat() - 0.5D) * 0.08D, new int[] {itemId, itemMeta});                
+            }
+            this.setDead();
+        }
+        
+        //Extinguishing Arrows
+        if (arrowType == ItemBEArrow.ArrowType.EXTINGUISHING)
+        {
+            if (!this.world.isRemote)
+            {
+                for (int xx = -2; xx <= 2; xx++)
+                {
+                    for (int yy = -2; yy <= 2; yy++)
+                    {
+                        for (int zz = -2; zz <= 2; zz++)
+                        {
+                            BlockPos pos = blockpos.add(xx, yy - 1, zz);
+                        
+                            if (this.world.getBlockState(pos).getBlock() == Blocks.FIRE)
+                            {
+                                world.setBlockToAir(pos);
+                            }
+                            if (this.world.getBlockState(pos).getBlock() == Blocks.TORCH)
+                            {
+                                world.destroyBlock(pos, true);
+                            }
+                        }
+                    }
+                }
+            }
+            this.world.playSound((EntityPlayer)null, blockpos, SoundEvents.BLOCK_GLASS_BREAK, SoundCategory.BLOCKS, 0.5F, 2.6F + (this.world.rand.nextFloat() - this.world.rand.nextFloat()) * 0.8F);
+            
+            for (int i = 0; i < 8; ++i)
+            {
+                this.world.spawnParticle(EnumParticleTypes.WATER_SPLASH, (this.posX - 0.5D) + Math.random(), this.posY + 0.25D, (this.posZ - 0.5D) + Math.random(), 0.0D, 0.0D, 0.0D, new int[0]);
+            }
+            
+            int itemId = Item.getIdFromItem(BEItems.arrow);
+            int itemMeta = this.getArrowType().ordinal();
+            for (int ii = 0; ii < 16; ++ii)
+            {
+                this.world.spawnParticle(EnumParticleTypes.ITEM_CRACK, this.posX, this.posY, this.posZ, ((double)this.rand.nextFloat() - 0.5D) * 0.08D, ((double)this.rand.nextFloat() - 0.5D) * 0.08D, ((double)this.rand.nextFloat() - 0.5D) * 0.08D, new int[] {itemId, itemMeta});                
+            }
+            
+            this.setDead();
+        }
+        
+        //Fire Arrows
+        if (arrowType == ItemBEArrow.ArrowType.FIRE)
+        {
+            if (!this.world.isRemote)
+            {
+                if (world.getBlockState(blockpos) == Blocks.ICE.getDefaultState())
+                {
+                    this.world.setBlockState(blockpos, Blocks.WATER.getDefaultState());
+                }
+                if (world.getBlockState(blockpos) == Blocks.FROSTED_ICE.getDefaultState())
+                {
+                    this.world.setBlockState(blockpos, Blocks.WATER.getDefaultState());
+                }
+                if (world.getBlockState(blockpos) == Blocks.SNOW_LAYER.getDefaultState())
+                {
+                    this.world.setBlockState(blockpos, Blocks.AIR.getDefaultState());
+                }
+                if (world.getBlockState(blockpos) == Blocks.SNOW.getDefaultState())
+                {
+                    this.world.setBlockState(blockpos, Blocks.AIR.getDefaultState());
+                }
+                if (world.getBlockState(blockpos) == Blocks.PACKED_ICE.getDefaultState())
+                {
+                    this.world.setBlockState(blockpos, Blocks.ICE.getDefaultState());
+                }
+                if (world.getBlockState(blockpos) == Blocks.TNT.getDefaultState())
+                {
+                    EntityTNTPrimed entitytntprimed = new EntityTNTPrimed(this.world, (double)((float)blockpos.getX() + 0.5F), (double)blockpos.getY(), (double)((float)blockpos.getZ() + 0.5F), this.shootingEntity instanceof EntityLivingBase ? (EntityLivingBase)this.shootingEntity : null);
+                    this.world.spawnEntity(entitytntprimed);
+                    this.world.playSound((EntityPlayer)null, entitytntprimed.posX, entitytntprimed.posY, entitytntprimed.posZ, SoundEvents.ENTITY_TNT_PRIMED, SoundCategory.BLOCKS, 1.0F, 1.0F);
+                    this.world.setBlockToAir(blockpos);
+                }
+            }
+            
+            this.world.playSound((EntityPlayer)null, blockpos, SoundEvents.BLOCK_FIRE_EXTINGUISH, SoundCategory.BLOCKS, 0.5F, 2.6F + (this.world.rand.nextFloat() - this.world.rand.nextFloat()) * 0.8F);
+            
+            for (int i = 0; i < 8; ++i)
+            {
+                this.world.spawnParticle(EnumParticleTypes.SMOKE_LARGE, (this.posX - 0.5D) + Math.random(), this.posY + 0.25D, (this.posZ - 0.5D) + Math.random(), 0.0D, 0.0D, 0.0D, new int[0]);
+            }
+            
+            int itemId = Item.getIdFromItem(BEItems.arrow);
+            int itemMeta = this.getArrowType().ordinal();
+            for (int ii = 0; ii < 16; ++ii)
+            {
+                this.world.spawnParticle(EnumParticleTypes.ITEM_CRACK, this.posX, this.posY, this.posZ, ((double)this.rand.nextFloat() - 0.5D) * 0.08D, ((double)this.rand.nextFloat() - 0.5D) * 0.08D, ((double)this.rand.nextFloat() - 0.5D) * 0.08D, new int[] {itemId, itemMeta});                
+            }
+            
+            this.setDead();
+        }
+        
+        //Ice Arrows
+        if (arrowType == ItemBEArrow.ArrowType.ICE)
+        {
+            if (!this.world.isRemote)
+            {
+                if (world.getBlockState(blockpos) == Blocks.ICE.getDefaultState())
+                {
+                    this.world.setBlockState(blockpos, Blocks.PACKED_ICE.getDefaultState());
+                }
+                if (world.isAirBlock(blockpos.up()) && world.isBlockFullCube(blockpos))
+                {
+                    this.world.setBlockState(blockpos.up(), Blocks.SNOW_LAYER.getDefaultState());
+                }
+            }
+            
+            for (int i = 0; i < 8; ++i)
+            {
+                Bullseye.proxy.spawnParticle(BEParticleTypes.SNOWFLAKE, (this.posX - 0.5D) + Math.random(), this.posY + 0.25D, (this.posZ - 0.5D) + Math.random(), 0.0D, 0.0D, 0.0D, new int[0]);
+            }
+            
+            int itemId = Item.getIdFromItem(BEItems.arrow);
+            int itemMeta = this.getArrowType().ordinal();
+            for (int ii = 0; ii < 16; ++ii)
+            {
+                this.world.spawnParticle(EnumParticleTypes.ITEM_CRACK, this.posX, this.posY, this.posZ, ((double)this.rand.nextFloat() - 0.5D) * 0.08D, ((double)this.rand.nextFloat() - 0.5D) * 0.08D, ((double)this.rand.nextFloat() - 0.5D) * 0.08D, new int[] {itemId, itemMeta});                
+            }
+            
+            this.setDead();
+        }
+        
+        //Bomb Arrows
+        if (arrowType == ItemBEArrow.ArrowType.BOMB)
+        {
+            if (!this.world.isRemote)
+            {   
+                float f = 1.8F;
+                this.world.createExplosion(this, this.posX, this.posY, this.posZ, f, ConfigurationHandler.explodeBombArrows);
+            }
+            
+            int itemId = Item.getIdFromItem(BEItems.arrow);
+            int itemMeta = this.getArrowType().ordinal();
+            for (int ii = 0; ii < 16; ++ii)
+            {
+                this.world.spawnParticle(EnumParticleTypes.ITEM_CRACK, this.posX, this.posY, this.posZ, ((double)this.rand.nextFloat() - 0.5D) * 0.08D, ((double)this.rand.nextFloat() - 0.5D) * 0.08D, ((double)this.rand.nextFloat() - 0.5D) * 0.08D, new int[] {itemId, itemMeta});                
+            }
+            
+            this.setDead();
+        }
+        
+        //Lightning Arrows
+        if (arrowType == ItemBEArrow.ArrowType.LIGHTNING)
+        {
+            if (!this.world.isRemote)
+            {   
+                EntityLightningBolt entityLightningBolt = new EntityLightningBolt(this.world, this.posX, this.posY, this.posZ, !(ConfigurationHandler.fireLightningArrows));
+                this.world.addWeatherEffect(entityLightningBolt);
+                
+                if (!(ConfigurationHandler.fireLightningArrows))
+                {
+                    double d0 = 3.0D;
+                    List<Entity> list = this.world.getEntitiesWithinAABBExcludingEntity(this, new AxisAlignedBB(entityLightningBolt.posX - d0, entityLightningBolt.posY - d0, entityLightningBolt.posZ - d0, entityLightningBolt.posX + d0, entityLightningBolt.posY + 6.0D + d0, entityLightningBolt.posZ + d0));
+
+                    for (int i1 = 0; i1 < list.size(); ++i1)
+                    {
+                        Entity entity1 = (Entity)list.get(i1);
+                        if (!net.minecraftforge.event.ForgeEventFactory.onEntityStruckByLightning(entity1, entityLightningBolt))
+                            entity1.onStruckByLightning(entityLightningBolt);
+                    }
+                }
+            }
+            
+            int itemId = Item.getIdFromItem(BEItems.arrow);
+            int itemMeta = this.getArrowType().ordinal();
+            for (int ii = 0; ii < 16; ++ii)
+            {
+                this.world.spawnParticle(EnumParticleTypes.ITEM_CRACK, this.posX, this.posY, this.posZ, ((double)this.rand.nextFloat() - 0.5D) * 0.08D, ((double)this.rand.nextFloat() - 0.5D) * 0.08D, ((double)this.rand.nextFloat() - 0.5D) * 0.08D, new int[] {itemId, itemMeta});                
+            }
+            
+            this.setDead();
+        }
+    }
+
     @Override
+    @Nullable
     protected Entity findEntityOnPath(Vec3d start, Vec3d end)
     {
         Entity entity = null;
@@ -969,6 +968,11 @@ public class EntityBEArrow extends EntityArrow implements IProjectile
 
         return entity;
     }
+
+    public static void registerFixesBEArrow(DataFixer fixer)
+    {
+        EntityArrow.registerFixesArrow(fixer, "BEArrow");
+    }
     
     @Override
     public void writeEntityToNBT(NBTTagCompound compound)
@@ -977,13 +981,14 @@ public class EntityBEArrow extends EntityArrow implements IProjectile
         compound.setInteger("yTile", this.yTile);
         compound.setInteger("zTile", this.zTile);
         compound.setShort("life", (short)this.ticksInGround);
-        ResourceLocation resourcelocation = (ResourceLocation)Block.REGISTRY.getNameForObject(this.inTile);
+        ResourceLocation resourcelocation = Block.REGISTRY.getNameForObject(this.inTile);
         compound.setString("inTile", resourcelocation == null ? "" : resourcelocation.toString());
         compound.setByte("inData", (byte)this.inData);
         compound.setByte("shake", (byte)this.arrowShake);
         compound.setByte("inGround", (byte)(this.inGround ? 1 : 0));
         compound.setByte("pickup", (byte)this.pickupStatus.ordinal());
         compound.setDouble("damage", this.damage);
+        compound.setBoolean("crit", this.getIsCritical());
         compound.setInteger("arrowType", this.getArrowType().ordinal());
     }
 
@@ -1021,6 +1026,8 @@ public class EntityBEArrow extends EntityArrow implements IProjectile
         {
             this.pickupStatus = compound.getBoolean("player") ? EntityBEArrow.PickupStatus.ALLOWED : EntityBEArrow.PickupStatus.DISALLOWED;
         }
+
+        this.setIsCritical(compound.getBoolean("crit"));
         
         if (compound.hasKey("arrowType", 99))
         {
@@ -1055,7 +1062,7 @@ public class EntityBEArrow extends EntityArrow implements IProjectile
         itemstack.setItemDamage(this.getArrowType().ordinal());
         return itemstack;
     }
-
+    
     @Override
     protected boolean canTriggerWalking()
     {
@@ -1091,7 +1098,7 @@ public class EntityBEArrow extends EntityArrow implements IProjectile
     {
         return 0.0F;
     }
-
+    
     @Override
     public void setIsCritical(boolean critical)
     {

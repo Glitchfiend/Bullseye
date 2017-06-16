@@ -55,9 +55,9 @@ public class ItemDyeArrow extends ItemArrow
     @Override
     public EntityArrow createArrow(World worldIn, ItemStack stack, EntityLivingBase shooter)
     {
-        EntityDyeArrow entitydyearrow = new EntityDyeArrow(worldIn, shooter);
-        entitydyearrow.setDyeType(ItemDyeArrow.DyeType.fromMeta(stack.getMetadata()));
-        return entitydyearrow;
+        EntityDyeArrow entityDyeArrow = new EntityDyeArrow(worldIn, shooter);
+        entityDyeArrow.setDyeType(ItemDyeArrow.DyeType.fromMeta(stack.getMetadata()));
+        return entityDyeArrow;
     }
    
     // add all the gem types as separate items in the creative tab

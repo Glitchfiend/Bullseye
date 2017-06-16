@@ -11,6 +11,7 @@ import bullseye.api.BEItems;
 import bullseye.item.ItemDyeArrow;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockColored;
+import net.minecraft.block.BlockConcretePowder;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.enchantment.EnchantmentHelper;
@@ -41,6 +42,7 @@ import net.minecraft.util.DamageSource;
 import net.minecraft.util.EntitySelectors;
 import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.datafix.DataFixer;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
@@ -251,59 +253,17 @@ public class EntityDyeArrow extends EntityArrow implements IProjectile
             }
             else
             {
-            	//Arrow Effects
-            	ItemDyeArrow.DyeType dyeType = this.getDyeType();
-        		if (!this.world.isRemote)
-        		{
-        			if (block == Blocks.WOOL)
-        			{
-        				world.setBlockState(blockpos, iblockstate.withProperty(BlockColored.COLOR, EnumDyeColor.byMetadata(dyeType.ordinal())));
-        			}
-        			if (block == Blocks.CARPET)
-        			{
-        				world.setBlockState(blockpos, iblockstate.withProperty(BlockColored.COLOR, EnumDyeColor.byMetadata(dyeType.ordinal())));
-        			}
-        			if (block == Blocks.STAINED_HARDENED_CLAY)
-        			{
-        				world.setBlockState(blockpos, iblockstate.withProperty(BlockColored.COLOR, EnumDyeColor.byMetadata(dyeType.ordinal())));
-        			}
-        			if (block == Blocks.STAINED_GLASS)
-        			{
-        				world.setBlockState(blockpos, iblockstate.withProperty(BlockColored.COLOR, EnumDyeColor.byMetadata(dyeType.ordinal())));
-        			}
-        			if (block == Blocks.STAINED_GLASS_PANE)
-        			{
-        				world.setBlockState(blockpos, iblockstate.withProperty(BlockColored.COLOR, EnumDyeColor.byMetadata(dyeType.ordinal())));
-        			}
-        			if (block == Blocks.GLASS)
-        			{
-        				world.setBlockState(blockpos, Blocks.STAINED_GLASS.getDefaultState().withProperty(BlockColored.COLOR, EnumDyeColor.byMetadata(dyeType.ordinal())));
-        			}
-        			if (block == Blocks.HARDENED_CLAY)
-        			{
-        				world.setBlockState(blockpos, Blocks.STAINED_HARDENED_CLAY.getDefaultState().withProperty(BlockColored.COLOR, EnumDyeColor.byMetadata(dyeType.ordinal())));
-        			}
-        			if (block == Blocks.GLASS_PANE)
-        			{
-        				world.setBlockState(blockpos, Blocks.STAINED_GLASS_PANE.getDefaultState().withProperty(BlockColored.COLOR, EnumDyeColor.byMetadata(dyeType.ordinal())));
-        			}
-        		}
-    	        int itemId = Item.getIdFromItem(BEItems.dye_arrow);
-    	        int itemMeta = this.getDyeType().ordinal();
-    	        for (int ii = 0; ii < 16; ++ii)
-    	        {
-    	            this.world.spawnParticle(EnumParticleTypes.ITEM_CRACK, this.posX, this.posY, this.posZ, ((double)this.rand.nextFloat() - 0.5D) * 0.08D, ((double)this.rand.nextFloat() - 0.5D) * 0.08D, ((double)this.rand.nextFloat() - 0.5D) * 0.08D, new int[] {itemId, itemMeta});                
-    	        }
-    			this.setDead();
+            	this.arrowLand(blockpos);
             }
             
             ++this.timeInGround;
         }
         else
         {
+            ItemDyeArrow.DyeType dyeType = this.getDyeType();
+            
             this.timeInGround = 0;
             ++this.ticksInAir;
-            ItemDyeArrow.DyeType dyeType = this.getDyeType();
             this.damage = dyeType.getDamageInflicted();
             Vec3d vec3d1 = new Vec3d(this.posX, this.posY, this.posZ);
             Vec3d vec3d = new Vec3d(this.posX + this.motionX, this.posY + this.motionY, this.posZ + this.motionZ);
@@ -349,10 +309,10 @@ public class EntityDyeArrow extends EntityArrow implements IProjectile
             this.posX += this.motionX;
             this.posY += this.motionY;
             this.posZ += this.motionZ;
-            float f3 = MathHelper.sqrt(this.motionX * this.motionX + this.motionZ * this.motionZ);
-            this.rotationYaw = (float)(MathHelper.atan2(this.motionX, this.motionZ) * 180.0D / Math.PI);
+            float f4 = MathHelper.sqrt(this.motionX * this.motionX + this.motionZ * this.motionZ);
+            this.rotationYaw = (float)(MathHelper.atan2(this.motionX, this.motionZ) * (180D / Math.PI));
 
-            for (this.rotationPitch = (float)(MathHelper.atan2(this.motionY, (double)f3) * 180.0D / Math.PI); this.rotationPitch - this.prevRotationPitch < -180.0F; this.prevRotationPitch -= 360.0F)
+            for (this.rotationPitch = (float)(MathHelper.atan2(this.motionY, (double)f4) * (180D / Math.PI)); this.rotationPitch - this.prevRotationPitch < -180.0F; this.prevRotationPitch -= 360.0F)
             {
                 ;
             }
@@ -374,18 +334,18 @@ public class EntityDyeArrow extends EntityArrow implements IProjectile
 
             this.rotationPitch = this.prevRotationPitch + (this.rotationPitch - this.prevRotationPitch) * 0.2F;
             this.rotationYaw = this.prevRotationYaw + (this.rotationYaw - this.prevRotationYaw) * 0.2F;
-            float f4 = 0.99F;
-            float f6 = 0.05F;
+            float f1 = 0.99F;
+            float f2 = 0.05F;
 
             if (this.isInWater())
             {
-                for (int i1 = 0; i1 < 4; ++i1)
+                for (int i = 0; i < 4; ++i)
                 {
-                    float f8 = 0.25F;
-                    this.world.spawnParticle(EnumParticleTypes.WATER_BUBBLE, this.posX - this.motionX * (double)f8, this.posY - this.motionY * (double)f8, this.posZ - this.motionZ * (double)f8, this.motionX, this.motionY, this.motionZ, new int[0]);
+                    float f3 = 0.25F;
+                    this.world.spawnParticle(EnumParticleTypes.WATER_BUBBLE, this.posX - this.motionX * 0.25D, this.posY - this.motionY * 0.25D, this.posZ - this.motionZ * 0.25D, this.motionX, this.motionY, this.motionZ);
                 }
 
-                f4 = 0.6F;
+                f1 = 0.6F;
             }
 
             if (this.isWet())
@@ -393,9 +353,9 @@ public class EntityDyeArrow extends EntityArrow implements IProjectile
                 this.extinguish();
             }
 
-            this.motionX *= (double)f4;
-            this.motionY *= (double)f4;
-            this.motionZ *= (double)f4;
+            this.motionX *= (double)f1;
+            this.motionY *= (double)f1;
+            this.motionZ *= (double)f1;
             
             if (!this.hasNoGravity())
             {
@@ -411,7 +371,6 @@ public class EntityDyeArrow extends EntityArrow implements IProjectile
     protected void onHit(RayTraceResult raytraceResultIn)
     {
         Entity entity = raytraceResultIn.entityHit;
-        ItemDyeArrow.DyeType dyeType = this.getDyeType();
 
         if (entity != null)
         {
@@ -444,36 +403,6 @@ public class EntityDyeArrow extends EntityArrow implements IProjectile
                 if (entity instanceof EntityLivingBase)
                 {
                     EntityLivingBase entitylivingbase = (EntityLivingBase)entity;
-                    
-                    if (entity instanceof EntitySheep)
-                    {
-                        EntitySheep entitysheep = (EntitySheep)entity;
-
-                        entitysheep.setFleeceColor(EnumDyeColor.byMetadata(dyeType.ordinal()));
-                        this.setDead();
-                    }
-                    
-                    if (entity instanceof EntityWolf)
-                    {
-                        EntityWolf entitywolf = (EntityWolf)entity;
-
-                        entitywolf.setCollarColor(EnumDyeColor.byMetadata(dyeType.ordinal()));
-                        this.setDead();
-                    }
-                    
-                    if (entity instanceof EntityPlayer)
-                    {
-                        EntityPlayer entityplayer = (EntityPlayer)entity;
-
-                        for (ItemStack itemstack : entityplayer.inventory.armorInventory)
-                        {
-                            if (itemstack != null && (itemstack.getItem() == Items.LEATHER_HELMET || itemstack.getItem() == Items.LEATHER_CHESTPLATE || itemstack.getItem() == Items.LEATHER_LEGGINGS || itemstack.getItem() == Items.LEATHER_BOOTS))
-                            {
-                                ItemArmor itemarmor = (ItemArmor)itemstack.getItem();
-                                itemarmor.setColor(itemstack, EnumDyeColor.byMetadata(dyeType.ordinal()).func_193350_e());
-                            }
-                        }
-                    }
 
                     if (!this.world.isRemote)
                     {
@@ -571,14 +500,108 @@ public class EntityDyeArrow extends EntityArrow implements IProjectile
             this.zTile = MathHelper.floor(this.posZ);
         }
     }
+    
+    protected void arrowLand(BlockPos blockpos)
+    {
+        IBlockState iblockstate = this.world.getBlockState(blockpos);
+        Block block = iblockstate.getBlock();
+        
+        ItemDyeArrow.DyeType dyeType = this.getDyeType();
+        
+        if (!this.world.isRemote)
+        {
+            if (block == Blocks.WOOL)
+            {
+                world.setBlockState(blockpos, iblockstate.withProperty(BlockColored.COLOR, EnumDyeColor.byMetadata(dyeType.ordinal())));
+            }
+            if (block == Blocks.CARPET)
+            {
+                world.setBlockState(blockpos, iblockstate.withProperty(BlockColored.COLOR, EnumDyeColor.byMetadata(dyeType.ordinal())));
+            }
+            if (block == Blocks.STAINED_HARDENED_CLAY)
+            {
+                world.setBlockState(blockpos, iblockstate.withProperty(BlockColored.COLOR, EnumDyeColor.byMetadata(dyeType.ordinal())));
+            }
+            if (block == Blocks.STAINED_GLASS)
+            {
+                world.setBlockState(blockpos, iblockstate.withProperty(BlockColored.COLOR, EnumDyeColor.byMetadata(dyeType.ordinal())));
+            }
+            //Concrete
+            if (block == Blocks.field_192443_dR)
+            {
+                world.setBlockState(blockpos, iblockstate.withProperty(BlockColored.COLOR, EnumDyeColor.byMetadata(dyeType.ordinal())));
+            }
+            //Concrete Powder
+            if (block == Blocks.field_192444_dS)
+            {
+                world.setBlockState(blockpos, iblockstate.withProperty(BlockConcretePowder.field_192426_a, EnumDyeColor.byMetadata(dyeType.ordinal())));
+            }
+            if (block == Blocks.STAINED_GLASS_PANE)
+            {
+                world.setBlockState(blockpos, iblockstate.withProperty(BlockColored.COLOR, EnumDyeColor.byMetadata(dyeType.ordinal())));
+            }
+            if (block == Blocks.GLASS)
+            {
+                world.setBlockState(blockpos, Blocks.STAINED_GLASS.getDefaultState().withProperty(BlockColored.COLOR, EnumDyeColor.byMetadata(dyeType.ordinal())));
+            }
+            if (block == Blocks.HARDENED_CLAY)
+            {
+                world.setBlockState(blockpos, Blocks.STAINED_HARDENED_CLAY.getDefaultState().withProperty(BlockColored.COLOR, EnumDyeColor.byMetadata(dyeType.ordinal())));
+            }
+            if (block == Blocks.GLASS_PANE)
+            {
+                world.setBlockState(blockpos, Blocks.STAINED_GLASS_PANE.getDefaultState().withProperty(BlockColored.COLOR, EnumDyeColor.byMetadata(dyeType.ordinal())));
+            }
+        }
+        
+        int itemId = Item.getIdFromItem(BEItems.dye_arrow);
+        int itemMeta = this.getDyeType().ordinal();
+        for (int ii = 0; ii < 16; ++ii)
+        {
+            this.world.spawnParticle(EnumParticleTypes.ITEM_CRACK, this.posX, this.posY, this.posZ, ((double)this.rand.nextFloat() - 0.5D) * 0.08D, ((double)this.rand.nextFloat() - 0.5D) * 0.08D, ((double)this.rand.nextFloat() - 0.5D) * 0.08D, new int[] {itemId, itemMeta});                
+        }
+        
+        this.setDead();
+    }
 
     @Override
     protected void arrowHit(EntityLivingBase living)
     {
+        ItemDyeArrow.DyeType dyeType = this.getDyeType();
+        
+        if (living instanceof EntitySheep)
+        {
+            EntitySheep entitysheep = (EntitySheep)living;
+
+            entitysheep.setFleeceColor(EnumDyeColor.byMetadata(dyeType.ordinal()));
+            this.setDead();
+        }
+        
+        if (living instanceof EntityWolf)
+        {
+            EntityWolf entitywolf = (EntityWolf)living;
+
+            entitywolf.setCollarColor(EnumDyeColor.byMetadata(dyeType.ordinal()));
+            this.setDead();
+        }
+        
+        if (living instanceof EntityPlayer)
+        {
+            EntityPlayer entityplayer = (EntityPlayer)living;
+
+            for (ItemStack itemstack : entityplayer.inventory.armorInventory)
+            {
+                if (itemstack != null && (itemstack.getItem() == Items.LEATHER_HELMET || itemstack.getItem() == Items.LEATHER_CHESTPLATE || itemstack.getItem() == Items.LEATHER_LEGGINGS || itemstack.getItem() == Items.LEATHER_BOOTS))
+                {
+                    ItemArmor itemarmor = (ItemArmor)itemstack.getItem();
+                    itemarmor.setColor(itemstack, EnumDyeColor.byMetadata(dyeType.ordinal()).func_193350_e());
+                }
+            }
+        }
     }
-    
-    @Nullable
+
     @Override
+    @Nullable
     protected Entity findEntityOnPath(Vec3d start, Vec3d end)
     {
         Entity entity = null;
@@ -608,6 +631,11 @@ public class EntityDyeArrow extends EntityArrow implements IProjectile
         }
 
         return entity;
+    }
+
+    public static void registerFixesDyeArrow(DataFixer fixer)
+    {
+        EntityArrow.registerFixesArrow(fixer, "DyeArrow");
     }
     
     @Override
@@ -731,11 +759,11 @@ public class EntityDyeArrow extends EntityArrow implements IProjectile
     {
         return 0.0F;
     }
-
+    
     @Override
     public void setIsCritical(boolean critical)
     {
-        byte b0 = this.dataManager.get(CRITICAL).byteValue();
+        byte b0 = ((Byte)this.dataManager.get(CRITICAL)).byteValue();
 
         if (critical)
         {
@@ -750,7 +778,7 @@ public class EntityDyeArrow extends EntityArrow implements IProjectile
     @Override
     public boolean getIsCritical()
     {
-        byte b0 = this.dataManager.get(CRITICAL).byteValue();
+        byte b0 = ((Byte)this.dataManager.get(CRITICAL)).byteValue();
         return (b0 & 1) != 0;
     }
     

@@ -23,7 +23,7 @@ import net.minecraftforge.fml.common.Mod.Instance;
 import net.minecraftforge.fml.common.SidedProxy;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 
-@Mod(modid = Bullseye.MOD_ID, version = Bullseye.MOD_VERSION, name = Bullseye.MOD_NAME, guiFactory = Bullseye.GUI_FACTORY)
+@Mod(modid = Bullseye.MOD_ID, version = Bullseye.MOD_VERSION, name = Bullseye.MOD_NAME, dependencies = "required-after:forge@[14.21.0.2330,)", guiFactory = Bullseye.GUI_FACTORY)
 public class Bullseye
 {
     public static final String MOD_NAME = "Bullseye";

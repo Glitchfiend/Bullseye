@@ -8,8 +8,6 @@ import net.minecraft.init.PotionTypes;
 import net.minecraft.item.ItemStack;
 import net.minecraft.potion.PotionUtils;
 
-import static bullseye.util.inventory.CraftingUtil.*;
-
 public class ModCrafting
 {
     public static void init()
@@ -22,6 +20,7 @@ public class ModCrafting
         // Register crafting recipes
 
         // Arrows
+        /*
         addShapedRecipe(new ItemStack(BEItems.arrow, 4, ItemBEArrow.ArrowType.TRAINING.ordinal()), new Object [] {"R", "S", "F", 'R', Items.RABBIT_HIDE, 'S', "stickWood", 'F', Items.FEATHER});
         addShapedRecipe(new ItemStack(BEItems.arrow, 4, ItemBEArrow.ArrowType.EGG.ordinal()), new Object [] {"E", "S", "F", 'E', Items.EGG, 'S', "stickWood", 'F', Items.FEATHER});
         addShapedRecipe(new ItemStack(BEItems.arrow, 4, ItemBEArrow.ArrowType.EXTINGUISHING.ordinal()), new Object [] {"T", "S", "F", 'T', PotionUtils.addPotionToItemStack(new ItemStack(Items.POTIONITEM), PotionTypes.WATER), 'S', "stickWood", 'F', Items.FEATHER});
@@ -48,5 +47,6 @@ public class ModCrafting
         addShapedRecipe(new ItemStack(BEItems.dye_arrow, 4, ItemDyeArrow.DyeType.SILVER.ordinal()), new Object [] {"D", "S", "F", 'D', "dyeLightGray", 'S', "stickWood", 'F', Items.FEATHER});
         addShapedRecipe(new ItemStack(BEItems.dye_arrow, 4, ItemDyeArrow.DyeType.GRAY.ordinal()), new Object [] {"D", "S", "F", 'D', "dyeGray", 'S', "stickWood", 'F', Items.FEATHER});
         addShapedRecipe(new ItemStack(BEItems.dye_arrow, 4, ItemDyeArrow.DyeType.BLACK.ordinal()), new Object [] {"D", "S", "F", 'D', "dyeBlack", 'S', "stickWood", 'F', Items.FEATHER});
+        */
     }
 }

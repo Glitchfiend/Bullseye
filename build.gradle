@@ -22,10 +22,6 @@ configFile.withReader {
     project.ext.config = new ConfigSlurper().parse prop
 }
 
-def commonManifest = {
-    attributes 'FMLAT': 'bullseye_at.cfg'
-}
-
 group = "glitchfiend.bullseye"
 version = config.mod_version
 archivesBaseName = "Bullseye"

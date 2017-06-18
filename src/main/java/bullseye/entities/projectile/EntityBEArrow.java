@@ -231,7 +231,7 @@ public class EntityBEArrow extends EntityArrow implements IProjectile
         {
             AxisAlignedBB axisalignedbb = iblockstate.getCollisionBoundingBox(this.world, blockpos);
 
-            if (axisalignedbb != Block.NULL_AABB && axisalignedbb.offset(blockpos).isVecInside(new Vec3d(this.posX, this.posY, this.posZ)))
+            if (axisalignedbb != Block.NULL_AABB && axisalignedbb.offset(blockpos).contains(new Vec3d(this.posX, this.posY, this.posZ)))
             {
                 this.inGround = true;
             }
@@ -246,7 +246,7 @@ public class EntityBEArrow extends EntityArrow implements IProjectile
         {
             int j = block.getMetaFromState(iblockstate);
 
-            if ((block != this.inTile || j != this.inData) && !this.world.collidesWithAnyBlock(this.getEntityBoundingBox().expandXyz(0.05D)))
+            if ((block != this.inTile || j != this.inData) && !this.world.collidesWithAnyBlock(this.getEntityBoundingBox().grow(0.05D)))
             {
                 this.inGround = false;
                 this.motionX *= (double)(this.rand.nextFloat() * 0.2F);
@@ -289,7 +289,7 @@ public class EntityBEArrow extends EntityArrow implements IProjectile
 
             if (raytraceresult != null)
             {
-                vec3d = new Vec3d(raytraceresult.hitVec.xCoord, raytraceresult.hitVec.yCoord, raytraceresult.hitVec.zCoord);
+                vec3d = new Vec3d(raytraceresult.hitVec.x, raytraceresult.hitVec.y, raytraceresult.hitVec.z);
             }
 
             Entity entity = this.findEntityOnPath(vec3d1, vec3d);
@@ -524,9 +524,9 @@ public class EntityBEArrow extends EntityArrow implements IProjectile
     		IBlockState iblockstate = this.world.getBlockState(blockpos);
     		this.inTile = iblockstate.getBlock();
     		this.inData = this.inTile.getMetaFromState(iblockstate);
-    		this.motionX = (double)((float)(raytraceResultIn.hitVec.xCoord - this.posX));
-    		this.motionY = (double)((float)(raytraceResultIn.hitVec.yCoord - this.posY));
-    		this.motionZ = (double)((float)(raytraceResultIn.hitVec.zCoord - this.posZ));
+    		this.motionX = (double)((float)(raytraceResultIn.hitVec.x - this.posX));
+    		this.motionY = (double)((float)(raytraceResultIn.hitVec.y - this.posY));
+    		this.motionZ = (double)((float)(raytraceResultIn.hitVec.z - this.posZ));
     		float f2 = MathHelper.sqrt(this.motionX * this.motionX + this.motionY * this.motionY + this.motionZ * this.motionZ);
     		this.posX -= this.motionX / (double)f2 * 0.05000000074505806D;
     		this.posY -= this.motionY / (double)f2 * 0.05000000074505806D;
@@ -592,19 +592,6 @@ public class EntityBEArrow extends EntityArrow implements IProjectile
                 }
             }
     	}
-    }
-    
-    @Override
-    public void move(MoverType type, double x, double y, double z)
-    {
-        super.move(type, x, y, z);
-
-        if (this.inGround)
-        {
-            this.xTile = MathHelper.floor(this.posX);
-            this.yTile = MathHelper.floor(this.posY);
-            this.zTile = MathHelper.floor(this.posZ);
-        }
     }
 
     @Override
@@ -941,7 +928,7 @@ public class EntityBEArrow extends EntityArrow implements IProjectile
     protected Entity findEntityOnPath(Vec3d start, Vec3d end)
     {
         Entity entity = null;
-        List<Entity> list = this.world.getEntitiesInAABBexcluding(this, this.getEntityBoundingBox().addCoord(this.motionX, this.motionY, this.motionZ).expandXyz(1.0D), ARROW_TARGETS);
+        List<Entity> list = this.world.getEntitiesInAABBexcluding(this, this.getEntityBoundingBox().expand(this.motionX, this.motionY, this.motionZ).grow(1.0D), ARROW_TARGETS);
         double d0 = 0.0D;
 
         for (int i = 0; i < list.size(); ++i)
@@ -950,7 +937,7 @@ public class EntityBEArrow extends EntityArrow implements IProjectile
 
             if (entity1 != this.shootingEntity || this.ticksInAir >= 5)
             {
-                AxisAlignedBB axisalignedbb = entity1.getEntityBoundingBox().expandXyz(0.30000001192092896D);
+                AxisAlignedBB axisalignedbb = entity1.getEntityBoundingBox().grow(0.30000001192092896D);
                 RayTraceResult raytraceresult = axisalignedbb.calculateIntercept(start, end);
 
                 if (raytraceresult != null)

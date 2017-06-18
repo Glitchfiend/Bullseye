@@ -83,7 +83,7 @@ public class ItemBEArrow extends ItemArrow
     @SideOnly(Side.CLIENT)
     public void getSubItems(CreativeTabs tab, NonNullList<ItemStack> subItems)
     {
-        if (this.func_194125_a(tab))
+        if (this.isInCreativeTab(tab))
         {
             for (ArrowType arrowType : ArrowType.values())
             {

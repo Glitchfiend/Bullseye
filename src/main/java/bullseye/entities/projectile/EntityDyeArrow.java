@@ -210,6 +210,13 @@ public class EntityDyeArrow extends EntityArrow implements IProjectile
     @Override
     public void onUpdate()
     {
+        if (!this.world.isRemote)
+        {
+            this.setFlag(6, this.isGlowing());
+        }
+
+        this.onEntityUpdate();
+        
         if (this.prevRotationPitch == 0.0F && this.prevRotationYaw == 0.0F)
         {
             float f = MathHelper.sqrt(this.motionX * this.motionX + this.motionZ * this.motionZ);
@@ -403,11 +410,6 @@ public class EntityDyeArrow extends EntityArrow implements IProjectile
                 if (entity instanceof EntityLivingBase)
                 {
                     EntityLivingBase entitylivingbase = (EntityLivingBase)entity;
-
-                    if (!this.world.isRemote)
-                    {
-                        entitylivingbase.setArrowCountInEntity(entitylivingbase.getArrowCountInEntity() + 1);
-                    }
 
                     if (this.knockbackStrength > 0)
                     {

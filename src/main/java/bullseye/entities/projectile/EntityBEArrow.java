@@ -214,6 +214,13 @@ public class EntityBEArrow extends EntityArrow implements IProjectile
     @Override
     public void onUpdate()
     {
+        if (!this.world.isRemote)
+        {
+            this.setFlag(6, this.isGlowing());
+        }
+
+        this.onEntityUpdate();
+        
         if (this.prevRotationPitch == 0.0F && this.prevRotationYaw == 0.0F)
         {
             float f = MathHelper.sqrt(this.motionX * this.motionX + this.motionZ * this.motionZ);
@@ -283,7 +290,7 @@ public class EntityBEArrow extends EntityArrow implements IProjectile
             ++this.ticksInAir;
             Vec3d vec3d1 = new Vec3d(this.posX, this.posY, this.posZ);
             Vec3d vec3d = new Vec3d(this.posX + this.motionX, this.posY + this.motionY, this.posZ + this.motionZ);
-            RayTraceResult raytraceresult = this.world.rayTraceBlocks(vec3d1, vec3d, false, true, false);
+            RayTraceResult raytraceresult = this.world.rayTraceBlocks(vec3d1, vec3d, (arrowType == ItemBEArrow.ArrowType.FIRE || arrowType == ItemBEArrow.ArrowType.ICE || arrowType == ItemBEArrow.ArrowType.EXTINGUISHING), (arrowType != ItemBEArrow.ArrowType.FIRE && arrowType != ItemBEArrow.ArrowType.ICE && arrowType != ItemBEArrow.ArrowType.EXTINGUISHING), false);
             vec3d1 = new Vec3d(this.posX, this.posY, this.posZ);
             vec3d = new Vec3d(this.posX + this.motionX, this.posY + this.motionY, this.posZ + this.motionZ);
 
@@ -329,28 +336,28 @@ public class EntityBEArrow extends EntityArrow implements IProjectile
             {
             	for (int k = 0; k < 8; ++k)
                 {
-            		this.world.spawnParticle(EnumParticleTypes.FLAME, this.posX + this.motionX * (double)k / 4.0D, this.posY + this.motionY * (double)k / 4.0D, this.posZ + this.motionZ * (double)k / 4.0D, -this.motionX, -this.motionY + 0.2D, -this.motionZ);
+            	    this.world.spawnParticle(EnumParticleTypes.FLAME, this.posX + this.motionX * (double)k / 8.0D, this.posY + this.motionY * (double)k / 8.0D, this.posZ + this.motionZ * (double)k / 8.0D, 0.0D, 0.0D, 0.0D, new int[0]);
                 }
             }
             if (arrowType == ItemBEArrow.ArrowType.ICE)
             {
             	for (int k = 0; k < 8; ++k)
                 {
-            		Bullseye.proxy.spawnParticle(BEParticleTypes.SNOWFLAKE, this.posX + this.motionX * (double)k / 4.0D, this.posY + this.motionY * (double)k / 4.0D, this.posZ + this.motionZ * (double)k / 4.0D, -this.motionX, -this.motionY + 0.2D, -this.motionZ);
+            		Bullseye.proxy.spawnParticle(BEParticleTypes.SNOWFLAKE, this.posX + this.motionX * (double)k / 8.0D, this.posY + this.motionY * (double)k / 8.0D, this.posZ + this.motionZ * (double)k / 8.0D, 0.0D, 0.0D, 0.0D, new int[0]);
                 }
             }
             if (arrowType == ItemBEArrow.ArrowType.LIGHTNING)
             {
             	for (int k = 0; k < 8; ++k)
                 {
-            		this.world.spawnParticle(EnumParticleTypes.FIREWORKS_SPARK, this.posX + this.motionX * (double)k / 4.0D, this.posY + this.motionY * (double)k / 4.0D, this.posZ + this.motionZ * (double)k / 4.0D, -this.motionX, -this.motionY + 0.2D, -this.motionZ);
+            		this.world.spawnParticle(EnumParticleTypes.FIREWORKS_SPARK, this.posX + this.motionX * (double)k / 8.0D, this.posY + this.motionY * (double)k / 8.0D, this.posZ + this.motionZ * (double)k / 8.0D, 0.0D, 0.0D, 0.0D, new int[0]);
                 }
             }
             if (arrowType == ItemBEArrow.ArrowType.BOMB)
             {
             	for (int k = 0; k < 8; ++k)
                 {
-            		this.world.spawnParticle(EnumParticleTypes.SMOKE_NORMAL, this.posX + this.motionX * (double)k / 4.0D, this.posY + this.motionY * (double)k / 4.0D, this.posZ + this.motionZ * (double)k / 4.0D, -this.motionX, -this.motionY + 0.2D, -this.motionZ);
+            		this.world.spawnParticle(EnumParticleTypes.SMOKE_NORMAL, this.posX + this.motionX * (double)k / 8.0D, this.posY + this.motionY * (double)k / 8.0D, this.posZ + this.motionZ * (double)k / 8.0D, 0.0D, 0.0D, 0.0D, new int[0]);
                 }
             }
 
@@ -424,6 +431,66 @@ public class EntityBEArrow extends EntityArrow implements IProjectile
         Entity entity = raytraceResultIn.entityHit;
         ItemBEArrow.ArrowType arrowType = this.getArrowType();
 
+        if (raytraceResultIn != null)
+        {
+            if (raytraceResultIn.typeOfHit == RayTraceResult.Type.BLOCK)
+            {
+                BlockPos blockpos = raytraceResultIn.getBlockPos();
+                IBlockState iblockstate = this.world.getBlockState(blockpos);
+                
+                //Extinguishing Arrows
+                if (arrowType == ItemBEArrow.ArrowType.EXTINGUISHING)
+                {
+                    if (iblockstate.getMaterial() == Material.LAVA && ((Integer)iblockstate.getValue(BlockLiquid.LEVEL)).intValue() == 0)
+                    {
+                        this.world.playSound((EntityPlayer)null, blockpos, SoundEvents.BLOCK_GLASS_BREAK, SoundCategory.BLOCKS, 0.5F, 2.6F + (this.world.rand.nextFloat() - this.world.rand.nextFloat()) * 0.8F);
+                        for (int i = 0; i < 8; ++i)
+                        {
+                            this.world.spawnParticle(EnumParticleTypes.WATER_SPLASH, (this.posX - 0.5D) + Math.random(), this.posY + 0.25D, (this.posZ - 0.5D) + Math.random(), 0.0D, 0.0D, 0.0D, new int[0]);
+                        }
+                        this.world.setBlockState(blockpos, Blocks.OBSIDIAN.getDefaultState());
+                        this.setDead();
+                    }
+                }
+                
+                //Ice Arrows
+                if (arrowType == ItemBEArrow.ArrowType.ICE)
+                {
+                    if (iblockstate.getMaterial() == Material.WATER && ((Integer)iblockstate.getValue(BlockLiquid.LEVEL)).intValue() == 0)
+                    {
+                        this.world.setBlockState(blockpos, Blocks.FROSTED_ICE.getDefaultState(), 2);
+                        this.setDead();
+                    }
+                }
+                
+                //Fire Arrows
+                if (arrowType == ItemBEArrow.ArrowType.FIRE)
+                {
+                    if (iblockstate.getMaterial() == Material.WATER && ((Integer)iblockstate.getValue(BlockLiquid.LEVEL)).intValue() == 0)
+                    {
+                        this.world.playSound((EntityPlayer)null, blockpos, SoundEvents.BLOCK_FIRE_EXTINGUISH, SoundCategory.BLOCKS, 0.5F, 2.6F + (this.world.rand.nextFloat() - this.world.rand.nextFloat()) * 0.8F);
+                        for (int i = 0; i < 8; ++i)
+                        {
+                            this.world.spawnParticle(EnumParticleTypes.SMOKE_LARGE, (this.posX - 0.5D) + Math.random(), this.posY + 0.25D, (this.posZ - 0.5D) + Math.random(), 0.0D, 0.0D, 0.0D, new int[0]);
+                        }
+                        this.setDead();
+                    }
+                    
+                    BlockPos pos = raytraceResultIn.getBlockPos().offset(raytraceResultIn.sideHit);
+                    
+                    if (world.isAirBlock(pos) && this.world.isBlockFullCube(blockpos) && iblockstate.getMaterial() != Material.LAVA && iblockstate.getMaterial() != Material.WATER && iblockstate != Blocks.ICE.getDefaultState() && iblockstate != Blocks.SNOW_LAYER.getDefaultState() && iblockstate != Blocks.SNOW.getDefaultState() && iblockstate != Blocks.PACKED_ICE.getDefaultState() && iblockstate != Blocks.TNT.getDefaultState())
+                    {
+                        if (ConfigurationHandler.burnFireArrows)
+                        {
+                            this.world.setBlockState(pos, Blocks.FIRE.getDefaultState(), 11);
+                        }
+                        
+                        this.setDead();
+                    }
+                }
+            }
+        }
+        
     	if (entity != null)
     	{
     		float f = MathHelper.sqrt(this.motionX * this.motionX + this.motionY * this.motionY + this.motionZ * this.motionZ);
@@ -458,7 +525,10 @@ public class EntityBEArrow extends EntityArrow implements IProjectile
 
     				if (!this.world.isRemote)
     				{
-    					entitylivingbase.setArrowCountInEntity(entitylivingbase.getArrowCountInEntity() + 1);
+    				    if (arrowType != ItemBEArrow.ArrowType.BOMB && arrowType != ItemBEArrow.ArrowType.LIGHTNING && arrowType != ItemBEArrow.ArrowType.EGG && arrowType != ItemBEArrow.ArrowType.EXTINGUISHING && arrowType != ItemBEArrow.ArrowType.TRAINING)
+    				    {
+    				        entitylivingbase.setArrowCountInEntity(entitylivingbase.getArrowCountInEntity() + 1);
+    				    }
     				}
 
     				if (this.knockbackStrength > 0)
@@ -540,57 +610,6 @@ public class EntityBEArrow extends EntityArrow implements IProjectile
     		{
     			this.inTile.onEntityCollidedWithBlock(this.world, blockpos, iblockstate, this);
     		}
-    		
-    		//Extinguishing Arrows
-    		if (arrowType == ItemBEArrow.ArrowType.EXTINGUISHING)
-            {
-                if (iblockstate.getMaterial() == Material.LAVA && ((Integer)iblockstate.getValue(BlockLiquid.LEVEL)).intValue() == 0)
-                {
-                    this.world.playSound((EntityPlayer)null, blockpos, SoundEvents.BLOCK_GLASS_BREAK, SoundCategory.BLOCKS, 0.5F, 2.6F + (this.world.rand.nextFloat() - this.world.rand.nextFloat()) * 0.8F);
-                    for (int i = 0; i < 8; ++i)
-                    {
-                        this.world.spawnParticle(EnumParticleTypes.WATER_SPLASH, (this.posX - 0.5D) + Math.random(), this.posY + 0.25D, (this.posZ - 0.5D) + Math.random(), 0.0D, 0.0D, 0.0D, new int[0]);
-                    }
-                    this.world.setBlockState(blockpos, Blocks.OBSIDIAN.getDefaultState());
-                    this.setDead();
-                }
-            }
-    		
-    		//Ice Arrows
-            if (arrowType == ItemBEArrow.ArrowType.ICE)
-            {
-                if (iblockstate.getMaterial() == Material.WATER && ((Integer)iblockstate.getValue(BlockLiquid.LEVEL)).intValue() == 0)
-                {
-                    this.world.setBlockState(blockpos, Blocks.FROSTED_ICE.getDefaultState(), 2);
-                    this.setDead();
-                }
-            }
-            
-            //Fire Arrows
-            if (arrowType == ItemBEArrow.ArrowType.FIRE)
-            {
-                if (iblockstate.getMaterial() == Material.WATER && ((Integer)iblockstate.getValue(BlockLiquid.LEVEL)).intValue() == 0)
-                {
-                    this.world.playSound((EntityPlayer)null, blockpos, SoundEvents.BLOCK_FIRE_EXTINGUISH, SoundCategory.BLOCKS, 0.5F, 2.6F + (this.world.rand.nextFloat() - this.world.rand.nextFloat()) * 0.8F);
-                    for (int i = 0; i < 8; ++i)
-                    {
-                        this.world.spawnParticle(EnumParticleTypes.SMOKE_LARGE, (this.posX - 0.5D) + Math.random(), this.posY + 0.25D, (this.posZ - 0.5D) + Math.random(), 0.0D, 0.0D, 0.0D, new int[0]);
-                    }
-                    this.setDead();
-                }
-                
-                BlockPos pos = raytraceResultIn.getBlockPos().offset(raytraceResultIn.sideHit);
-                
-                if (world.isAirBlock(pos) && this.world.isBlockFullCube(blockpos) && iblockstate.getMaterial() != Material.LAVA && iblockstate.getMaterial() != Material.WATER && iblockstate != Blocks.ICE.getDefaultState() && iblockstate != Blocks.SNOW_LAYER.getDefaultState() && iblockstate != Blocks.SNOW.getDefaultState() && iblockstate != Blocks.PACKED_ICE.getDefaultState() && iblockstate != Blocks.TNT.getDefaultState())
-                {
-                    if (ConfigurationHandler.burnFireArrows)
-                    {
-                        this.world.setBlockState(pos, Blocks.FIRE.getDefaultState(), 11);
-                    }
-                    
-                    this.setDead();
-                }
-            }
     	}
     }
 

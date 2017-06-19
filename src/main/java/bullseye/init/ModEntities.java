@@ -26,8 +26,8 @@ public class ModEntities
     public static void init()
     {
         // projectiles
-    	registerBEEntity(EntityDyeArrow.class, "dye_arrow", 64, 20, true);
-        registerBEEntity(EntityBEArrow.class, "arrow", 64, 20, true);
+    	registerBEEntity(EntityDyeArrow.class, "dye_arrow", 64, 3, true);
+        registerBEEntity(EntityBEArrow.class, "arrow", 64, 3, true);
     }
     
     // register an entity

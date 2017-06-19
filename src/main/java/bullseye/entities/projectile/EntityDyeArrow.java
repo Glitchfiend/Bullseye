@@ -10,15 +10,17 @@ import com.google.common.base.Predicates;
 import bullseye.api.BEItems;
 import bullseye.item.ItemDyeArrow;
 import net.minecraft.block.Block;
+import net.minecraft.block.BlockBed;
 import net.minecraft.block.BlockColored;
 import net.minecraft.block.BlockConcretePowder;
+import net.minecraft.block.BlockGlazedTerracotta;
+import net.minecraft.block.BlockHorizontal;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.IProjectile;
-import net.minecraft.entity.MoverType;
 import net.minecraft.entity.monster.EntityEnderman;
 import net.minecraft.entity.passive.EntitySheep;
 import net.minecraft.entity.passive.EntityWolf;
@@ -38,8 +40,11 @@ import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.network.datasync.DataSerializers;
 import net.minecraft.network.datasync.EntityDataManager;
 import net.minecraft.network.play.server.SPacketChangeGameState;
+import net.minecraft.tileentity.TileEntity;
+import net.minecraft.tileentity.TileEntityBed;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.EntitySelectors;
+import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.datafix.DataFixer;
@@ -407,6 +412,7 @@ public class EntityDyeArrow extends EntityArrow implements IProjectile
 
             if (entity.attackEntityFrom(damagesource, (float)i))
             {
+                
                 if (entity instanceof EntityLivingBase)
                 {
                     EntityLivingBase entitylivingbase = (EntityLivingBase)entity;
@@ -538,6 +544,67 @@ public class EntityDyeArrow extends EntityArrow implements IProjectile
             if (block == Blocks.GLASS_PANE)
             {
                 world.setBlockState(blockpos, Blocks.STAINED_GLASS_PANE.getDefaultState().withProperty(BlockColored.COLOR, EnumDyeColor.byMetadata(dyeType.ordinal())));
+            }
+            /*
+            if (block == Blocks.BED)
+            {
+                EnumFacing enumfacing = (EnumFacing)iblockstate.getValue(BlockBed.FACING);
+                
+                if (iblockstate.getValue(BlockBed.PART) == BlockBed.EnumPartType.FOOT)
+                {
+                    BlockPos blockpos2 = blockpos.offset(enumfacing);
+                    
+                    TileEntity bed1 = world.getTileEntity(blockpos);
+                    TileEntity bed2 = world.getTileEntity(blockpos2);
+                    
+                    if (bed1 != null && bed1 instanceof TileEntityBed)
+                    {
+                        ((TileEntityBed)bed1).setColor(EnumDyeColor.byMetadata(dyeType.ordinal()));
+                    }
+                    if (bed2 != null && bed2 instanceof TileEntityBed)
+                    {
+                        ((TileEntityBed)bed2).setColor(EnumDyeColor.byMetadata(dyeType.ordinal()));
+                    }
+                }
+                
+                if (iblockstate.getValue(BlockBed.PART) == BlockBed.EnumPartType.HEAD)
+                {
+                    BlockPos blockpos2 = blockpos.offset(enumfacing.getOpposite());
+                    
+                    TileEntity bed1 = world.getTileEntity(blockpos);
+                    TileEntity bed2 = world.getTileEntity(blockpos2);
+                    
+                    if (bed1 != null && bed1 instanceof TileEntityBed)
+                    {
+                        ((TileEntityBed)bed1).setColor(EnumDyeColor.byMetadata(dyeType.ordinal()));
+                    }
+                    if (bed2 != null && bed2 instanceof TileEntityBed)
+                    {
+                        ((TileEntityBed)bed2).setColor(EnumDyeColor.byMetadata(dyeType.ordinal()));
+                    }
+                }
+            }
+            */
+            if (block instanceof BlockGlazedTerracotta)
+            {   
+                EnumFacing facing = iblockstate.getValue(BlockGlazedTerracotta.FACING);
+                
+                if (dyeType == ItemDyeArrow.DyeType.BLACK) { world.setBlockState(blockpos, Blocks.BLACK_GLAZED_TERRACOTTA.getDefaultState().withProperty(BlockGlazedTerracotta.FACING, facing)); }
+                if (dyeType == ItemDyeArrow.DyeType.BLUE) { world.setBlockState(blockpos, Blocks.BLUE_GLAZED_TERRACOTTA.getDefaultState().withProperty(BlockGlazedTerracotta.FACING, facing)); }
+                if (dyeType == ItemDyeArrow.DyeType.BROWN) { world.setBlockState(blockpos, Blocks.BROWN_GLAZED_TERRACOTTA.getDefaultState().withProperty(BlockGlazedTerracotta.FACING, facing)); }
+                if (dyeType == ItemDyeArrow.DyeType.CYAN) { world.setBlockState(blockpos, Blocks.CYAN_GLAZED_TERRACOTTA.getDefaultState().withProperty(BlockGlazedTerracotta.FACING, facing)); }
+                if (dyeType == ItemDyeArrow.DyeType.GRAY) { world.setBlockState(blockpos, Blocks.GRAY_GLAZED_TERRACOTTA.getDefaultState().withProperty(BlockGlazedTerracotta.FACING, facing)); }
+                if (dyeType == ItemDyeArrow.DyeType.GREEN) { world.setBlockState(blockpos, Blocks.GREEN_GLAZED_TERRACOTTA.getDefaultState().withProperty(BlockGlazedTerracotta.FACING, facing)); }
+                if (dyeType == ItemDyeArrow.DyeType.LIGHT_BLUE) { world.setBlockState(blockpos, Blocks.LIGHT_BLUE_GLAZED_TERRACOTTA.getDefaultState().withProperty(BlockGlazedTerracotta.FACING, facing)); }
+                if (dyeType == ItemDyeArrow.DyeType.LIME) { world.setBlockState(blockpos, Blocks.LIME_GLAZED_TERRACOTTA.getDefaultState().withProperty(BlockGlazedTerracotta.FACING, facing)); }
+                if (dyeType == ItemDyeArrow.DyeType.MAGENTA) { world.setBlockState(blockpos, Blocks.MAGENTA_GLAZED_TERRACOTTA.getDefaultState().withProperty(BlockGlazedTerracotta.FACING, facing)); }
+                if (dyeType == ItemDyeArrow.DyeType.ORANGE) { world.setBlockState(blockpos, Blocks.ORANGE_GLAZED_TERRACOTTA.getDefaultState().withProperty(BlockGlazedTerracotta.FACING, facing)); }
+                if (dyeType == ItemDyeArrow.DyeType.PINK) { world.setBlockState(blockpos, Blocks.PINK_GLAZED_TERRACOTTA.getDefaultState().withProperty(BlockGlazedTerracotta.FACING, facing)); }
+                if (dyeType == ItemDyeArrow.DyeType.PURPLE) { world.setBlockState(blockpos, Blocks.PURPLE_GLAZED_TERRACOTTA.getDefaultState().withProperty(BlockGlazedTerracotta.FACING, facing)); }
+                if (dyeType == ItemDyeArrow.DyeType.RED) { world.setBlockState(blockpos, Blocks.RED_GLAZED_TERRACOTTA.getDefaultState().withProperty(BlockGlazedTerracotta.FACING, facing)); }
+                if (dyeType == ItemDyeArrow.DyeType.SILVER) { world.setBlockState(blockpos, Blocks.SILVER_GLAZED_TERRACOTTA.getDefaultState().withProperty(BlockGlazedTerracotta.FACING, facing)); }
+                if (dyeType == ItemDyeArrow.DyeType.WHITE) { world.setBlockState(blockpos, Blocks.WHITE_GLAZED_TERRACOTTA.getDefaultState().withProperty(BlockGlazedTerracotta.FACING, facing)); }
+                if (dyeType == ItemDyeArrow.DyeType.YELLOW) { world.setBlockState(blockpos, Blocks.YELLOW_GLAZED_TERRACOTTA.getDefaultState().withProperty(BlockGlazedTerracotta.FACING, facing)); }
             }
         }
         

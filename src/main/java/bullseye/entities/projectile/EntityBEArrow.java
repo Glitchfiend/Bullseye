@@ -621,6 +621,11 @@ public class EntityBEArrow extends EntityArrow implements IProjectile
         //Extinguishing Arrows
         if (arrowType == ItemBEArrow.ArrowType.EXTINGUISHING)
         {
+            if (living.isBurning())
+            {
+                living.extinguish();
+            }
+            
             if (living instanceof EntityPlayer)
             {
                 EntityPlayer entityplayer = (EntityPlayer)living;

@@ -4,6 +4,7 @@ import bullseye.api.BEItems;
 import bullseye.core.Bullseye;
 import bullseye.item.ItemBEArrow;
 import bullseye.item.ItemDyeArrow;
+import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.init.PotionTypes;
 import net.minecraft.item.ItemStack;
@@ -22,11 +23,12 @@ public class ModCrafting
         registerCraftingRecipe("egg_arrow", new ShapedOreRecipe(new ResourceLocation(Bullseye.MOD_ID, "egg_arrow"), new ItemStack(BEItems.arrow, 4, ItemBEArrow.ArrowType.EGG.ordinal()), new Object [] {"E", "S", "F", 'E', Items.EGG, 'S', "stickWood", 'F', Items.FEATHER}));
         registerCraftingRecipe("extinguishing_arrow", new ShapedOreRecipe(new ResourceLocation(Bullseye.MOD_ID, "extinguishing_arrow"), new ItemStack(BEItems.arrow, 4, ItemBEArrow.ArrowType.EXTINGUISHING.ordinal()), new Object [] {"T", "S", "F", 'T', PotionUtils.addPotionToItemStack(new ItemStack(Items.POTIONITEM), PotionTypes.WATER), 'S', "stickWood", 'F', Items.FEATHER}));
         registerCraftingRecipe("diamond_arrow", new ShapedOreRecipe(new ResourceLocation(Bullseye.MOD_ID, "diamond_arrow"), new ItemStack(BEItems.arrow, 4, ItemBEArrow.ArrowType.DIAMOND.ordinal()), new Object [] {"D", "S", "F", 'D', Items.DIAMOND, 'S', "stickWood", 'F', Items.FEATHER}));
-        registerCraftingRecipe("bomb_arrow", new ShapedOreRecipe(new ResourceLocation(Bullseye.MOD_ID, "bomb_arrow"), new ItemStack(BEItems.arrow, 4, ItemBEArrow.ArrowType.BOMB.ordinal()), new Object [] {"T", "S", "F", 'T', Items.GUNPOWDER, 'S', "stickWood", 'F', Items.FEATHER}));
+        registerCraftingRecipe("bomb_arrow", new ShapedOreRecipe(new ResourceLocation(Bullseye.MOD_ID, "bomb_arrow"), new ItemStack(BEItems.arrow, 4, ItemBEArrow.ArrowType.BOMB.ordinal()), new Object [] {"T", "S", "F", 'T', Blocks.TNT, 'S', "stickWood", 'F', Items.FEATHER}));
         registerCraftingRecipe("fire_arrow", new ShapedOreRecipe(new ResourceLocation(Bullseye.MOD_ID, "fire_arrow"), new ItemStack(BEItems.arrow, 4, ItemBEArrow.ArrowType.FIRE.ordinal()), new Object [] {"T", "S", "F", 'T', Items.BLAZE_POWDER, 'S', "stickWood", 'F', Items.FEATHER}));
-        registerCraftingRecipe("ice_arrow", new ShapedOreRecipe(new ResourceLocation(Bullseye.MOD_ID, "ice_arrow"), new ItemStack(BEItems.arrow, 4, ItemBEArrow.ArrowType.ICE.ordinal()), new Object [] {"T", "S", "F", 'T', Items.SNOWBALL, 'S', "stickWood", 'F', Items.FEATHER}));
+        registerCraftingRecipe("ice_arrow", new ShapedOreRecipe(new ResourceLocation(Bullseye.MOD_ID, "ice_arrow"), new ItemStack(BEItems.arrow, 4, ItemBEArrow.ArrowType.ICE.ordinal()), new Object [] {"T", "S", "F", 'T', Blocks.ICE, 'S', "stickWood", 'F', Items.FEATHER}));
         registerCraftingRecipe("lightning_arrow", new ShapedOreRecipe(new ResourceLocation(Bullseye.MOD_ID, "lightning_arrow"), new ItemStack(BEItems.arrow, 4, ItemBEArrow.ArrowType.LIGHTNING.ordinal()), new Object [] {"T", "S", "F", 'T', Items.NETHER_STAR, 'S', "stickWood", 'F', Items.FEATHER}));
         registerCraftingRecipe("prismarine_arrow", new ShapedOreRecipe(new ResourceLocation(Bullseye.MOD_ID, "prismarine_arrow"), new ItemStack(BEItems.arrow, 4, ItemBEArrow.ArrowType.PRISMARINE.ordinal()), new Object [] {"T", "S", "F", 'T', Items.PRISMARINE_SHARD, 'S', "stickWood", 'F', Items.FEATHER}));
+        registerCraftingRecipe("ender_arrow", new ShapedOreRecipe(new ResourceLocation(Bullseye.MOD_ID, "ender_arrow"), new ItemStack(BEItems.arrow, 4, ItemBEArrow.ArrowType.ENDER.ordinal()), new Object [] {"T", "S", "F", 'T', Items.ENDER_PEARL, 'S', "stickWood", 'F', Items.FEATHER}));
         
         registerCraftingRecipe("red_dye_arrow", new ShapedOreRecipe(dye_arrow_location, new ItemStack(BEItems.dye_arrow, 4, ItemDyeArrow.DyeType.RED.ordinal()), new Object [] {"D", "S", "F", 'D', "dyeRed", 'S', "stickWood", 'F', Items.FEATHER}));
         registerCraftingRecipe("orange_dye_arrow", new ShapedOreRecipe(dye_arrow_location, new ItemStack(BEItems.dye_arrow, 4, ItemDyeArrow.DyeType.ORANGE.ordinal()), new Object [] {"D", "S", "F", 'D', "dyeOrange", 'S', "stickWood", 'F', Items.FEATHER}));

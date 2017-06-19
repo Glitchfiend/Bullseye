@@ -12,6 +12,7 @@ import bullseye.config.ConfigurationHandler;
 import bullseye.core.Bullseye;
 import bullseye.item.ItemBEArrow;
 import bullseye.particle.BEParticleTypes;
+import net.minecraft.advancements.CriteriaTriggers;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockLiquid;
 import net.minecraft.block.BlockTNT;
@@ -25,6 +26,7 @@ import net.minecraft.entity.MoverType;
 import net.minecraft.entity.effect.EntityLightningBolt;
 import net.minecraft.entity.item.EntityTNTPrimed;
 import net.minecraft.entity.monster.EntityEnderman;
+import net.minecraft.entity.monster.EntityEndermite;
 import net.minecraft.entity.passive.EntityChicken;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
@@ -41,6 +43,8 @@ import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.network.datasync.DataSerializers;
 import net.minecraft.network.datasync.EntityDataManager;
 import net.minecraft.network.play.server.SPacketChangeGameState;
+import net.minecraft.tileentity.TileEntity;
+import net.minecraft.tileentity.TileEntityEndGateway;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.EntitySelectors;
 import net.minecraft.util.EnumParticleTypes;
@@ -334,30 +338,37 @@ public class EntityBEArrow extends EntityArrow implements IProjectile
             }
             if (arrowType == ItemBEArrow.ArrowType.FIRE)
             {
-            	for (int k = 0; k < 8; ++k)
+            	for (int k = 0; k < 4; ++k)
                 {
             	    this.world.spawnParticle(EnumParticleTypes.FLAME, this.posX + this.motionX * (double)k / 8.0D, this.posY + this.motionY * (double)k / 8.0D, this.posZ + this.motionZ * (double)k / 8.0D, 0.0D, 0.0D, 0.0D, new int[0]);
                 }
             }
             if (arrowType == ItemBEArrow.ArrowType.ICE)
             {
-            	for (int k = 0; k < 8; ++k)
+            	for (int k = 0; k < 4; ++k)
                 {
             		Bullseye.proxy.spawnParticle(BEParticleTypes.SNOWFLAKE, this.posX + this.motionX * (double)k / 8.0D, this.posY + this.motionY * (double)k / 8.0D, this.posZ + this.motionZ * (double)k / 8.0D, 0.0D, 0.0D, 0.0D, new int[0]);
                 }
             }
             if (arrowType == ItemBEArrow.ArrowType.LIGHTNING)
             {
-            	for (int k = 0; k < 8; ++k)
+            	for (int k = 0; k < 4; ++k)
                 {
-            		this.world.spawnParticle(EnumParticleTypes.FIREWORKS_SPARK, this.posX + this.motionX * (double)k / 8.0D, this.posY + this.motionY * (double)k / 8.0D, this.posZ + this.motionZ * (double)k / 8.0D, 0.0D, 0.0D, 0.0D, new int[0]);
+            		this.world.spawnParticle(EnumParticleTypes.END_ROD, this.posX + this.motionX * (double)k / 8.0D, this.posY + this.motionY * (double)k / 8.0D, this.posZ + this.motionZ * (double)k / 8.0D, 0.0D, 0.0D, 0.0D, new int[0]);
                 }
             }
             if (arrowType == ItemBEArrow.ArrowType.BOMB)
             {
-            	for (int k = 0; k < 8; ++k)
+            	for (int k = 0; k < 4; ++k)
                 {
             		this.world.spawnParticle(EnumParticleTypes.SMOKE_NORMAL, this.posX + this.motionX * (double)k / 8.0D, this.posY + this.motionY * (double)k / 8.0D, this.posZ + this.motionZ * (double)k / 8.0D, 0.0D, 0.0D, 0.0D, new int[0]);
+                }
+            }
+            if (arrowType == ItemBEArrow.ArrowType.ENDER)
+            {
+                for (int k = 0; k < 8; ++k)
+                {
+                    this.world.spawnParticle(EnumParticleTypes.PORTAL, this.posX, this.posY, this.posZ, this.rand.nextGaussian(), 0.0D, this.rand.nextGaussian());
                 }
             }
 
@@ -525,7 +536,7 @@ public class EntityBEArrow extends EntityArrow implements IProjectile
 
     				if (!this.world.isRemote)
     				{
-    				    if (arrowType != ItemBEArrow.ArrowType.BOMB && arrowType != ItemBEArrow.ArrowType.LIGHTNING && arrowType != ItemBEArrow.ArrowType.EGG && arrowType != ItemBEArrow.ArrowType.EXTINGUISHING && arrowType != ItemBEArrow.ArrowType.TRAINING)
+    				    if (arrowType != ItemBEArrow.ArrowType.BOMB && arrowType != ItemBEArrow.ArrowType.LIGHTNING && arrowType != ItemBEArrow.ArrowType.EGG && arrowType != ItemBEArrow.ArrowType.EXTINGUISHING && arrowType != ItemBEArrow.ArrowType.TRAINING && arrowType != ItemBEArrow.ArrowType.ENDER)
     				    {
     				        entitylivingbase.setArrowCountInEntity(entitylivingbase.getArrowCountInEntity() + 1);
     				    }
@@ -749,6 +760,76 @@ public class EntityBEArrow extends EntityArrow implements IProjectile
     {
         ItemBEArrow.ArrowType arrowType = this.getArrowType();
         
+        //Ender Arrow
+        if (arrowType == ItemBEArrow.ArrowType.ENDER)
+        {
+            EntityLivingBase entitylivingbase = (EntityLivingBase)this.shootingEntity;
+            TileEntity tileentity = this.world.getTileEntity(blockpos);
+
+            if (tileentity instanceof TileEntityEndGateway)
+            {
+                TileEntityEndGateway tileentityendgateway = (TileEntityEndGateway)tileentity;
+
+                if (entitylivingbase != null)
+                {
+                    if (entitylivingbase instanceof EntityPlayerMP)
+                    {
+                        CriteriaTriggers.ENTER_BLOCK.trigger((EntityPlayerMP)entitylivingbase, this.world.getBlockState(blockpos));
+                    }
+
+                    tileentityendgateway.teleportEntity(entitylivingbase);
+                    this.setDead();
+                    return;
+                }
+
+                tileentityendgateway.teleportEntity(this);
+                return;
+            }
+            
+            for (int i = 0; i < 32; ++i)
+            {
+                this.world.spawnParticle(EnumParticleTypes.PORTAL, this.posX, this.posY + this.rand.nextDouble() * 2.0D, this.posZ, this.rand.nextGaussian(), 0.0D, this.rand.nextGaussian());
+            }
+
+            if (!this.world.isRemote)
+            {
+                if (entitylivingbase instanceof EntityPlayerMP)
+                {
+                    EntityPlayerMP entityplayermp = (EntityPlayerMP)entitylivingbase;
+
+                    if (entityplayermp.connection.getNetworkManager().isChannelOpen() && entityplayermp.world == this.world && !entityplayermp.isPlayerSleeping())
+                    {
+                        net.minecraftforge.event.entity.living.EnderTeleportEvent event = new net.minecraftforge.event.entity.living.EnderTeleportEvent(entityplayermp, this.posX, this.posY, this.posZ, 5.0F);
+                        if (!net.minecraftforge.common.MinecraftForge.EVENT_BUS.post(event))
+                        { // Don't indent to lower patch size
+                        if (this.rand.nextFloat() < 0.05F && this.world.getGameRules().getBoolean("doMobSpawning"))
+                        {
+                            EntityEndermite entityendermite = new EntityEndermite(this.world);
+                            entityendermite.setSpawnedByPlayer(true);
+                            entityendermite.setLocationAndAngles(entitylivingbase.posX, entitylivingbase.posY, entitylivingbase.posZ, entitylivingbase.rotationYaw, entitylivingbase.rotationPitch);
+                            this.world.spawnEntity(entityendermite);
+                        }
+
+                        if (entitylivingbase.isRiding())
+                        {
+                            entitylivingbase.dismountRidingEntity();
+                        }
+
+                        entitylivingbase.setPositionAndUpdate(event.getTargetX(), event.getTargetY(), event.getTargetZ());
+                        entitylivingbase.fallDistance = 0.0F;
+                        entitylivingbase.attackEntityFrom(DamageSource.FALL, event.getAttackDamage());
+                        }
+                    }
+                }
+                else if (entitylivingbase != null)
+                {
+                    entitylivingbase.setPositionAndUpdate(this.posX, this.posY, this.posZ);
+                    entitylivingbase.fallDistance = 0.0F;
+                }
+
+                this.setDead();
+            }
+        }
         //Egg Arrows
         if (arrowType == ItemBEArrow.ArrowType.EGG)
         {

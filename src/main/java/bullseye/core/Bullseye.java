@@ -13,6 +13,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import bullseye.init.ModConfiguration;
+import bullseye.init.ModCrafting;
 import bullseye.init.ModEntities;
 import bullseye.init.ModItems;
 import bullseye.init.ModVanillaCompat;
@@ -22,7 +23,7 @@ import net.minecraftforge.fml.common.Mod.Instance;
 import net.minecraftforge.fml.common.SidedProxy;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 
-@Mod(modid = Bullseye.MOD_ID, version = Bullseye.MOD_VERSION, name = Bullseye.MOD_NAME, dependencies = "required-after:forge@[14.21.0.2340,)", guiFactory = Bullseye.GUI_FACTORY)
+@Mod(modid = Bullseye.MOD_ID, version = Bullseye.MOD_VERSION, name = Bullseye.MOD_NAME, dependencies = "required-after:forge@[14.21.0.2334,)", guiFactory = Bullseye.GUI_FACTORY)
 public class Bullseye
 {
     public static final String MOD_NAME = "Bullseye";
@@ -48,6 +49,7 @@ public class Bullseye
     	ModEntities.init();
         ModItems.init();
         ModVanillaCompat.init();
+        ModCrafting.init();
         
         proxy.registerRenderers();
     }

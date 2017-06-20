@@ -1,0 +1,28 @@
+{
+  "type": "forge:ore_shaped",
+  "group": "dye_arrow",
+  "pattern": [
+    "T",
+    "S",
+    "F"
+  ],
+  "key": {
+    "T": {
+      "type": "forge:ore_dict",
+	  "ore": "dyeBrown"
+    },
+    "S": {
+      "type": "forge:ore_dict",
+	  "ore": "stickWood"
+    },
+    "F": {
+      "item": "minecraft:feather"
+    }
+
+  },
+  "result": {
+    "item": "bullseye:dye_arrow",
+	"data": 12,
+    "count": 4
+  }
+}

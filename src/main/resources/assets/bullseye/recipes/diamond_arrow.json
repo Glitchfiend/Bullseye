@@ -1,0 +1,26 @@
+{
+  "type": "forge:ore_shaped",
+  "pattern": [
+    "T",
+    "S",
+    "F"
+  ],
+  "key": {
+    "T": {
+      "item": "minecraft:diamond"
+    },
+    "S": {
+      "type": "forge:ore_dict",
+	  "ore": "stickWood"
+    },
+    "F": {
+      "item": "minecraft:feather"
+    }
+
+  },
+  "result": {
+    "item": "bullseye:arrow",
+	"data": 3,
+    "count": 4
+  }
+}

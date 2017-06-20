@@ -489,7 +489,7 @@ public class EntityBEArrow extends EntityArrow implements IProjectile
                     
                     BlockPos pos = raytraceResultIn.getBlockPos().offset(raytraceResultIn.sideHit);
                     
-                    if (world.isAirBlock(pos) && this.world.isBlockFullCube(blockpos) && iblockstate.getMaterial() != Material.LAVA && iblockstate.getMaterial() != Material.WATER && iblockstate != Blocks.ICE.getDefaultState() && iblockstate != Blocks.SNOW_LAYER.getDefaultState() && iblockstate != Blocks.SNOW.getDefaultState() && iblockstate != Blocks.PACKED_ICE.getDefaultState() && iblockstate != Blocks.TNT.getDefaultState())
+                    if ((world.isAirBlock(pos) || iblockstate.getBlock().isReplaceable(world, pos)) && this.world.isBlockFullCube(blockpos) && iblockstate.getMaterial() != Material.LAVA && iblockstate.getMaterial() != Material.WATER && iblockstate != Blocks.ICE.getDefaultState() && iblockstate != Blocks.SNOW_LAYER.getDefaultState() && iblockstate != Blocks.SNOW.getDefaultState() && iblockstate != Blocks.PACKED_ICE.getDefaultState() && iblockstate != Blocks.TNT.getDefaultState())
                     {
                         if (ConfigurationHandler.burnFireArrows)
                         {

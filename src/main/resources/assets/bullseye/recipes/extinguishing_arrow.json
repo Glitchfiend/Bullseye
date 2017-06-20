@@ -1,0 +1,30 @@
+{
+  "type": "forge:ore_shaped",
+  "pattern": [
+    "T",
+    "S",
+    "F"
+  ],
+  "key": {
+    "T": {
+	  "type": "minecraft:item_nbt",
+      "item": "minecraft:potion",
+	  "nbt": {
+        "Potion": "water"
+      }
+    },
+    "S": {
+      "type": "forge:ore_dict",
+	  "ore": "stickWood"
+    },
+    "F": {
+      "item": "minecraft:feather"
+    }
+
+  },
+  "result": {
+    "item": "bullseye:arrow",
+	"data": 2,
+    "count": 4
+  }
+}

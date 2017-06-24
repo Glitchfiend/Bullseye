@@ -10,6 +10,7 @@ item.ender_arrow.name=Ender Arrow
 item.extinguishing_arrow.name=Extinguishing Arrow
 item.fire_arrow.name=Fire Arrow
 item.ice_arrow.name=Ice Arrow
+item.light_arrow.name=Light Arrow
 item.lightning_arrow.name=Lightning Arrow
 item.prismarine_arrow.name=Prismarine Arrow
 item.training_arrow.name=Training Arrow
@@ -42,6 +43,7 @@ entity.ice_arrow.name=Ice Arrow
 entity.lightning_arrow.name=Lightning Arrow
 entity.prismarine_arrow.name=Prismarine Arrow
 entity.ender_arrow.name=Ender Arrow
+entity.light_arrow.name=Light Arrow
 
 entity.dye_arrow.name=Dye Arrow
 entity.dye_arrow_red.name=Red Dye Arrow

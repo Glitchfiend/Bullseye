@@ -4,9 +4,6 @@ import static bullseye.api.BEItems.arrow;
 import static bullseye.api.BEItems.be_icon;
 import static bullseye.api.BEItems.dye_arrow;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import bullseye.core.Bullseye;
 import bullseye.item.ItemBEArrow;
 import bullseye.item.ItemDyeArrow;
@@ -20,7 +17,7 @@ import net.minecraft.util.NonNullList;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.client.model.ModelLoader;
 import net.minecraftforge.fml.common.FMLCommonHandler;
-import net.minecraftforge.fml.common.registry.GameRegistry;
+import net.minecraftforge.fml.common.registry.ForgeRegistries;
 import net.minecraftforge.fml.relauncher.Side;
 
 public class ModItems
@@ -55,7 +52,9 @@ public class ModItems
         {
             item.setCreativeTab(CreativeTabBE.instance);
         }
-        GameRegistry.register(item, new ResourceLocation(Bullseye.MOD_ID, name));
+        
+        item.setRegistryName(new ResourceLocation(Bullseye.MOD_ID, name));
+        ForgeRegistries.ITEMS.register(item);
         //BECommand.itemCount++;
         
         // register sub types if there are any

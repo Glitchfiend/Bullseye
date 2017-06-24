@@ -22,12 +22,12 @@ import net.minecraftforge.fml.common.Mod.Instance;
 import net.minecraftforge.fml.common.SidedProxy;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 
-@Mod(modid = Bullseye.MOD_ID, version = Bullseye.MOD_VERSION, name = Bullseye.MOD_NAME, dependencies = "required-after:forge@[14.21.0.2340,)", guiFactory = Bullseye.GUI_FACTORY)
+@Mod(modid = Bullseye.MOD_ID, version = Bullseye.MOD_VERSION, name = Bullseye.MOD_NAME, dependencies = "required-after:forge@[1.0.0.0,)", guiFactory = Bullseye.GUI_FACTORY)
 public class Bullseye
 {
     public static final String MOD_NAME = "Bullseye";
     public static final String MOD_ID = "bullseye";
-    public static final String MOD_VERSION = "3.0.2";
+    public static final String MOD_VERSION = "@MOD_VERSION@";
     public static final String GUI_FACTORY = "bullseye.client.gui.GuiBEFactory";
     
     @Instance(MOD_ID)

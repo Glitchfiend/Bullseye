@@ -2,8 +2,8 @@
     "modid": "bullseye",
     "name": "Bullseye",
     "description": "Adds new arrows, including fire arrows, dye arrows, bomb arrows, and more!",
-    "version": "3.0.3",
-    "mcversion": "1.12",
+    "version": "${mod_version}",
+    "mcversion": "${minecraft_version}",
 	"url": "https://minecraft.curseforge.com/projects/bullseye",
     "authorList": ["Forstride"],
     "logoFile": "assets/bullseye/textures/gui/logo.png"

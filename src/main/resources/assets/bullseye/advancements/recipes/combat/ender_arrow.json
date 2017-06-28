@@ -1,0 +1,42 @@
+{
+  "rewards": {
+    "recipes": [
+      "bullseye:ender_arrow"
+    ]
+  },
+  "criteria": {
+    "has_feather": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "item": "minecraft:feather"
+          }
+        ]
+      }
+    },
+    "has_topper": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "item": "minecraft:ender_pearl"
+          }
+        ]
+      }
+    },
+    "has_the_recipe": {
+      "trigger": "minecraft:recipe_unlocked",
+      "conditions": {
+        "recipe": "bullseye:ender_arrow"
+      }
+    }
+  },
+  "requirements": [
+    [
+      "has_feather",
+      "has_topper",
+      "has_the_recipe"
+    ]
+  ]
+}

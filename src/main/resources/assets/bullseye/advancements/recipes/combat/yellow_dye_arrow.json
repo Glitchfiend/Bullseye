@@ -1,0 +1,43 @@
+{
+  "rewards": {
+    "recipes": [
+      "bullseye:yellow_dye_arrow"
+    ]
+  },
+  "criteria": {
+    "has_feather": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "item": "minecraft:feather"
+          }
+        ]
+      }
+    },
+    "has_topper": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "type": "forge:ore_dict",
+			"ore": "dyeYellow"
+          }
+        ]
+      }
+    },
+    "has_the_recipe": {
+      "trigger": "minecraft:recipe_unlocked",
+      "conditions": {
+        "recipe": "bullseye:yellow_dye_arrow"
+      }
+    }
+  },
+  "requirements": [
+    [
+      "has_feather",
+      "has_topper",
+      "has_the_recipe"
+    ]
+  ]
+}

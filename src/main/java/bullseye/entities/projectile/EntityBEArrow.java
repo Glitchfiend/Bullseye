@@ -148,12 +148,12 @@ public class EntityBEArrow extends EntityArrow implements IProjectile
     }
     
     @Override
-    public void setAim(Entity shooter, float pitch, float yaw, float p_184547_4_, float velocity, float inaccuracy)
+    public void shoot(Entity shooter, float pitch, float yaw, float p_184547_4_, float velocity, float inaccuracy)
     {
         float f = -MathHelper.sin(yaw * 0.017453292F) * MathHelper.cos(pitch * 0.017453292F);
         float f1 = -MathHelper.sin(pitch * 0.017453292F);
         float f2 = MathHelper.cos(yaw * 0.017453292F) * MathHelper.cos(pitch * 0.017453292F);
-        this.setThrowableHeading((double)f, (double)f1, (double)f2, velocity, inaccuracy);
+        this.shoot((double)f, (double)f1, (double)f2, velocity, inaccuracy);
         this.motionX += shooter.motionX;
         this.motionZ += shooter.motionZ;
 
@@ -164,7 +164,7 @@ public class EntityBEArrow extends EntityArrow implements IProjectile
     }
 
     @Override
-    public void setThrowableHeading(double x, double y, double z, float velocity, float inaccuracy)
+    public void shoot(double x, double y, double z, float velocity, float inaccuracy)
     {
         float f = MathHelper.sqrt(x * x + y * y + z * z);
         x = x / (double)f;

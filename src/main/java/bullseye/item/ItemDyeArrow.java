@@ -32,14 +32,6 @@ public class ItemDyeArrow extends ItemArrow
             return this.getName();
         }
         
-        public double getDamageInflicted()
-        {
-            switch(this)
-            {
-                default:
-                    return 0.25D;
-            }
-        }
         public static DyeType fromMeta(int meta)
         {
             return DyeType.values()[meta % DyeType.values().length];

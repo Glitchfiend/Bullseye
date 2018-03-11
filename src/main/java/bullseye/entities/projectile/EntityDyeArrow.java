@@ -91,7 +91,7 @@ public class EntityDyeArrow extends EntityArrow implements IProjectile
         this.yTile = -1;
         this.zTile = -1;
         this.pickupStatus = EntityDyeArrow.PickupStatus.DISALLOWED;
-        this.damage = 2.0D;
+        this.damage = 0.25D;
         this.setSize(0.5F, 0.5F);
     }
 
@@ -276,7 +276,6 @@ public class EntityDyeArrow extends EntityArrow implements IProjectile
             
             this.timeInGround = 0;
             ++this.ticksInAir;
-            this.damage = dyeType.getDamageInflicted();
             Vec3d vec3d1 = new Vec3d(this.posX, this.posY, this.posZ);
             Vec3d vec3d = new Vec3d(this.posX + this.motionX, this.posY + this.motionY, this.posZ + this.motionZ);
             RayTraceResult raytraceresult = this.world.rayTraceBlocks(vec3d1, vec3d, false, true, false);

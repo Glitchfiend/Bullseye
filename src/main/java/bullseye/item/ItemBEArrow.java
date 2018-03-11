@@ -79,6 +79,7 @@ public class ItemBEArrow extends ItemArrow
     {
         EntityBEArrow entityBEArrow = new EntityBEArrow(worldIn, shooter);
         entityBEArrow.setArrowType(ItemBEArrow.ArrowType.fromMeta(stack.getMetadata()));
+        entityBEArrow.setDamage(ItemBEArrow.ArrowType.fromMeta(stack.getMetadata()).getDamageInflicted());
         return entityBEArrow;
     }
    

@@ -18,7 +18,8 @@
 	  "ore": "stickWood"
     },
     "F": {
-      "item": "minecraft:feather"
+      "type": "forge:ore_dict",
+	  "ore": "feather"
     }
 
   },

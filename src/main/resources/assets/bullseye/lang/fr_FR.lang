@@ -1,0 +1,64 @@
+itemGroup.tabBullseye=Bullseye
+
+config.category.arrowSettings.title=Paramètres des flèches
+config.category.arrowSettings.tooltip=Baculer les propriétés pour les différents types de flèches
+
+item.bomb_arrow.name=Flèche explosive
+item.diamond_arrow.name=Flèche en diamant
+item.egg_arrow.name=Flèche à oeuf
+item.ender_arrow.name=Flèche de l'Ender
+item.extinguishing_arrow.name=Flèche d'extinction
+item.fire_arrow.name=Flèche enflammée
+item.ice_arrow.name=Flèche glacée
+item.light_arrow.name=Flèche lumineuse
+item.lightning_arrow.name=Flèche foudroyante
+item.prismarine_arrow.name=Flèche en prismarine
+item.training_arrow.name=Flèche d'entraînement
+
+item.dye_arrow_red.name=Flèche à teinture rouge
+item.dye_arrow_orange.name=Flèche à teinture orange
+item.dye_arrow_yellow.name=Flèche à teinture jaune
+item.dye_arrow_lime.name=Flèche à teinture vert clair
+item.dye_arrow_green.name=Flèche à teinture verte
+item.dye_arrow_cyan.name=Flèche à teinture cyan
+item.dye_arrow_light_blue.name=Flèche à teinture bleu clair
+item.dye_arrow_blue.name=Flèche à teinture bleue
+item.dye_arrow_purple.name=Flèche à teinture violette
+item.dye_arrow_magenta.name=Flèche à teinture magenta
+item.dye_arrow_pink.name=Flèche à teinture rose
+item.dye_arrow_brown.name=Flèche à teinture marron
+item.dye_arrow_white.name=Flèche à teinture blanche
+item.dye_arrow_silver.name=Flèche à teinture gris clair
+item.dye_arrow_gray.name=Flèche à teinture grise
+item.dye_arrow_black.name=Flèche à teinture noire
+
+entity.arrow.name=Flèche
+entity.training_arrow.name=Flèche d'entraînement
+entity.egg_arrow.name=Flèche à oeuf
+entity.extinguishing_arrow.name=Flèche d'extinction
+entity.diamond_arrow.name=Flèche en diamant
+entity.bomb_arrow.name=Flèche explosive
+entity.fire_arrow.name=Flèche enflammée
+entity.ice_arrow.name=Flèche glacée
+entity.lightning_arrow.name=Flèche foudroyante
+entity.prismarine_arrow.name=Flèche en prismarine
+entity.ender_arrow.name=Flèche de l'Ender
+entity.light_arrow.name=Flèche lumineuse
+
+entity.dye_arrow.name=Flèche à teinture
+entity.dye_arrow_red.name=Flèche à teinture rouge
+entity.dye_arrow_orange.name=Flèche à teinture orange
+entity.dye_arrow_yellow.name=Flèche à teinture jaune
+entity.dye_arrow_lime.name=Flèche à teinture vert clair
+entity.dye_arrow_green.name=Flèche à teinture verte
+entity.dye_arrow_cyan.name=Flèche à teinture cyan
+entity.dye_arrow_light_blue.name=Flèche à teinture bleu clair
+entity.dye_arrow_blue.name=Flèche à teinture bleue
+entity.dye_arrow_purple.name=Flèche à teinture violette
+entity.dye_arrow_magenta.name=Flèche à teinture magenta
+entity.dye_arrow_pink.name=Flèche à teinture rose
+entity.dye_arrow_brown.name=Flèche à teinture marron
+entity.dye_arrow_white.name=Flèche à teinture blanche
+entity.dye_arrow_silver.name=Flèche à teinture gris clair
+entity.dye_arrow_gray.name=Flèche à teinture grise
+entity.dye_arrow_black.name=Flèche à teinture noire

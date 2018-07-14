@@ -1,0 +1,64 @@
+itemGroup.tabBullseye=Bullseye
+
+config.category.arrowSettings.title=Configurações de flechas
+config.category.arrowSettings.tooltip=Altera as propriedades dos diferentes tipos de flechas
+
+item.bomb_arrow.name=Flecha explosiva
+item.diamond_arrow.name=Flecha de diamante
+item.egg_arrow.name=Flecha de ovo
+item.ender_arrow.name=Flecha de ender
+item.extinguishing_arrow.name=Flecha extintora
+item.fire_arrow.name=Flecha incendiária
+item.ice_arrow.name=Flecha de gelo
+item.light_arrow.name=Flecha luminosa
+item.lightning_arrow.name=Flecha de Thor
+item.prismarine_arrow.name=Flecha de prismarinho
+item.training_arrow.name=Flecha de treino
+
+item.dye_arrow_red.name=Flecha com corante vermelho
+item.dye_arrow_orange.name=Flecha com corante laranja
+item.dye_arrow_yellow.name=Flecha com corante amarelo
+item.dye_arrow_lime.name=Flecha com corante verde-limão
+item.dye_arrow_green.name=Flecha com corante verde
+item.dye_arrow_cyan.name=Flecha com corante ciano
+item.dye_arrow_light_blue.name=Flecha com corante azul-claro
+item.dye_arrow_blue.name=Flecha com corante azul
+item.dye_arrow_purple.name=Flecha com corante roxo
+item.dye_arrow_magenta.name=Flecha com corante magenta
+item.dye_arrow_pink.name=Flecha com corante rosa
+item.dye_arrow_brown.name=Flecha com corante marrom
+item.dye_arrow_white.name=Flecha com corante branco
+item.dye_arrow_silver.name=Flecha com corante cinza-claro
+item.dye_arrow_gray.name=Flecha com corante cinza
+item.dye_arrow_black.name=Flecha com corante preto
+
+entity.arrow.name=Flecha
+entity.training_arrow.name=Flecha de treino
+entity.egg_arrow.name=Flecha de ovo
+entity.extinguishing_arrow.name=Flecha extintora
+entity.diamond_arrow.name=Flecha de diamante
+entity.bomb_arrow.name=Flecha explosiva
+entity.fire_arrow.name=Flecha incendiária
+entity.ice_arrow.name=Flecha de gelo
+entity.lightning_arrow.name=Flecha de Thor
+entity.prismarine_arrow.name=Flecha de prismarinho
+entity.ender_arrow.name=Flecha de ender
+entity.light_arrow.name=Flecha luminosa
+
+entity.dye_arrow.name=Flecha com corante
+entity.dye_arrow_red.name=Flecha com corante vermelho
+entity.dye_arrow_orange.name=Flecha com corante laranja
+entity.dye_arrow_yellow.name=Flecha com corante amarelo
+entity.dye_arrow_lime.name=Flecha com corante verde-limão
+entity.dye_arrow_green.name=Flecha com corante verde
+entity.dye_arrow_cyan.name=Flecha com corante ciano
+entity.dye_arrow_light_blue.name=Flecha com corante azul-claro
+entity.dye_arrow_blue.name=Flecha com corante azul
+entity.dye_arrow_purple.name=Flecha com corante roxo
+entity.dye_arrow_magenta.name=Flecha com corante magenta
+entity.dye_arrow_pink.name=Flecha com corante rosa
+entity.dye_arrow_brown.name=Flecha com corante marrom
+entity.dye_arrow_white.name=Flecha com corante branco
+entity.dye_arrow_silver.name=Flecha com corante cinza-claro
+entity.dye_arrow_gray.name=Flecha com corante cinza
+entity.dye_arrow_black.name=Flecha com corante preto

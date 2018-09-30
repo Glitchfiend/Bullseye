@@ -15,14 +15,12 @@ import bullseye.particle.BEParticleTypes;
 import net.minecraft.advancements.CriteriaTriggers;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockLiquid;
-import net.minecraft.block.BlockTNT;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.IProjectile;
-import net.minecraft.entity.MoverType;
 import net.minecraft.entity.effect.EntityLightningBolt;
 import net.minecraft.entity.item.EntityTNTPrimed;
 import net.minecraft.entity.monster.EntityEnderman;
@@ -57,10 +55,11 @@ import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
+import net.minecraftforge.fml.common.registry.IThrowableEntity;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
-public class EntityBEArrow extends EntityArrow implements IProjectile
+public class EntityBEArrow extends EntityArrow implements IProjectile, IThrowableEntity
 {    
 	private static final Predicate<Entity> ARROW_TARGETS = Predicates.and(new Predicate[] {EntitySelectors.NOT_SPECTATING, EntitySelectors.IS_ALIVE, new Predicate<Entity>()
 	{
@@ -1251,5 +1250,17 @@ public class EntityBEArrow extends EntityArrow implements IProjectile
 
             return values()[ordinal];
         }
+    }
+
+    @Override
+    public Entity getThrower()
+    {
+        return shootingEntity;
+    }
+
+    @Override
+    public void setThrower( Entity entity )
+    {
+        shootingEntity = entity;
     }
 }

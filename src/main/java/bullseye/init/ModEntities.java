@@ -26,10 +26,10 @@ public class ModEntities
     public static void init()
     {
         // projectiles
-    	registerBEEntity(EntityDyeArrow.class, "dye_arrow", 64, 3, true);
-        registerBEEntity(EntityBEArrow.class, "arrow", 64, 3, true);
+    	registerBEEntity(EntityDyeArrow.class, "dye_arrow", 64, 20, false);
+        registerBEEntity(EntityBEArrow.class, "arrow", 64, 20, false);
     }
-    
+
     // register an entity
     public static int registerBEEntity(Class<? extends Entity> entityClass, String entityName, int trackingRange, int updateFrequency, boolean sendsVelocityUpdates)
     {

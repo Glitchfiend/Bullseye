@@ -10,11 +10,9 @@ import com.google.common.base.Predicates;
 import bullseye.api.BEItems;
 import bullseye.item.ItemDyeArrow;
 import net.minecraft.block.Block;
-import net.minecraft.block.BlockBed;
 import net.minecraft.block.BlockColored;
 import net.minecraft.block.BlockConcretePowder;
 import net.minecraft.block.BlockGlazedTerracotta;
-import net.minecraft.block.BlockHorizontal;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.enchantment.EnchantmentHelper;
@@ -40,8 +38,6 @@ import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.network.datasync.DataSerializers;
 import net.minecraft.network.datasync.EntityDataManager;
 import net.minecraft.network.play.server.SPacketChangeGameState;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.tileentity.TileEntityBed;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.EntitySelectors;
 import net.minecraft.util.EnumFacing;
@@ -54,10 +50,11 @@ import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
+import net.minecraftforge.fml.common.registry.IThrowableEntity;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
-public class EntityDyeArrow extends EntityArrow implements IProjectile
+public class EntityDyeArrow extends EntityArrow implements IProjectile, IThrowableEntity
 {    
 	private static final Predicate<Entity> ARROW_TARGETS = Predicates.and(new Predicate[] {EntitySelectors.NOT_SPECTATING, EntitySelectors.IS_ALIVE, new Predicate<Entity>()
 	{
@@ -873,5 +870,17 @@ public class EntityDyeArrow extends EntityArrow implements IProjectile
 
             return values()[ordinal];
         }
+    }
+
+    @Override
+    public Entity getThrower()
+    {
+        return shootingEntity;
+    }
+    
+    @Override
+    public void setThrower( Entity entity )
+    {
+        shootingEntity = entity;
     }
 }

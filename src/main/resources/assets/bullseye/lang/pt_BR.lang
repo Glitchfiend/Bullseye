@@ -1,7 +1,7 @@
 itemGroup.tabBullseye=Bullseye
 
 config.category.arrowSettings.title=Configurações de flechas
-config.category.arrowSettings.tooltip=Altera as propriedades dos diferentes tipos de flechas
+config.category.arrowSettings.tooltip=Altera as propriedades de flechas
 
 item.bomb_arrow.name=Flecha explosiva
 item.diamond_arrow.name=Flecha de diamante
